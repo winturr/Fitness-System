@@ -29,6 +29,6 @@ public class CheckInRecord {
         this.checkOutTime=checkOutTime;
     }
     
-    public void date(String date) {
+    public void setDate(String date) {
         this.date=date;
     }
