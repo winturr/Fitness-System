@@ -75,7 +75,7 @@
             String line;
             while ((line = reader.readLine()) != null) {
 			tempWriter.write(line + "\n");
-            } //lalagay ung info sa templfile
+            } //lalagay ung info sa tempfile
 		
             reader.close();
             tempWriter.close();
