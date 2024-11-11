@@ -12,6 +12,10 @@ public class Visitor {
 		this.visitorType = visitorType;
 	}
 	
+	public Visitor(String visitorID) {
+		this.visitorID = visitorID;
+	}
+
 	public String getVisitorID() {
 		return visitorID;
 	}

@@ -1,5 +1,7 @@
 package fitness;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Staff {
@@ -8,6 +10,12 @@ public class Staff {
 	private String name;
 	private String role;
 	private String contactInfo;
+	public Staff(String staffID, String name, String role, String contactInfo) {
+		this.staffID = staffID;
+		this.name = name;
+		this.role = role;
+		this.contactInfo = contactInfo;
+	}
 	
 	public void setStaffID(String staffID) {
 		this.staffID = staffID;
@@ -33,17 +41,30 @@ public class Staff {
 	public String getContactInfo() {
 		return contactInfo;
 	}
-	public void add() throws IOException{
-		BufferedWriter writer = new BufferedWriter(new FileWriter("staff.txt",true));
-		System.out.print("Enter staff ID: ");
-		setStaffID(i.nextLine());
-		System.out.print("Enter staff name: ");
-		setName(i.nextLine());
-		System.out.print("Enter staff role: ");
-		setRole(i.nextLine());
-		System.out.print("Enter contact info: ");
-		setContactInfo(i.nextLine());
-		writer.write(staffID + "\t" + name + "\t" + role + "\t" + contactInfo +"\n");
-		writer.close();
+	public void saveToFile() {
+		try(BufferedWriter writer = new BufferedWriter(new FileWriter("Staff.txt", true))) {
+			writer.write(staffID + "*" + name + "*" + role + "*" + contactInfo + "*");
+			writer.newLine();
+		}catch(IOException e) {
+			e.printStackTrace();
+		}
+	}
+	public static List<Staff> getFromFile() {
+		List<Staff> staff = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader("Staff.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] data = line.split("\\*");
+                String id = data[0];
+                String name = data[1];
+                String role = data[2];
+                String info = data[3];
+                staff.add(new Staff(id, name, role, info));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return staff;
+
 	}
 }
