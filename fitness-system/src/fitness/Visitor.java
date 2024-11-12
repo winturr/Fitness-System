@@ -64,7 +64,13 @@ public class Visitor {
         }
         return visitors;
 	}
+	//adds a Visitor record to "Visitor.txt"
 	public static void add() {
+		LocalDate date = LocalDate.now();
+		LocalDate futureDate = date.plusYears(3);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String currentDate = date.format(formatter);
+        String endingDate = futureDate.format(formatter);
 		System.out.print("Enter Visitor ID: ");
 		Scanner i =new Scanner(System.in);
 		String visitorID = i.nextLine();
@@ -74,21 +80,36 @@ public class Visitor {
 		String visitorType = i.nextLine();
 		Visitor v = new Visitor(visitorID, visitorName, visitorType);
 		v.saveToFile();
+		// places Visitor on either subtype (DayPassUser or Member)
 		switch (visitorType) {
 		case "D":
-			LocalDate date = LocalDate.now();
-	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-	        String visitDate = date.format(formatter);
-	        DayPassUser dp = new DayPassUser(visitorID,visitorName,visitorType,visitDate);
+	        DayPassUser dp = new DayPassUser(visitorID,visitorName,visitorType,currentDate);
 	        dp.saveToFile();
 	        System.out.println("Saved to Visitor.txt and DayPassUser.txt");
 	        break;
+		case "M":
+			System.out.print("Enter Contact Number: ");
+			String contactInfo = i.nextLine();
+			System.out.print("Enter status, [1]Active [2]Inactive: ");
+			String status = i.nextLine();
+			switch (status) {
+			case "1":
+				status = "Active";
+				break;
+			case "2":
+				status = "Inactive";
+			}
+			Member m = new Member(visitorID,visitorName,visitorType,currentDate,endingDate,contactInfo,status);
+			m.saveToFile();
+			System.out.println("Saved to Visitor.txt and Member.txt");
+			break;
 		}
 	}
+	//displays all Visitor entries from "Visitor.txt"
 	public static void display() {
 		List <Visitor> visitors = (List<Visitor>) Visitor.getFromFile();
 		System.out.println(String.format("%s", "------------------------------------------------"));
-		System.out.println(String.format("%5s %3s %15s %5s %5s","VisitorID", "|"," Name" ,"|"," VisitorType"));
+		System.out.println(String.format("%5s %3s %15s %5s %5s","VisitorID", "|","Name" ,"|","VisitorType"));
 		System.out.println(String.format("%s", "------------------------------------------------"));
 		for(Visitor vi: visitors) {
 			System.out.println(String.format("%9s %3s %15s %5s %5s", vi.getVisitorID(),"|",vi.getName() ,"|", vi.getVisitorType()));

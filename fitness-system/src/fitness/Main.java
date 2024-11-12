@@ -8,9 +8,10 @@ import java.util.*;
 public class Main {
 
 	public static void main(String[] args) throws IOException {
+		Visitor.add();
 		Visitor.display();
 		DayPassUser.display();
-		Staff.display();
+		Member.display();
 		
 	}
 
