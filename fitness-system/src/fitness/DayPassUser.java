@@ -48,4 +48,13 @@ public class DayPassUser extends Visitor {
         }
         return dp;
 	}
+	public static void display() {
+		List <DayPassUser> daypasser = (List<DayPassUser>) DayPassUser.getsFromFile();
+		System.out.println(String.format("%s", "----------------------"));
+	    System.out.println(String.format("%5s %1s %5s","VisitorID" ,"|"," VisitDate"));
+	    System.out.println(String.format("%s", "----------------------"));
+		for(DayPassUser vi: daypasser) {
+			System.out.println(String.format("%5s %5s %5s", vi.getVisitorID(),"|", vi.getVisitDate()));
+		}
+	}
 }

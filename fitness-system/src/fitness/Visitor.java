@@ -65,6 +65,7 @@ public class Visitor {
         return visitors;
 	}
 	public static void add() {
+		System.out.print("Enter Visitor ID: ");
 		Scanner i =new Scanner(System.in);
 		String visitorID = i.nextLine();
 		System.out.print("Enter Visitor Name: ");
@@ -86,9 +87,11 @@ public class Visitor {
 	}
 	public static void display() {
 		List <Visitor> visitors = (List<Visitor>) Visitor.getFromFile();
-		System.out.format("%-13s%-20s%-15s%n","VisitorID" ," Name" ," VisitorType");
+		System.out.println(String.format("%s", "------------------------------------------------"));
+		System.out.println(String.format("%5s %3s %15s %5s %5s","VisitorID", "|"," Name" ,"|"," VisitorType"));
+		System.out.println(String.format("%s", "------------------------------------------------"));
 		for(Visitor vi: visitors) {
-			System.out.format("%-15s%-20s%-15s%n", vi.getVisitorID() ,vi.getName() , vi.getVisitorType());
+			System.out.println(String.format("%9s %3s %15s %5s %5s", vi.getVisitorID(),"|",vi.getName() ,"|", vi.getVisitorType()));
 		}
 	}
 }

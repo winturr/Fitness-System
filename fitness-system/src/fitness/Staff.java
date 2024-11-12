@@ -82,6 +82,7 @@ public class Staff {
 	}
 	public static void display() {
 		List <Staff> staff = (List<Staff>) Staff.getFromFile();
+		System.out.println(String.format("%s", "----------------------------------------------------------------------------"));
 		System.out.println(String.format("%5s %3s %15s %5s %15s %10s %15s","StaffID" ,"|","Name","|","Role","|","ContactInfo"));
 		System.out.println(String.format("%s", "----------------------------------------------------------------------------"));
 		for(Staff st: staff) {
