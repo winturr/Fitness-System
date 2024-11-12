@@ -5,12 +5,12 @@ public class ClassRegistration {
     public boolean isGood = true;
     public static Scanner inp = new Scanner(System.in);
     
-	public ClassRegistration(String registrationID, String status) {
+	public ClassRegistration(String registrationID, String status) { // Constructor kay Add()
     	this.registrationID=registrationID;
     	this.registrationDate = LocalDate.now().format(formatter);
     	this.status=status;
     }
-	public ClassRegistration(String regID, String date2, String status2) {
+	public ClassRegistration(String regID, String date2, String status2) { //Constructor kay getFromFile()
 		registrationID = regID;
 		registrationDate = date2;
 		status = status2;
@@ -40,7 +40,7 @@ public class ClassRegistration {
         this.status=status;
     }
     
-    public void saveToFile() { // pang write txt
+    public void saveToFile() { // pang write txt. Rekta na ren to no need to use sa main
 		try(BufferedWriter writer = new BufferedWriter(new FileWriter("ClassRegistration.txt", true))) {
 			
 			writer.write(registrationID + "*" + registrationDate + "*" + status + "*");
@@ -67,7 +67,7 @@ public class ClassRegistration {
         return classreg;		     
 	}
     
-    public void checkDuplicateID(String inputID) throws IOException {    	    	
+    public void checkDuplicateID(String inputID) throws IOException { //Rekta na kay add para magamit to    	    	
     		boolean isDuplicate = false;
 			try (BufferedReader reader = new BufferedReader(new FileReader("ClassRegistration.txt"))) {
 				String line;
