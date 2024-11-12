@@ -6,6 +6,7 @@ import java.time.*;
 import java.time.format.DateTimeFormatter;
 
 public class Visitor {
+	public static Scanner i =new Scanner(System.in);
 	private String visitorID;
 	private String name;
 	private String visitorType;
@@ -37,6 +38,7 @@ public class Visitor {
 	public void setVisitorType(String visitorType) {
 		this.visitorType = visitorType;
 	}
+	//saves record from user input into Visitor.txt
 	public void saveToFile() {
 		try(BufferedWriter writer = new BufferedWriter(new FileWriter("Visitor.txt", true))) {
 			writer.write(visitorID + "*" + name + "*" + visitorType + "*");
@@ -72,7 +74,6 @@ public class Visitor {
         String currentDate = date.format(formatter);
         String endingDate = futureDate.format(formatter);
 		System.out.print("Enter Visitor ID: ");
-		Scanner i =new Scanner(System.in);
 		String visitorID = i.nextLine();
 		System.out.print("Enter Visitor Name: ");
 		String visitorName = i.nextLine();
@@ -80,8 +81,7 @@ public class Visitor {
 		String visitorType = i.nextLine();
 		Visitor v = new Visitor(visitorID, visitorName, visitorType);
 		v.saveToFile();
-		// places Visitor on either subtype (DayPassUser or Member)
-		switch (visitorType) {
+		switch (visitorType) {// places Visitor on either subtype (DayPassUser or Member)
 		case "D":
 	        DayPassUser dp = new DayPassUser(visitorID,visitorName,visitorType,currentDate);
 	        dp.saveToFile();
@@ -106,6 +106,7 @@ public class Visitor {
 		}
 	}
 	//displays all Visitor entries from "Visitor.txt"
+	//static method to directly access method from main without instantiation
 	public static void display() {
 		List <Visitor> visitors = (List<Visitor>) Visitor.getFromFile();
 		System.out.println(String.format("%s", "------------------------------------------------"));
@@ -115,4 +116,24 @@ public class Visitor {
 			System.out.println(String.format("%9s %3s %15s %5s %5s", vi.getVisitorID(),"|",vi.getName() ,"|", vi.getVisitorType()));
 		}
 	}
+	public static void updateVisitor(List<Visitor> visitors, String id, String newName, String newType) {
+	    for (Visitor visitor : visitors) {
+	        if (visitor.getVisitorID().equals(id)) {
+	            visitor.setName(newName);
+	            visitor.saveToFile();
+	            break;
+	        }
+	    }
+	    saveUpdate(visitors);
+	}
+	public static void saveUpdate(List<Visitor> visitors) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("Visitor.txt"))) {
+            for (Visitor visitor : visitors) {
+                writer.write(visitor.getVisitorID() + "*" + visitor.getName() + "*" + visitor.getVisitorType());
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

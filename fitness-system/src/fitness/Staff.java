@@ -75,7 +75,7 @@ public class Staff {
 		String name = i.nextLine();
 		System.out.print("Enter Staff Role: ");
 		String role = i.nextLine();
-		System.out.print("Enter ContactInfo: ");
+		System.out.print("Enter Contact Number: ");
 		String contactInfo = i.nextLine();
 		Staff s = new Staff(staffID, name, role, contactInfo);
 		s.saveToFile();

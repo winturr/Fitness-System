@@ -25,6 +25,7 @@ public class DayPassUser extends Visitor {
 	public void setVisitDate(String visitDate) {
 		this.visitDate = visitDate;
 	}
+	//saves record from user input into DayPassUser.txt
 	public void saveToFile() {
 		try(BufferedWriter writer = new BufferedWriter(new FileWriter("DayPassUser.txt", true))) {
 			writer.write(getVisitorID() + "*" + visitDate + "*");
@@ -33,6 +34,7 @@ public class DayPassUser extends Visitor {
 			e.printStackTrace();
 		}
 	}
+	//scans all available records in DayPassUser.txt, 
 	public static List<DayPassUser> getsFromFile() {
 		List<DayPassUser> dp = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader("DayPassUser.txt"))) {
@@ -48,6 +50,8 @@ public class DayPassUser extends Visitor {
         }
         return dp;
 	}
+	//displays Member.txt in table form
+	//static method to directly access method from main without instantiation
 	public static void display() {
 		List <DayPassUser> daypasser = (List<DayPassUser>) DayPassUser.getsFromFile();
 		System.out.println(String.format("%s", "----------------------"));

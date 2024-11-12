@@ -16,6 +16,7 @@ public class Member extends Visitor {
 		this.contactInfo = contactInfo;
 		this.status = status;
 	}
+	//constructor specifically used for scanning Member.txt records
 	public Member(String visitorID, String memStartDate, String memEndDate, String contactInfo, String status) {
 		super(visitorID);
 		this.membershipStartDate = memStartDate;
@@ -52,6 +53,7 @@ public class Member extends Visitor {
 	public void setStatus(String status) {
 		this.status = status;
 	}
+	//saves record from user input into Member.txt
 	public void saveToFile() {
 		try(BufferedWriter writer = new BufferedWriter(new FileWriter("Member.txt", true))) {
 			writer.write(getVisitorID() + "*" + membershipStartDate + "*" + membershipEndDate + "*" + contactInfo + "*" + status + "*");
@@ -60,6 +62,7 @@ public class Member extends Visitor {
 			e.printStackTrace();
 		}
 	}
+	//scans all available records in Member.txt
 	public static List<Member> getFromFiles() {
 		List<Member> m = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader("Member.txt"))) {
@@ -78,6 +81,8 @@ public class Member extends Visitor {
         }
         return m;
 	}
+	//displays Member.txt in table form
+	//static method to directly access method from main without instantiation
 	public static void display() {
 		List <Member> members = (List<Member>) Member.getFromFiles();
 		System.out.println(String.format("%s", "------------------------------------------------------------------------------------"));
