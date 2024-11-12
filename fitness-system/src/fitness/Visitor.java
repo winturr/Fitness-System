@@ -1,6 +1,5 @@
 package fitness;
 import java.io.*;
-import java.util.Scanner;
 import java.util.*;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
@@ -39,13 +38,11 @@ public class Visitor {
 		this.visitorType = visitorType;
 	}
 	//saves record from user input into Visitor.txt
-	public void saveToFile() {
-		try(BufferedWriter writer = new BufferedWriter(new FileWriter("Visitor.txt", true))) {
+	public void saveToFile()throws IOException {
+		BufferedWriter writer = new BufferedWriter(new FileWriter("Visitor.txt", true));
 			writer.write(visitorID + "*" + name + "*" + visitorType + "*");
 			writer.newLine();
-		}catch(IOException e) {
-			e.printStackTrace();
-		}
+			writer.close();
 	}
 	//List<Visitor> as a return data type in this method
 	/*List is an interface, concrete class ArrayList implements the List interface
@@ -67,7 +64,7 @@ public class Visitor {
         return visitors;
 	}
 	//adds a Visitor record to "Visitor.txt"
-	public static void add() {
+	public static void add()throws IOException {
 		LocalDate date = LocalDate.now();
 		LocalDate futureDate = date.plusYears(3);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -116,21 +113,25 @@ public class Visitor {
 			System.out.println(String.format("%9s %3s %15s %5s %5s", vi.getVisitorID(),"|",vi.getName() ,"|", vi.getVisitorType()));
 		}
 	}
-	public static void updateVisitor(List<Visitor> visitors, String id, String newName, String newType) {
-	    for (Visitor visitor : visitors) {
+	public static void update()throws IOException {
+		List<Visitor> visitorList = Visitor.getFromFile();
+		System.out.print("Look for ID: ");
+		String id = i.nextLine();
+		System.out.print("Enter new name: ");
+		String nn = i.nextLine();
+	    for (Visitor visitor : visitorList) {
 	        if (visitor.getVisitorID().equals(id)) {
-	            visitor.setName(newName);
+	            visitor.setName(nn);
 	            visitor.saveToFile();
 	            break;
 	        }
 	    }
-	    try (BufferedWriter writer = new BufferedWriter(new FileWriter("Visitor.txt"))) {
-            for (Visitor visitor : visitors) {
-                writer.write(visitor.getVisitorID() + "*" + visitor.getName() + "*" + visitor.getVisitorType());
-                writer.newLine();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+	    BufferedWriter writer = new BufferedWriter(new FileWriter("Visitor.txt"));
+        for (Visitor visitor : visitorList) {
+        	writer.write(visitor.getVisitorID() + "*" + visitor.getName() + "*" + visitor.getVisitorType());
+            writer.newLine();
         }
+        writer.close();
+        System.out.print("Updated");
 	}
 }
