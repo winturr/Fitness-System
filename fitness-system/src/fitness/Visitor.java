@@ -124,10 +124,7 @@ public class Visitor {
 	            break;
 	        }
 	    }
-	    saveUpdate(visitors);
-	}
-	public static void saveUpdate(List<Visitor> visitors) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("Visitor.txt"))) {
+	    try (BufferedWriter writer = new BufferedWriter(new FileWriter("Visitor.txt"))) {
             for (Visitor visitor : visitors) {
                 writer.write(visitor.getVisitorID() + "*" + visitor.getName() + "*" + visitor.getVisitorType());
                 writer.newLine();
@@ -135,5 +132,5 @@ public class Visitor {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
+	}
 }
