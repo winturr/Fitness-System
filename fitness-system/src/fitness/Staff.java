@@ -16,6 +16,9 @@ public class Staff {
 		this.role = role;
 		this.contactInfo = contactInfo;
 	}
+	public Staff() {
+		
+	}
 	
 	public void setStaffID(String staffID) {
 		this.staffID = staffID;
@@ -67,7 +70,7 @@ public class Staff {
         return staff;
 
 	}
-	public static void add() {
+	public void add() {
 		Scanner i = new Scanner(System.in);
 		System.out.print("Enter Staff ID: ");
 		String staffID = i.nextLine();
@@ -80,13 +83,13 @@ public class Staff {
 		Staff s = new Staff(staffID, name, role, contactInfo);
 		s.saveToFile();
 	}
-	public static void display() {
+	public void display() {
 		List <Staff> staff = (List<Staff>) Staff.getFromFile();
-		System.out.println(String.format("%s", "----------------------------------------------------------------------------"));
-		System.out.println(String.format("%5s %3s %15s %5s %15s %10s %15s","StaffID" ,"|","Name","|","Role","|","ContactInfo"));
-		System.out.println(String.format("%s", "----------------------------------------------------------------------------"));
+		System.out.println(String.format("%s", "------------------------------------------------------------------------------------------"));
+		System.out.println(String.format("%9s %3s %26s %5s %15s %10s %15s","StaffID" ,"|","Name","|","Role","|","ContactInfo"));
+		System.out.println(String.format("%s", "------------------------------------------------------------------------------------------"));
 		for(Staff st: staff) {
-			System.out.format("%5s %5s %15s %5s %15s %10s %15s", st.getStaffID(), "|", st.getName(),"|", st.getRole(),"|", st.getContactInfo());
+			System.out.format("%9s %3s %26s %5s %15s %10s %15s", st.getStaffID(), "|", st.getName(),"|", st.getRole(),"|", st.getContactInfo());
 			System.out.println();
 		}
 	}

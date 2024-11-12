@@ -12,18 +12,12 @@ public class Main {
 		Visitor v = new Visitor();
 		Member m = new Member();
 		DayPassUser d = new DayPassUser();
-		//
-		System.out.println("--------------LOGIN--------------");
-		System.out.println("------------MOCK ONLY------------");
-		System.out.print("Enter Username: ");
-		String username = i.nextLine();
-		System.out.print("Enter Password: ");
-		String password = i.nextLine();
-		System.out.println();
+		Staff s = new Staff();
 		v.display();	
 		d.display();
 		m.display();
-		v.update();
+		s.display();
+		
 	}
 
 }
