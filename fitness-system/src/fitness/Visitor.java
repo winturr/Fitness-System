@@ -18,6 +18,9 @@ public class Visitor {
 	public Visitor(String visitorID) {
 		this.visitorID = visitorID;
 	}
+	public Visitor() {
+		
+	}
 
 	public String getVisitorID() {
 		return visitorID;
@@ -64,7 +67,7 @@ public class Visitor {
         return visitors;
 	}
 	//adds a Visitor record to "Visitor.txt"
-	public static void add()throws IOException {
+	public void add()throws IOException {
 		LocalDate date = LocalDate.now();
 		LocalDate futureDate = date.plusYears(3);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -104,26 +107,25 @@ public class Visitor {
 	}
 	//displays all Visitor entries from "Visitor.txt"
 	//static method to directly access method from main without instantiation
-	public static void display() {
+	public void display() {
 		List <Visitor> visitors = (List<Visitor>) Visitor.getFromFile();
-		System.out.println(String.format("%s", "------------------------------------------------"));
-		System.out.println(String.format("%5s %3s %15s %5s %5s","VisitorID", "|","Name" ,"|","VisitorType"));
-		System.out.println(String.format("%s", "------------------------------------------------"));
+		System.out.println(String.format("%s", "-----------------------------------------------------------"));
+		System.out.println(String.format("%5s %3s %26s %5s %5s","VisitorID", "|","Name" ,"|","VisitorType"));
+		System.out.println(String.format("%s", "-----------------------------------------------------------"));
 		for(Visitor vi: visitors) {
-			System.out.println(String.format("%9s %3s %15s %5s %5s", vi.getVisitorID(),"|",vi.getName() ,"|", vi.getVisitorType()));
+			System.out.println(String.format("%9s %3s %26s %5s %5s", vi.getVisitorID(),"|",vi.getName() ,"|", vi.getVisitorType()));
 		}
 	}
-	public static void update()throws IOException {
+	public void update()throws IOException {
 		List<Visitor> visitorList = Visitor.getFromFile();
-		System.out.print("Look for ID: ");
+		System.out.print("Look for ID -->> ");
 		String id = i.nextLine();
-		System.out.print("Enter new name: ");
-		String nn = i.nextLine();
-	    for (Visitor visitor : visitorList) {
+		for (Visitor visitor : visitorList) {
 	        if (visitor.getVisitorID().equals(id)) {
+		System.out.print("Enter new name -->> ");
+		String nn = i.nextLine();
 	            visitor.setName(nn);
 	            visitor.saveToFile();
-	            break;
 	        }
 	    }
 	    BufferedWriter writer = new BufferedWriter(new FileWriter("Visitor.txt"));
@@ -131,7 +133,7 @@ public class Visitor {
         	writer.write(visitor.getVisitorID() + "*" + visitor.getName() + "*" + visitor.getVisitorType());
             writer.newLine();
         }
+        System.out.print("Updated Entry.");
         writer.close();
-        System.out.print("Updated");
 	}
 }

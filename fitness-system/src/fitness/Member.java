@@ -24,6 +24,9 @@ public class Member extends Visitor {
 		this.contactInfo = contactInfo;
 		this.status = status;
 	}
+	public Member(){
+		
+	}
 	private String membershipStartDate;
 	private String membershipEndDate;
 	private String contactInfo;
@@ -83,13 +86,44 @@ public class Member extends Visitor {
 	}
 	//displays Member.txt in table form
 	//static method to directly access method from main without instantiation
-	public static void display() {
+	public void display() {
 		List <Member> members = (List<Member>) Member.getFromFiles();
-		System.out.println(String.format("%s", "------------------------------------------------------------------------------------"));
+		System.out.println(String.format("%s", "-------------------------------------------------------------------------------------"));
 		System.out.println(String.format("%9s %3s %15s %1s %5s %1s %5s %5s %10s","VisitorID", "|","MembershipStartDate" ,"|","MembershipEndDate", "|", "ContactInfo","|", "Status"));
-		System.out.println(String.format("%s", "------------------------------------------------------------------------------------"));
+		System.out.println(String.format("%s", "-------------------------------------------------------------------------------------"));
 		for(Member me: members) {
 			System.out.println(String.format("%9s %3s %5s %10s %5s %8s %11s %5s %10s", me.getVisitorID(),"|",me.getMembershipStartDate() ,"|", me.getMembershipEndDate(),"|",me.getContactInfo(),"|",me.getStatus()));
 		}
+	}
+	public void update()throws IOException {
+		List<Member> memberList = Member.getFromFiles();
+		System.out.print("Look for ID: ");
+		String id = i.nextLine();
+		System.out.print("Enter new Contact Info: ");
+		String nc = i.nextLine();
+		System.out.print("Enter new status, [1]Active [2]Inactive: ");
+		String ns = i.nextLine();
+		switch (ns) {
+		case "1":
+			ns = "Active";
+			break;
+		case "2":
+			ns = "Inactive";
+		}
+	    for (Member member : memberList) {
+	        if (member.getVisitorID().equals(id)) {
+	            member.setContactInfo(nc);
+	            member.setStatus(ns);
+	            member.saveToFile();
+	            break;
+	        }
+	    }
+	    BufferedWriter writer = new BufferedWriter(new FileWriter("Member.txt"));
+        for (Member member : memberList) {
+        	writer.write(member.getVisitorID() + "*" + member.getMembershipStartDate() + "*" + member.getMembershipEndDate() + "*" + member.getContactInfo() + "*" + member.getStatus());
+            writer.newLine();
+        }
+        System.out.print("Updated Entry.");
+        writer.close();
 	}
 }

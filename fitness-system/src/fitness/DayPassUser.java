@@ -17,6 +17,9 @@ public class DayPassUser extends Visitor {
 		super(visitorID);
 		this.visitDate = visitDate;
 	}
+	public DayPassUser() {
+		
+	}
 	private String visitDate;
 	
 	public String getVisitDate() {
@@ -52,13 +55,13 @@ public class DayPassUser extends Visitor {
 	}
 	//displays Member.txt in table form
 	//static method to directly access method from main without instantiation
-	public static void display() {
+	public void display() {
 		List <DayPassUser> daypasser = (List<DayPassUser>) DayPassUser.getsFromFile();
-		System.out.println(String.format("%s", "----------------------"));
-	    System.out.println(String.format("%5s %1s %5s","VisitorID" ,"|"," VisitDate"));
-	    System.out.println(String.format("%s", "----------------------"));
+		System.out.println(String.format("%s", "-------------------------"));
+	    System.out.println(String.format("%9s %3s %5s","VisitorID" ,"|"," VisitDate"));
+	    System.out.println(String.format("%s", "-------------------------"));
 		for(DayPassUser vi: daypasser) {
-			System.out.println(String.format("%5s %5s %5s", vi.getVisitorID(),"|", vi.getVisitDate()));
+			System.out.println(String.format("%9s %3s %5s", vi.getVisitorID(),"|", vi.getVisitDate()));
 		}
 	}
 }
