@@ -67,4 +67,26 @@ public class Staff {
         return staff;
 
 	}
+	public static void add() {
+		Scanner i = new Scanner(System.in);
+		System.out.print("Enter Staff ID: ");
+		String staffID = i.nextLine();
+		System.out.print("Enter Staff Name: ");
+		String name = i.nextLine();
+		System.out.print("Enter Staff Role: ");
+		String role = i.nextLine();
+		System.out.print("Enter ContactInfo: ");
+		String contactInfo = i.nextLine();
+		Staff s = new Staff(staffID, name, role, contactInfo);
+		s.saveToFile();
+	}
+	public static void display() {
+		List <Staff> staff = (List<Staff>) Staff.getFromFile();
+		System.out.println(String.format("%5s %3s %15s %5s %15s %10s %15s","StaffID" ,"|","Name","|","Role","|","ContactInfo"));
+		System.out.println(String.format("%s", "----------------------------------------------------------------------------"));
+		for(Staff st: staff) {
+			System.out.format("%5s %5s %15s %5s %15s %10s %15s", st.getStaffID(), "|", st.getName(),"|", st.getRole(),"|", st.getContactInfo());
+			System.out.println();
+		}
+	}
 }

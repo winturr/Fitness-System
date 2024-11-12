@@ -1,6 +1,9 @@
 package fitness;
 import java.io.*;
+import java.util.Scanner;
 import java.util.*;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 
 public class Visitor {
 	private String visitorID;
@@ -60,6 +63,32 @@ public class Visitor {
             e.printStackTrace();
         }
         return visitors;
-
+	}
+	public static void add() {
+		Scanner i =new Scanner(System.in);
+		String visitorID = i.nextLine();
+		System.out.print("Enter Visitor Name: ");
+		String visitorName = i.nextLine();
+		System.out.print("Enter Visitor Type, [M] Member [D] Day Pass: ");
+		String visitorType = i.nextLine();
+		Visitor v = new Visitor(visitorID, visitorName, visitorType);
+		v.saveToFile();
+		switch (visitorType) {
+		case "D":
+			LocalDate date = LocalDate.now();
+	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+	        String visitDate = date.format(formatter);
+	        DayPassUser dp = new DayPassUser(visitorID,visitorName,visitorType,visitDate);
+	        dp.saveToFile();
+	        System.out.println("Saved to Visitor.txt and DayPassUser.txt");
+	        break;
+		}
+	}
+	public static void display() {
+		List <Visitor> visitors = (List<Visitor>) Visitor.getFromFile();
+		System.out.format("%-13s%-20s%-15s%n","VisitorID" ," Name" ," VisitorType");
+		for(Visitor vi: visitors) {
+			System.out.format("%-15s%-20s%-15s%n", vi.getVisitorID() ,vi.getName() , vi.getVisitorType());
+		}
 	}
 }
