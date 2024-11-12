@@ -1,134 +1,136 @@
-
-    public class classRegistration {
-        private String registrationID,registrationDate,status;
-        
-        public String getRegistrationID(){
-        return registrationID;
-        }
-        
-        public String getRegistrationDate(){
-        return registrationDate;
-        }
-        
-        public String getStatus(){
-        return status;
-          }
-        
-        public void setRegistrationID(String registrationID) {
-            this.registrationID=registrationID;
-        }
-        
-         public void setRegistrationDate(String registrationDate) {
-            this.registrationDate=registrationDate;
-        }
-         
-        public void setStatus(String status) {
-            this.status=status;
-        }
-        //PANG ADD
-         public void add() throws IOException {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("classRegistration.txt",false)) //create txt file
-        ) {
-            writer.write(String.format("%-20s%-20s%-15s\n", "Registration ID", "Registration Date", "Status"));
-            Scanner inp = new Scanner (System.in);
-            System.out.print("Registration ID: ");//registration ID
-            setRegistrationID(inp.nextLine());
-            LocalDate date = LocalDate.now();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            setRegistrationDate(date.format(formatter)); //registration Date            
-            boolean isRight;
-            do {
-                System.out.print("[1]Registered\n[2]Waitlisted\n[3]Attended\nStatus: ");
-                int ch = inp.nextInt(); //Status
-                isRight =true;
-                switch (ch) {
-                    case 1:
-                        setStatus("Registered");
-                        break;
-                    case 2:
-                        setStatus("Waitlisted");
-                        break;
-                    case 3:
-                        setStatus("Attended");
-                        break;
-                    default:
-                        System.out.println("Enter 1 for Registered 2 for Waitlisted and 3 for Attended");
-                        isRight=false;
-                       
-                }
-            } while (!isRight);
-                                
-            writer.write(String.format("%-20s%-20s%-15s\n", getRegistrationID(), getRegistrationDate(), getStatus()));
-        }
-
-            //PANG UPDATE
-            public void update() throws IOException {
-            System.out.print("Registration ID want to update: ");
-            String upid = inp.nextLine(); //update id
-		
-            File tempFile = new File ("tempFile.txt");
-            File inputFile = new File ("classRegistration.txt");
-		
-            BufferedReader reader = new BufferedReader(new FileReader(inputFile));
-            BufferedWriter tempWriter = new BufferedWriter(new FileWriter(tempFile));
-		
+public class ClassRegistration {
+	public Scanner inp = new Scanner(System.in);
+    private String registrationID,registrationDate,status;
+    LocalDate date = LocalDate.now();
+    static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    public boolean isGood = true;
+    
+	public ClassRegistration(String registrationID, String status) {
+    	this.registrationID=registrationID;
+    	this.registrationDate = LocalDate.now().format(formatter);
+    	this.status=status;
+    }
+    public String getRegistrationID(){
+    return registrationID;
+    }
+   
+    public String getRegistrationDate(){
+    return registrationDate;
+    }
+    
+    public String getStatus(){
+    return status;
+    }
+    
+    public void setRegistrationID(String registrationID) {
+        this.registrationID=registrationID;
+    }
+    
+     public void setRegistrationDate(String registrationDate) {
+        this.registrationDate=registrationDate;
+    }
+     
+    public void setStatus(String status) {
+        this.status=status;
+    }
+    
+    public void saveToFile() { // pang write txt
+		try(BufferedWriter writer = new BufferedWriter(new FileWriter("ClassRegistration.txt", true))) {
+			
+			writer.write(registrationID + "*" + registrationDate + "*" + status + "*");
+			writer.newLine();															
+		}catch(IOException e) {
+			e.printStackTrace();
+		}
+	}
+    
+    public static List<ClassRegistration> getFromFile() { //read the txt file and put it into array to array list
+		List<ClassRegistration> classreg = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader("ClassRegistration.txt"))) {
             String line;
             while ((line = reader.readLine()) != null) {
-			tempWriter.write(line + "\n");
-            } //lalagay ung info sa tempfile
-		
-            reader.close();
-            tempWriter.close();
-		
-            BufferedReader tempReader = new BufferedReader(new FileReader(tempFile));
-            BufferedWriter inputWriter = new BufferedWriter(new FileWriter(inputFile));
-            String[] field = null;
-            while ((line = tempReader.readLine()) != null){
-		    field = line.split("\\s+"); //hahatiin tapos lalagay siya sa array
-                if (field[0].equals(upid) && field.length >=3) { //panghanap ng registration ID
-                    System.out.println("Found: " + line);
-                    String newStatus="";
-                    boolean isRight;
-                        do {
-                            System.out.print("[1]Registered\n[2]Waitlisted\n[3]Attended\nStatus: ");
-                             String ch2 = inp.nextLine(); //Status
-                             isRight =true;
-                                switch (ch2) {
-                                    case "1":
-                                        newStatus="Registered";
-                                        break;
-                                    case "2":
-                                        newStatus="Waitlisted";
-                                        break;
-                                    case "3":
-                                        newStatus="Attended";
-                                        break;
-                                    default:
-                                        System.out.print("Enter 1 for Registered 2 for Waitlisted and 3 for Attended");
-                                        isRight=false; 
-                       
-                                }
-                        } while (!isRight);
-                line = String.format("%-20s%-20s%-15s", field[0], field[1],newStatus);
-                System.out.print(line);                    
-                }
-            inputWriter.write(line + "\n");
+                String[] data = line.split("\\*");
+                String regID = data[0];
+                String status = data[2];
+                classreg.add(new ClassRegistration(regID,status));
             }
-        tempReader.close();
-        inputWriter.close();
-        tempFile.delete();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
-        
-        //PANG DISPLAY NG TXT FILE
-        public void displayAll() throws IOException {
-		BufferedReader reader = new BufferedReader(new FileReader("classRegistration.txt"));
-		String line;
-		while ((line = reader.readLine()) != null) {
-			String[] field = line.split("\\s+");
-			if (field.length >= 3) {
-			System.out.println(String.format("%-20s%-20s%-15s", field[0], field[1],field[2]));
+        return classreg;		     
+	}
+    
+    public void checkDuplicateID(String inputID) {
+    	
+    	try {
+    		boolean isDuplicate = false;
+			try (BufferedReader reader = new BufferedReader(new FileReader("ClassRegistration.txt"))) {
+				String line;
+				try {
+					while((line = reader.readLine()) != null ) {
+					String[]data=line.split("\\*");
+					if (data[0].equals(inputID) && data.length >=2) {
+						System.out.println("Registration ID "+data[0]+" already exists.");
+						isDuplicate=true;
+						isGood=false;
+						return;					
+					}
+					
+					}
+					if(!isDuplicate) {
+						saveToFile();
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			} catch (FileNotFoundException e) {
+				throw e;
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			
 		}
-		reader.close();
-        }
+    	
+    }
+    
+    // Palagay sa main yung [1]Registered [2]Waitlisted [3]Attended para sa paginput ng status
+    //Sample Main
+    /*System.out.print("Registration ID: ");  //registration ID
+			    String id = inp.nextLine();
+			    boolean isRight;
+			    String status = "";
+			            do {
+			                System.out.print("[1]Registered\n[2]Waitlisted\n[3]Attended\nStatus: ");
+			                String ch = inp.nextLine(); //Status
+			                isRight =true;
+			                switch (ch) {
+			                    case "1":
+			                        status ="Registered";
+			                        break;
+			                    case "2":
+			                        status="Waitlisted";
+			                        break;
+			                    case "3":
+			                        status="Attended";
+			                        break;
+			                    default:
+			                        System.out.println("Enter 1 for Registered 2 for Waitlisted and 3 for Attended");
+			                        isRight=false;
+			                       
+			                }
+			            } while (!isRight);
+			            
+			            ClassRegistration classreg = new ClassRegistration(id,status);
+						classreg.checkDuplicateID(id);
+						if (classreg.isGood) {
+						System.out.println("Registration ID: "+id+" Date: "+classreg.getRegistrationDate()+" Status: "+status);
+						System.out.println("Data Successfully Added");
+						}
+    
+	*/
+    
+   
+}
