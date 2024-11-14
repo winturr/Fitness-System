@@ -96,7 +96,6 @@ public class Member {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String currentDate = date.format(formatter);
         String endingDate = futureDate.format(formatter);
-		
 		System.out.print("Enter Contact Number: ");
 		String contactNo = i.nextLine();
 		System.out.print("Enter Status\n[1]Active\n[2]Inactive: ");
@@ -111,40 +110,32 @@ public class Member {
 		}
 		List<Visitor> visitorList = Visitor.getFromFile();
 		boolean isValid = false;
-		boolean isExisting = true;
-		boolean isGood = false;
-		String visitID;
+		int ctr= 0;
 		do {
 			System.out.print("Enter a valid Visitor ID: ");
-			visitID = i.nextLine();
+			String visitID = i.nextLine();
 			for (Visitor visitor: visitorList) {
 				if (visitor.getVisitorID().equals(visitID)) {
 					isValid = true;
+					List<Member> memberList = Member.getFromFile();
+					for (Member member: memberList) {
+						if (member.getVisitorID().equals(visitID)) {
+							ctr++;
+							if (ctr != 0) {
+								isValid = false;
+							}
+							else {
+								Member m = new Member(memberID, currentDate, endingDate, contactNo, status, visitID);
+								m.saveToFile();
+								System.out.println("Saved to \"Member.txt\".");
+							}
+						}
+					}
 					
 				}
 			}
-			int ctr = 0;
-			List<Member> memberList = Member.getFromFile();
-			for(Member member: memberList) {
-				if (member.getVisitorID().equals(visitID)) {
-					ctr++;
-				}
-			}
-			
-			if (ctr == 0) {
-				isExisting = false;
-				Member m = new Member(memberID, currentDate, endingDate, contactNo, status, visitID);
-				m.saveToFile();
-				System.out.println("Saved to \"Member.txt\".");
-			}
-			else {
-				isExisting = true;
-			}
-			if (isValid == true && isExisting == false)
-				isGood = true;
 		}
-		while(isGood == false);
-		System.out.println(isGood);
+		while(isValid == false);
 	}
 	//displays Member.txt in table form
 	//static method to directly access method from main without instantiation

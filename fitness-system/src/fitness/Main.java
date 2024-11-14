@@ -8,6 +8,8 @@ import java.util.*;
 public class Main {
 
 	public static void main(String[] args) throws IOException {
+		Visitor.display();
+		Member.display();
 		Member.add();
 	}
 
