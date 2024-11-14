@@ -84,91 +84,7 @@ public class ClassRegistration {
 	        }	        
 	    return classreg;
 	 }
-	 
-	 public static void ClassRegistrationUser() throws IOException {
-		 System.out.print("[1]Add Record\n[2]Delete Record\n[3]Display Record\n[4]Exit\nSelect an Operation for Class Registration: ");
-		 String userChoice = inp.nextLine();
-		 switch (userChoice) {
-		 	case "1":
-		 		String regID = null;
-		 		do {
-		 		System.out.print("Registration ID: ");
-		 		regID = inp.nextLine();
-		 		if (!isRegistrationIDValid(regID)) System.out.println("Registration ID Already Exist.");
-		 		} while (!isRegistrationIDValid(regID));
-		 		
-		 		String classID = null;
-		 		do {
-		 		System.out.print("Class ID: ");
-		 		classID = inp.nextLine();
-		 		if (!isClassIDValid(classID)) System.out.println("Class ID Doesn't Exist.");;
-		 		} while (!isClassIDValid(classID));
-		 		
-		 		String visitorID = null;
-		 		do {
-		 		System.out.print("Visitor ID: ");
-		 		visitorID = inp.nextLine();
-		 		if (!isVisitorIDValid(visitorID)) System.out.println("Visitor ID Doesn't Exist.");
-		 		} while (!isVisitorIDValid(visitorID));
-		 		
-		 		
-		 		
-		 		//check if there is an existing regID
-		 		ClassRegistration classReg = new ClassRegistration(regID,classID,visitorID);		 		
-		 		if (isRegistrationIDValid(regID) && isVisitorIDValid(visitorID) && isClassIDValid(classID)) {		 			
-		 			classReg.saveToFile();
-		 			System.out.println("Data Successfully Added");
-		 		} 
-		 		
-		 		
-		 		break;
-		 	case "2":
-		 		String classDel = null;
-		 		boolean isDeleted = true;
-		 		do {
-		 		System.out.print("Enter CLass Registration ID you want to delete: ");
-		 		classDel = inp.nextLine();
-		 		System.out.print("Are you sure you want to delete this record? (Yes or No): ");
-		 		String choice = inp.nextLine().toLowerCase();
-		 		if (choice.equals("no")) isDeleted = false;
-		 		if (isRegistrationIDValid(classDel)) System.out.println("Registration ID doesnt Exist");
-		 		} while(isRegistrationIDValid(classDel));
-		 		
-		 		if(isDeleted) {
-		 		List<ClassRegistration> classRegistrationList = ClassRegistration.getFromFile();
-		 		BufferedWriter writer = new BufferedWriter(new FileWriter("ClassRegistration.txt"));
-		 		for (ClassRegistration classRegis : classRegistrationList) {
-		 			if (!classRegis.getRegistrationID().equals(classDel)) {
-		 				writer.write(classRegis.getRegistrationID()+"*"+classRegis.getRegistrationDate()+"*"+classRegis.getClassID()+"*"+classRegis.getVisitorID());
-		 				writer.newLine();
-		 				isDeleted = true;
-		 			}
-		 			
-		 		}
-		 		writer.close();
-		 		System.out.println("Data Deleted");
-		 		}
-		 		break;
-		 	case "3":
-		 		List <ClassRegistration> classreg = (List<ClassRegistration>) ClassRegistration.getFromFile();
-		 		System.out.println(String.format("%s", "-------------------------------------------------------------------------------"));
-		 		System.out.println(String.format("%5s %2s %15s %3s %11s %6s %12s %3s"," Reigstration ID","|","  Registration Date","|","Class ID","|","VisitorID","|"));
-		 		System.out.println(String.format("%s", "-------------------------------------------------------------------------------"));
-		 		for(ClassRegistration cl: classreg) {
-		 			System.out.format("%10s %8s %15s %7s %8s %9s %8s %7s", cl.getRegistrationID(), "|", cl.getRegistrationDate(),"|",cl.getClassID(),"|",cl.getVisitorID(),"|");
-		 			System.out.println();		 				 		
-		 		}
-		 		System.out.println(String.format("%s", "-------------------------------------------------------------------------------"));
-		 		break;
-		 	case "4":
-		 		//for exit
-		 		break;
-		 }
-	 }
-	 
-	 
-	 
-	 
+	 	 	 	 	 	 
 	 public static boolean isRegistrationIDValid (String regID) throws IOException {
 		 List<ClassRegistration> classGet = ClassRegistration.getFromFile();
 	 		for (ClassRegistration regClass : classGet) {
@@ -199,6 +115,76 @@ public class ClassRegistration {
 	 	return false;
 	 }
 	 
+	 public static void add() throws IOException {
+		 String regID = null;
+	 		do {
+	 		System.out.print("Registration ID: ");
+	 		regID = inp.nextLine();
+	 		if (!isRegistrationIDValid(regID)) System.out.println("Registration ID Already Exist.");
+	 		} while (!isRegistrationIDValid(regID));
+	 		
+	 		String classID = null;
+	 		do {
+	 		System.out.print("Class ID: ");
+	 		classID = inp.nextLine();
+	 		if (!isClassIDValid(classID)) System.out.println("Class ID Doesn't Exist.");;
+	 		} while (!isClassIDValid(classID));
+	 		
+	 		String visitorID = null;
+	 		do {
+	 		System.out.print("Visitor ID: ");
+	 		visitorID = inp.nextLine();
+	 		if (!isVisitorIDValid(visitorID)) System.out.println("Visitor ID Doesn't Exist.");
+	 		} while (!isVisitorIDValid(visitorID));
+	 		
+	 		
+	 		
+	 		//check if there is an existing regID
+	 		ClassRegistration classReg = new ClassRegistration(regID,classID,visitorID);		 		
+	 		if (isRegistrationIDValid(regID) && isVisitorIDValid(visitorID) && isClassIDValid(classID)) {		 			
+	 			classReg.saveToFile();
+	 			System.out.println("Data Successfully Added");
+	 		} 
+	 }
 	 
+	 public static void delete() throws IOException {
+		 String classDel = null;
+	 		boolean isDeleted = true;
+	 		do {
+	 		System.out.print("Enter CLass Registration ID you want to delete: ");
+	 		classDel = inp.nextLine();
+	 		System.out.print("Are you sure you want to delete this record? (Yes or No): ");
+	 		String choice = inp.nextLine().toLowerCase();
+	 		if (choice.equals("no")) isDeleted = false;
+	 		if (isRegistrationIDValid(classDel)) System.out.println("Registration ID doesnt Exist");
+	 		} while(isRegistrationIDValid(classDel));
+	 		
+	 		if(isDeleted) {
+	 		List<ClassRegistration> classRegistrationList = ClassRegistration.getFromFile();
+	 		BufferedWriter writer = new BufferedWriter(new FileWriter("ClassRegistration.txt"));
+	 		for (ClassRegistration classRegis : classRegistrationList) {
+	 			if (!classRegis.getRegistrationID().equals(classDel)) {
+	 				writer.write(classRegis.getRegistrationID()+"*"+classRegis.getRegistrationDate()+"*"+classRegis.getClassID()+"*"+classRegis.getVisitorID());
+	 				writer.newLine();
+	 				isDeleted = true;
+	 			}
+	 			
+	 		}
+	 		writer.close();
+	 		System.out.println("Data Deleted");
+	 		}
+	 }
+	 
+	 public static void display() throws IOException {
+		 List <ClassRegistration> classreg = (List<ClassRegistration>) ClassRegistration.getFromFile();
+	 		System.out.println(String.format("%s", "-------------------------------------------------------------------------------"));
+	 		System.out.println(String.format("%5s %2s %15s %3s %11s %6s %12s %3s"," Reigstration ID","|","  Registration Date","|","Class ID","|","VisitorID","|"));
+	 		System.out.println(String.format("%s", "-------------------------------------------------------------------------------"));
+	 		for(ClassRegistration cl: classreg) {
+	 			System.out.format("%10s %8s %15s %7s %8s %9s %8s %7s", cl.getRegistrationID(), "|", cl.getRegistrationDate(),"|",cl.getClassID(),"|",cl.getVisitorID(),"|");
+	 			System.out.println();		 				 		
+	 		}
+	 		System.out.println(String.format("%s", "-------------------------------------------------------------------------------"));
+	 }
 }
 
