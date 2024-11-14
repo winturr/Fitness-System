@@ -124,33 +124,41 @@ public class ClassRegistration {
 		 		break;
 		 	case "2":
 		 		String classDel = null;
+		 		boolean isDeleted = true;
 		 		do {
 		 		System.out.print("Enter CLass Registration ID you want to delete: ");
 		 		classDel = inp.nextLine();
+		 		System.out.print("Are you sure you want to delete this record? (Yes or No): ");
+		 		String choice = inp.nextLine().toLowerCase();
+		 		if (choice.equals("no")) isDeleted = false;
+		 		if (isRegistrationIDValid(classDel)) System.out.println("Registration ID doesnt Exist");
 		 		} while(isRegistrationIDValid(classDel));
 		 		
+		 		if(isDeleted) {
 		 		List<ClassRegistration> classRegistrationList = ClassRegistration.getFromFile();
 		 		BufferedWriter writer = new BufferedWriter(new FileWriter("ClassRegistration.txt"));
 		 		for (ClassRegistration classRegis : classRegistrationList) {
 		 			if (!classRegis.getRegistrationID().equals(classDel)) {
 		 				writer.write(classRegis.getRegistrationID()+"*"+classRegis.getRegistrationDate()+"*"+classRegis.getClassID()+"*"+classRegis.getVisitorID());
 		 				writer.newLine();
+		 				isDeleted = true;
 		 			}
 		 			
 		 		}
 		 		writer.close();
-		 		System.out.print("Data Deleted");
-		 		
+		 		System.out.println("Data Deleted");
+		 		}
 		 		break;
 		 	case "3":
 		 		List <ClassRegistration> classreg = (List<ClassRegistration>) ClassRegistration.getFromFile();
+		 		System.out.println(String.format("%s", "-------------------------------------------------------------------------------"));
 		 		System.out.println(String.format("%5s %2s %15s %3s %11s %6s %12s %3s"," Reigstration ID","|","  Registration Date","|","Class ID","|","VisitorID","|"));
-		 		System.out.println(String.format("%s", "----------------------------------------------------------------------------------"));
+		 		System.out.println(String.format("%s", "-------------------------------------------------------------------------------"));
 		 		for(ClassRegistration cl: classreg) {
 		 			System.out.format("%10s %8s %15s %7s %8s %9s %8s %7s", cl.getRegistrationID(), "|", cl.getRegistrationDate(),"|",cl.getClassID(),"|",cl.getVisitorID(),"|");
 		 			System.out.println();		 				 		
 		 		}
-		 		
+		 		System.out.println(String.format("%s", "-------------------------------------------------------------------------------"));
 		 		break;
 		 	case "4":
 		 		//for exit
