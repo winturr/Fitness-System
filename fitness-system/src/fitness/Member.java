@@ -121,16 +121,18 @@ public class Member {
 					for (Member member: memberList) {
 						if (member.getVisitorID().equals(visitID)) {
 							ctr++;
-							if (ctr != 0) {
-								isValid = false;
-							}
-							else {
-								Member m = new Member(memberID, currentDate, endingDate, contactNo, status, visitID);
-								m.saveToFile();
-								System.out.println("Saved to \"Member.txt\".");
-							}
 						}
 					}
+					if (ctr != 0) {
+						isValid = false;
+						System.out.println(ctr);
+					}
+					else {
+						Member m = new Member(memberID, currentDate, endingDate, contactNo, status, visitID);
+						m.saveToFile();
+						System.out.println("Saved to \"Member.txt\".");
+					}
+					ctr = 0;
 					
 				}
 			}
