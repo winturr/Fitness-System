@@ -80,7 +80,7 @@ public class Class {
     }
 
     // Method to manage class creation, update, and deletion
-    public static void manageClassFromUserInput() throws IOException {
+    public static void manageClassFromUserInput() {
         Scanner inp = new Scanner(System.in);
         System.out.println("Select an operation for Class:");
         System.out.println("1. Create Class");
@@ -102,7 +102,8 @@ public class Class {
                 String startTime = inp.nextLine();
                 System.out.println("Enter End Time: ");
                 String endTime = inp.nextLine();
-                displayClassFile();
+                try{Staff.displayStafffile();}
+                catch(IOException e){}
                 System.out.println("Enter a Valid Staff ID: ");
                 String staffID = inp.nextLine();
                 
