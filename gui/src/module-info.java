@@ -4,6 +4,6 @@
 /**
  * 
  */
-module gymdatabase {
+module gui {
 	requires java.desktop;
 }
