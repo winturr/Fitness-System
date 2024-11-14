@@ -88,14 +88,15 @@ public class Member {
         return m;
 	}
 	public static void add()throws IOException {
-		System.out.print("Enter Member ID: ");
-		String memberID = i.nextLine();
-		
 		LocalDate date = LocalDate.now();
 		LocalDate futureDate = date.plusYears(3);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String currentDate = date.format(formatter);
         String endingDate = futureDate.format(formatter);
+        //Grabs local time; another with added 3 years (the only available membership length
+        
+        System.out.print("Enter Member ID: ");
+		String memberID = i.nextLine();
 		System.out.print("Enter Contact Number: ");
 		String contactNo = i.nextLine();
 		System.out.print("Enter Status\n[1]Active\n[2]Inactive: ");
@@ -109,7 +110,7 @@ public class Member {
 			break;
 		}
 		List<Visitor> visitorList = Visitor.getFromFile();
-		boolean isValid = false;
+		boolean isValid = false;//
 		int ctr= 0;
 		do {
 			System.out.print("Enter a valid Visitor ID: ");
@@ -125,7 +126,6 @@ public class Member {
 					}
 					if (ctr != 0) {
 						isValid = false;
-						System.out.println(ctr);
 					}
 					else {
 						Member m = new Member(memberID, currentDate, endingDate, contactNo, status, visitID);
@@ -147,11 +147,11 @@ public class Member {
 		System.out.println(String.format("%9s %3s %15s %1s %5s %1s %5s %5s %10s %5s %5s","MemberID", "|","MembershipStartDate" ,"|","MembershipEndDate", "|", "ContactInfo","|", "Status","|", "VisitorID"));
 		System.out.println(String.format("%s", "-----------------------------------------------------------------------------------------------------"));
 		for(Member me: members) {
-			System.out.println(String.format("%9s %3s %5s %10s %5s %8s %11s %5s %10s %5s %5s", me.getMemberID(),"|",me.getMembershipStartDate() ,"|", me.getMembershipEndDate(),"|",me.getContactNo(),"|",me.getStatus(), "|", me.getVisitorID()));
+			System.out.println(String.format("%9s %3s %5s %10s %5s %8s %11s %5s %10s %4s %5s", me.getMemberID(),"|",me.getMembershipStartDate() ,"|", me.getMembershipEndDate(),"|",me.getContactNo(),"|",me.getStatus(), "|", me.getVisitorID()));
 		}
 	}
 	public static void update()throws IOException {
-		List<Member> memberList = Member.getFromFile();
+		List<Member> memberList = Member.getFromFile();//.txt file into ArrayList
 		System.out.print("Look for ID: ");
 		String id = i.nextLine();
 		System.out.print("Enter new Contact Info: ");
@@ -165,8 +165,9 @@ public class Member {
 		case "2":
 			ns = "Inactive";
 		}
-	    for (Member member : memberList) {
-	        if (member.getMemberID().equals(id)) {
+	    for (Member member : memberList) {//looks for given MemberID
+	        if (member.getMemberID().equals(id)) {//if found
+	        	//replaces values
 	            member.setContactNo(nc);
 	            member.setStatus(ns);
 	            member.saveToFile();
@@ -174,11 +175,33 @@ public class Member {
 	        }
 	    }
 	    BufferedWriter writer = new BufferedWriter(new FileWriter("Member.txt"));
-        for (Member member : memberList) {
-        	writer.write(member.getMemberID() + "*" + member.getMembershipStartDate() + "*" + member.getMembershipEndDate() + "*" + member.getContactNo() + "*" + member.getStatus());
+        for (Member member : memberList) {//rewrites the ArrayList with updated record into the .txt file
+        	writer.write(member.getMemberID() + "*" + member.getMembershipStartDate() + "*" + member.getMembershipEndDate() + "*" + member.getContactNo() + "*" + member.getStatus() + "*" + member.getVisitorID() + "*");
             writer.newLine();
         }
         System.out.print("Updated Entry.");
         writer.close();
+	}
+	public static void delete()throws IOException{
+		List<Member> memberList = Member.getFromFile();//.txt file into ArrayList
+		System.out.print("Look for ID: ");
+		String id = i.nextLine();
+		System.out.print("Are you sure you want to delete " + id + "?\n[1]Yes [2]No --> ");
+        String deleteConfirm = i.nextLine();
+        switch(deleteConfirm) {
+        case "1"://case 1 / "YES"
+        	BufferedWriter writer = new BufferedWriter(new FileWriter("Member.txt"));//rewrites .txt file
+        	for (Member member: memberList) {
+        		if(!member.getMemberID().equals(id)) {//skips MemberID input from being written
+        			writer.write(member.getMemberID() + "*" + member.getMembershipStartDate() + "*" + member.getMembershipEndDate() + "*" + member.getContactNo() + "*" + member.getStatus() + "*" + member.getVisitorID() + "*");
+                    writer.newLine();
+        		}
+        	}
+        	writer.close();
+        System.out.println("Deleted.");
+        break;
+        case "2": //case 2 / "NO"
+        	System.out.println("Deletion cancelled.");
+        }
 	}
 }

@@ -89,4 +89,26 @@ public class Visitor {
         System.out.println("Updated Entry.");
         writer.close();
 	}
+	public static void delete()throws IOException{
+		List<Visitor> visitorList = Visitor.getFromFile();//.txt file into ArrayList
+		System.out.print("Look for ID: ");
+		String id = i.nextLine();
+		System.out.print("Are you sure you want to delete " + id + "?\n[1]Yes [2]No --> ");
+        String deleteConfirm = i.nextLine();
+        switch(deleteConfirm) {
+        case "1"://case 1 / "YES"
+        	BufferedWriter writer = new BufferedWriter(new FileWriter("Visitor.txt"));//rewrites .txt file
+        	for (Visitor visitor: visitorList) {
+        		if(!visitor.getVisitorID().equals(id)) {//skips VisitorID input from being written
+        			writer.write(visitor.getVisitorID() + "*" + visitor.getName());
+                    writer.newLine();
+        		}
+        	}
+        	writer.close();
+        System.out.println("Deleted.");
+        break;
+        case "2": //case 2 / "NO"
+        	System.out.println("Deletion cancelled.");
+        }
+	}
 }
