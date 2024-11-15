@@ -51,8 +51,25 @@ public class Visitor {
 	}
 	//adds a Visitor record to "Visitor.txt"
 	public static void add()throws IOException {
-		System.out.print("Enter Visitor ID: ");
-		String visitorID = i.nextLine();
+		String visitorID;
+		List <Visitor> visitorList = (List<Visitor>) Visitor.getFromFile();
+		boolean isValid = false;
+		int ctr = 0;
+		do {
+			System.out.print("Enter Visitor ID: ");
+			visitorID = i.nextLine();
+			for (Visitor visitor : visitorList) {
+				if(visitor.getVisitorID().equals(visitorID)) {	
+					ctr++;
+					System.out.println("Visitor ID already exists. Please try again.");
+				}
+			}
+			if (ctr == 0) {
+				isValid = true;
+			}
+			ctr = 0;
+		}
+		while(isValid == false);
 		System.out.print("Enter Visitor Name: ");
 		String visitorName = i.nextLine();
 		Visitor v = new Visitor(visitorID, visitorName);
