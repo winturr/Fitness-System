@@ -94,9 +94,25 @@ public class Member {
         String currentDate = date.format(formatter);
         String endingDate = futureDate.format(formatter);
         //Grabs local time; another with added 3 years (the only available membership length
-        
-        System.out.print("Enter Member ID: ");
-		String memberID = i.nextLine();
+        String memID;
+        List<Member> memberList = Member.getFromFile();
+        boolean isValid = false;
+        int ctr = 0;
+        do {
+        	System.out.print("Enter Member ID: ");
+    		memID = i.nextLine();
+     		for (Member member : memberList) {
+     			if(member.getMemberID().equals(memID)) {	
+     				ctr++;
+     				System.out.println("Member ID already exists. Please try again.");
+     			}
+     		}
+     		if (ctr == 0) {
+     			isValid = true;
+     		}
+     		ctr = 0;
+        }
+        while(isValid == false);
 		System.out.print("Enter Contact Number: ");
 		String contactNo = i.nextLine();
 		System.out.print("Enter Status\n[1]Active\n[2]Inactive: ");
@@ -110,30 +126,27 @@ public class Member {
 			break;
 		}
 		List<Visitor> visitorList = Visitor.getFromFile();
-		boolean isValid = false;//
-		int ctr= 0;
+		isValid = false;//
 		do {
 			System.out.print("Enter a valid Visitor ID: ");
 			String visitID = i.nextLine();
 			for (Visitor visitor: visitorList) {
 				if (visitor.getVisitorID().equals(visitID)) {
 					isValid = true;
-					List<Member> memberList = Member.getFromFile();
 					for (Member member: memberList) {
 						if (member.getVisitorID().equals(visitID)) {
-							ctr++;
+								ctr++;
 						}
 					}
 					if (ctr != 0) {
 						isValid = false;
 					}
 					else {
-						Member m = new Member(memberID, currentDate, endingDate, contactNo, status, visitID);
+						Member m = new Member(memID, currentDate, endingDate, contactNo, status, visitID);
 						m.saveToFile();
 						System.out.println("Saved to \"Member.txt\".");
 					}
 					ctr = 0;
-					
 				}
 			}
 		}
@@ -144,7 +157,7 @@ public class Member {
 	public static void display() throws IOException {
 		List <Member> members = (List<Member>) Member.getFromFile();
 		System.out.println(String.format("%s", "-----------------------------------------------------------------------------------------------------"));
-		System.out.println(String.format("%9s %3s %15s %1s %5s %1s %5s %5s %10s %5s %5s","MemberID", "|","MembershipStartDate" ,"|","MembershipEndDate", "|", "ContactInfo","|", "Status","|", "VisitorID"));
+		System.out.println(String.format("%9s %3s %15s %1s %5s %1s %5s %5s %10s %4s %5s","MemberID", "|","MembershipStartDate" ,"|","MembershipEndDate", "|", "ContactInfo","|", "Status","|", "VisitorID"));
 		System.out.println(String.format("%s", "-----------------------------------------------------------------------------------------------------"));
 		for(Member me: members) {
 			System.out.println(String.format("%9s %3s %5s %10s %5s %8s %11s %5s %10s %4s %5s", me.getMemberID(),"|",me.getMembershipStartDate() ,"|", me.getMembershipEndDate(),"|",me.getContactNo(),"|",me.getStatus(), "|", me.getVisitorID()));
@@ -152,8 +165,26 @@ public class Member {
 	}
 	public static void update()throws IOException {
 		List<Member> memberList = Member.getFromFile();//.txt file into ArrayList
-		System.out.print("Look for ID: ");
-		String id = i.nextLine();
+		boolean isValid = false;
+		int ctr = 0;
+		String id;
+		do {
+			System.out.print("Look for ID: ");
+			id = i.nextLine();
+			for (Member member: memberList) {
+				if(member.getMemberID().equals(id)) {
+					ctr++;
+					System.out.println("Member ID "+ member.getMemberID() +" Found.");
+				}
+			}
+			if (ctr != 0) {
+				isValid = true;
+			}
+			else {
+				System.out.println("Member ID not found.");
+			}
+		}
+		while(isValid == false);
 		System.out.print("Enter new Contact Info: ");
 		String nc = i.nextLine();
 		System.out.print("Enter new status, [1]Active [2]Inactive: ");
@@ -202,6 +233,7 @@ public class Member {
         break;
         case "2": //case 2 / "NO"
         	System.out.println("Deletion cancelled.");
+        	break;
         }
 	}
 }
