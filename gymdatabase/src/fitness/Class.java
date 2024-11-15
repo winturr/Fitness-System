@@ -1,18 +1,12 @@
 package fitness;
-
+    
 import java.io.*;
 import java.util.*;
 
 public class Class {
-    private String classID;
-    private String className;
-    private int maxCapacity;
-    private String startTime;
-    private String endTime;
-    private String staffID; // Associated staff
-
-    // Constructor
-    public Class(String classID, String className, int maxCapacity, String startTime, String endTime, String staffID) {
+    private String classID, className, startTime,endTime,staffID,maxCapacity;
+    
+    public Class(String classID, String className, String maxCapacity, String startTime, String endTime, String staffID) {
         this.classID = classID;
         this.className = className;
         this.maxCapacity = maxCapacity;
@@ -20,52 +14,39 @@ public class Class {
         this.endTime = endTime;
         this.staffID = staffID;
     }
-
-    // Getters and Setters
     public String getClassID() {
         return classID;
     }
-
     public void setClassID(String classID) {
         this.classID = classID;
     }
-
     public String getClassName() {
         return className;
     }
-
     public void setClassName(String className) {
         this.className = className;
     }
-
-    public int getMaxCapacity() {
+    public String getMaxCapacity() {
         return maxCapacity;
     }
-
-    public void setMaxCapacity(int maxCapacity) {
+    public void setMaxCapacity(String maxCapacity) {
         this.maxCapacity = maxCapacity;
     }
-
     public String getStartTime() {
         return startTime;
     }
-
     public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
-
     public String getEndTime() {
         return endTime;
     }
-
     public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
-
     public String getStaffID() {
         return staffID;
     }
-
     public void setStaffID(String staffID) {
         this.staffID = staffID;
     }
@@ -78,7 +59,7 @@ public class Class {
             while ((line = reader.readLine()) != null) {
                 String[] data = line.split("\\|");
                 if (data.length == 6) {
-                    classList.add(new Class(data[0].trim(), data[1].trim(), Integer.parseInt(data[2].trim()), data[3].trim(), data[4].trim(), data[5].trim()));
+                    classList.add(new Class(data[0].trim(), data[1].trim(),(data[2].trim()), data[3].trim(), data[4].trim(), data[5].trim()));
                 }
             }
         } catch (IOException e) {
@@ -86,10 +67,32 @@ public class Class {
         }
         return classList;
     }
+    
+    public static void displayClassFile()throws IOException{
+        try (BufferedReader writer = new BufferedReader(new FileReader("class.txt"))) {
+            String line;
+            while((line = writer.readLine()) != null)
+            {
+                System.out.println(line);
+            }   }
+        catch(IOException e){ 
+            System.out.println("Error dispalying file: " +e.getMessage());
+        }
+    }
 
+    public static boolean isClassIDValid(String classID) {
+            List<Class> classList = loadClassesFromFile();
+            for (Class clas : classList) {
+                if (clas.getStaffID().equals(classID)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    
     // Method to check if staff ID is valid for class creation
     public static boolean isStaffIDValid(String staffID) {
-        List<Staff> staffList = Staff.getFromFile();
+        List<Staff> staffList = Staff.loadStaffFromFile();
         for (Staff staff : staffList) {
             if (staff.getStaffID().equals(staffID)) {
                 return true;
@@ -100,74 +103,121 @@ public class Class {
 
     // Method to manage class creation, update, and deletion
     public static void manageClassFromUserInput() {
-        Scanner scanner = new Scanner(System.in);
-
+        Scanner inp = new Scanner(System.in);
         System.out.println("Select an operation for Class:");
         System.out.println("1. Create Class");
         System.out.println("2. Update Class");
         System.out.println("3. Delete Class");
-        int choice = scanner.nextInt();
-        scanner.nextLine();  // Consume newline
+        System.out.println("4. View Staff file");
+        int choice = inp.nextInt();
+        inp.nextLine();  // Consume newline
 
         switch (choice) {
             case 1:
                 // Create Class
+                System.out.println("Here is the Class file:");
+                try{displayClassFile();}
+                catch(IOException e){System.out.println("Error dispalying file: " +e.getMessage());}
                 System.out.println("Enter Class ID: ");
-                String classID = scanner.nextLine();
-                System.out.println("Enter Class Name: ");
-                String className = scanner.nextLine();
-                System.out.println("Enter Max Capacity: ");
-                int maxCapacity = scanner.nextInt();
-                scanner.nextLine();  // Consume newline
-                System.out.println("Enter Start Time: ");
-                String startTime = scanner.nextLine();
-                System.out.println("Enter End Time: ");
-                String endTime = scanner.nextLine();
-                System.out.println("Enter Staff ID: ");
-                String staffID = scanner.nextLine();
-
-                if (isStaffIDValid(staffID)) {
-                    Class newClass = new Class(classID, className, maxCapacity, startTime, endTime, staffID);
-                    addClassToFile(newClass);
-                    System.out.println("Class created successfully!");
-                } else {
-                    System.out.println("Error: Invalid Staff ID.");
+                String classID = inp.nextLine();
+                int ctr = 1;
+                while(ctr == 1){
+                    if (isClassIDValid(classID)){
+                            System.out.println("Class ID already exist,");
+                            System.out.println("Enter a Valid Class ID: ");
+                            classID = inp.nextLine();
+                        }
+                    else{
+                        while(ctr==1){
+                            System.out.println("Enter Class Name: ");
+                            String className = inp.nextLine();
+                            System.out.println("Enter Max Capacity: ");
+                            String maxCapacity = inp.nextLine();
+                            System.out.println("Enter Start Time: ");
+                            String startTime = inp.nextLine();
+                            System.out.println("Enter End Time: ");
+                            String endTime = inp.nextLine();
+                            try{Staff.displayStafffile();}
+                            catch(IOException e){System.out.println("Error dispalying file: " +e.getMessage());}
+                            System.out.println("Enter a Valid Staff ID: ");
+                            String staffID = inp.nextLine();
+                            if (isStaffIDValid(staffID)) {
+                                Class newClass = new Class(classID, className, maxCapacity, startTime, endTime, staffID);
+                                addClassToFile(newClass);
+                                System.out.println("Class created successfully!");
+                                ctr = 0;
+                            } 
+                            else {
+                                System.out.println("Error: Invalid Staff ID.");
+                            }
+                        }
+                    }
                 }
                 break;
 
             case 2:
                 // Update Class
+                System.out.println("Here is the Class file:");
+                try{displayClassFile();}
+                catch(IOException e){System.out.println("Error dispalying file: " +e.getMessage());}
                 System.out.println("Enter Class ID to update: ");
-                String updateClassID = scanner.nextLine();
-                System.out.println("Enter New Class Name: ");
-                String newClassName = scanner.nextLine();
-                System.out.println("Enter New Max Capacity: ");
-                int newMaxCapacity = scanner.nextInt();
-                scanner.nextLine();  // Consume newline
-                System.out.println("Enter New Start Time: ");
-                String newStartTime = scanner.nextLine();
-                System.out.println("Enter New End Time: ");
-                String newEndTime = scanner.nextLine();
-                System.out.println("Enter New Staff ID: ");
-                String newStaffID = scanner.nextLine();
-
-                if (isStaffIDValid(newStaffID)) {
-                    Class updatedClass = new Class(updateClassID, newClassName, newMaxCapacity, newStartTime, newEndTime, newStaffID);
-                    updateClassInFile(updateClassID, updatedClass);
-                    System.out.println("Class updated successfully!");
-                } else {
-                    System.out.println("Error: Invalid Staff ID.");
+                String updateClassID = inp.nextLine();
+                int ctr1 = 1;
+                while(ctr1 ==1){
+                    if (isClassIDValid(updateClassID)){
+                        System.out.println("Enter New Class Name: ");
+                        String newClassName = inp.nextLine();
+                        System.out.println("Enter New Max Capacity: ");
+                        String newMaxCapacity = inp.nextLine();
+                        System.out.println("Enter New Start Time: ");
+                        String newStartTime = inp.nextLine();
+                        System.out.println("Enter New End Time: ");
+                        String newEndTime = inp.nextLine();
+                        System.out.println("Enter New Staff ID: ");
+                        String newStaffID = inp.nextLine();
+                        if (isStaffIDValid(newStaffID)) {
+                            Class updatedClass = new Class(updateClassID, newClassName, newMaxCapacity, newStartTime, newEndTime, newStaffID);
+                            updateClassInFile(updateClassID, updatedClass);
+                            System.out.println("Class updated successfully!");
+                            ctr1 = 0;
+                        } 
+                        else {
+                            System.out.println("Error: Invalid Staff ID.");
+                        }
+                    }
+                    else{
+                        System.out.println("Class ID Does Not Exist;");
+                        System.out.println("Enter Class ID to update: ");
+                        updateClassID = inp.nextLine();
+                    }
                 }
                 break;
 
             case 3:
                 // Delete Class
+                System.out.println("Here is the Class file:");
+                try{displayClassFile();}
+                catch(IOException e){System.out.println("Error dispalying file: " +e.getMessage());}
                 System.out.println("Enter Class ID to delete: ");
-                String deleteClassID = scanner.nextLine();
-                deleteClassFromFile(deleteClassID);
-                System.out.println("Class deleted successfully!");
+                String deleteClassID = inp.nextLine();
+                int ctr2 = 1;
+                while(ctr2 ==1){
+                    if (isClassIDValid(deleteClassID)){
+                        deleteClassFromFile(deleteClassID);
+                        System.out.println("Class deleted successfully!");
+                        ctr2 =0;
+                    }
+                    else{
+                        System.out.println("Class ID Does Not Exist;");
+                        System.out.println("Enter Class ID to delete: ");
+                        deleteClassID = inp.nextLine();
+                    }
+                }
                 break;
-
+            case 4:
+                try{displayClassFile();}
+                catch(IOException e){System.out.println("Error dispalying file: " +e.getMessage());}
+                break;
             default:
                 System.out.println("Invalid choice.");
         }
@@ -177,7 +227,7 @@ public class Class {
     public static void addClassToFile(Class fitnessClass) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("class.txt", true))) {
             writer.write(fitnessClass.getClassID() + " | " + fitnessClass.getClassName() + " | " + fitnessClass.getMaxCapacity() + " | "
-                    + fitnessClass.getStartTime() + " | " + fitnessClass.getEndTime() + " | " + fitnessClass.getStaffID());
+            + fitnessClass.getStartTime() + " | " + fitnessClass.getEndTime() + " | " + fitnessClass.getStaffID());
             writer.newLine();
         } catch (IOException e) {
             System.out.println("Error writing class to file: " + e.getMessage());
@@ -193,7 +243,7 @@ public class Class {
                     fitnessClass = updatedClass;  // Update class
                 }
                 writer.write(fitnessClass.getClassID() + " | " + fitnessClass.getClassName() + " | " + fitnessClass.getMaxCapacity() + " | "
-                        + fitnessClass.getStartTime() + " | " + fitnessClass.getEndTime() + " | " + fitnessClass.getStaffID());
+                + fitnessClass.getStartTime() + " | " + fitnessClass.getEndTime() + " | " + fitnessClass.getStaffID());
                 writer.newLine();
             }
         } catch (IOException e) {
@@ -208,7 +258,7 @@ public class Class {
             for (Class fitnessClass : classList) {
                 if (!fitnessClass.getClassID().equals(classID)) {
                     writer.write(fitnessClass.getClassID() + " | " + fitnessClass.getClassName() + " | " + fitnessClass.getMaxCapacity() + " | "
-                            + fitnessClass.getStartTime() + " | " + fitnessClass.getEndTime() + " | " + fitnessClass.getStaffID());
+                    + fitnessClass.getStartTime() + " | " + fitnessClass.getEndTime() + " | " + fitnessClass.getStaffID());
                     writer.newLine();
                 }
             }
