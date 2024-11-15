@@ -10,13 +10,12 @@ public class Staff {
     public static Scanner i = new Scanner(System.in);
     private String staffID;
     private String name;
-    private String role;
-    private String contactInfo;
+    private String contactNo;
     private String roleID;
-    public Staff(String staffID, String name, String contactInfo, String roleID) {
+    public Staff(String staffID, String name, String contactNo, String roleID) {
         this.staffID = staffID;
         this.name = name;
-        this.contactInfo = contactInfo;
+        this.contactNo = contactNo;
         this.roleID= roleID;
     }
     public Staff() {
@@ -31,31 +30,28 @@ public class Staff {
     public void setName(String name) {
         this.name = name;
     }
-    public void setRoleId(String roleID) {
+    public void setRoleID(String roleID) {
         this.roleID = roleID;
     }
-    public void setContactInfo(String contactInfo) {
-        this.contactInfo = contactInfo;
+    public void setContactNo(String contactNo) {
+        this.contactNo = contactNo;
     }
     public String getStaffID() {
         return staffID;
     }
 
-    public String getRoleId() {
+    public String getRoleID() {
         return roleID;
     }
     public String getName() {
         return name;
     }
-    public String getRole() {
-        return role;
-    }
-    public String getContactInfo() {
-        return contactInfo;
+    public String getContactNo() {
+        return contactNo;
     }
     public void saveToFile() {
         try(BufferedWriter writer = new BufferedWriter(new FileWriter("Staff.txt", true))) {
-            writer.write(staffID + "*" + name +"*" + contactInfo + "*"+roleID+"*");
+            writer.write(staffID + "*" + name +"*" + contactNo + "*"+roleID+"*");
             writer.newLine();
         }catch(IOException e) {
             e.printStackTrace();
@@ -114,7 +110,7 @@ public class Staff {
                 if(role.getRoleId().equals(roleId)) {
                     isValid = true;
                 }
-            }setRoleId(roleId);
+            }setRoleID(roleId);
         }while(isValid == false);
 
 
@@ -127,7 +123,7 @@ public class Staff {
         System.out.println(String.format("%9s %3s %26s %5s %15s %10s %15s","StaffID" ,"|","Name","|","Role","|","ContactInfo"));
         System.out.println(String.format("%s", "------------------------------------------------------------------------------------------"));
         for(Staff st: staff) {
-            System.out.format("%9s %3s %26s %5s %15s %10s %15s", st.getStaffID(), "|", st.getName(),"|", st.getRole(),"|", st.getContactInfo());
+            System.out.format("%9s %3s %26s %5s %15s %10s %15s", st.getStaffID(), "|", st.getName(),"|", st.getContactNo(),"|", st.getRoleID());
             System.out.println();
         }
     }
