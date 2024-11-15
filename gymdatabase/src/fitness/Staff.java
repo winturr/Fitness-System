@@ -1,4 +1,4 @@
-
+package fitness;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -80,19 +80,24 @@ public class Staff {
 
     }
     public void add() {
-        boolean isValid = false;
-        List<Staff> staffs = Staff.getFromFile();
-        do {
-            System.out.print("Enter new Staff ID: ");
-            String staffId = i.nextLine();
-            for(Staff staff: staffs) {
-                if(staff.getStaffID().equals(staffId)) {
-                    System.out.println("Staff Id already exist! Please enter new one!");
-                }else {
-                	isValid = true;
-                }
-            }setStaffID(staffId);
-        }while(isValid == false);
+    	boolean isValid = false;
+    	List<Staff> staffs = Staff.getFromFile();
+
+    	do {
+    	    System.out.print("Enter new Staff ID: ");
+    	    String staffId = i.nextLine();
+    	    isValid = true;
+    	    for(Staff staff: staffs) {
+    	        if(staff.getStaffID().equals(staffId)) {
+    	            System.out.println("Staff ID already exists! Please enter a new one.");
+    	            isValid = false; 
+    	            break; 
+    	        }
+    	    }
+    	    if (isValid) {
+    	        setStaffID(staffId);
+    	    }
+    	} while(!isValid); 
 
         System.out.print("Enter Staff Name: ");
         String name = i.nextLine();
