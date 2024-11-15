@@ -8,8 +8,7 @@ public class Main {
         while (true) {
             System.out.println("Welcome to the Fitness Management System!");
             System.out.println("Please choose an option:");
-            System.out.println("1. Manage Staff");
-            System.out.println("2. Manage Classes");
+            System.out.println("1. Manage Classes");
             System.out.println("3. Exit");
             
             int choice = scanner.nextInt();
@@ -17,16 +16,9 @@ public class Main {
             
             switch (choice) {
                 case 1:
-                    // Manage Staff
-                    Staff.manageStaffFromUserInput();
-                    break;
-                    
-                case 2:
-                    // Manage Classes
                     Class.manageClassFromUserInput();
-                    break;
-                    
-                case 3:
+                    break;         
+                case 2:
                     // Exit
                     System.out.println("Exiting the system. Goodbye!");
                     scanner.close();
