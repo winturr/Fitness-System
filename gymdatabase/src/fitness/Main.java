@@ -9,7 +9,7 @@ public class Main {
             System.out.println("Welcome to the Fitness Management System!");
             System.out.println("Please choose an option:");
             System.out.println("1. Manage Classes");
-            System.out.println("3. Exit");
+            System.out.println("2. Exit");
             
             int choice = scanner.nextInt();
             scanner.nextLine();  // Consume newline
