@@ -207,7 +207,7 @@ public class Class {
                 }
             }setStaffID(staffID);
         }
-                while(isValid == false);9
+                while(isValid == false);
                 
 	    BufferedWriter writer = new BufferedWriter(new FileWriter("Class.txt"));
         for (Class class1 : classList) {//rewrites the ArrayList with updated record into the .txt file
