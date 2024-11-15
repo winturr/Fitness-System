@@ -129,11 +129,12 @@ public class Visitor {
 		List<Visitor> visitorList = Visitor.getFromFile();//.txt file into ArrayList
 		int ctr = 0;
 		boolean isValid = false;
+		boolean isFound = false;
 		do {
 			System.out.print("Look for ID: ");
 			String id = i.nextLine();
 			for (Visitor visitor : visitorList) {
-				if (visitor.getVisitorID().equals(id)) {
+				if (visitor.getVisitorID().equals(id)&& recordCheck(id)) {
 					ctr++;
 					isValid = true;
 					System.out.println("Visitor ID " + visitor.getVisitorID() + " || " + visitor.getName() + " Found.");
@@ -156,13 +157,27 @@ public class Visitor {
 			        		break;
 			        }
 				}
-			}
-			if (ctr == 0) {
-				System.out.println("Visitor ID not found. Please try again.");
-			}
-			
+			}		
 		}
 		while(!isValid);
 		
 	}
+	public static boolean recordCheck(String id)  throws IOException {
+		List<Member> memberList = Member.getFromFile();
+		int ctr = 0;
+		boolean isValid = false;
+		for (Member member : memberList) {
+			if (member.getVisitorID().equals(id)) {
+				ctr++;
+			}
+		}
+		if (ctr != 0) {
+			System.out.println("Unable to delete while in another record");
+		}
+		else {
+			isValid = true;
+		}
+		return isValid;
+	}
+	
 }
