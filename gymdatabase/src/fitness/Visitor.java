@@ -78,21 +78,40 @@ public class Visitor {
 	//displays all Visitor entries from "Visitor.txt"
 	//static method to directly access method from main without instantiation
 	public static void display() {
-		List <Visitor> visitors = (List<Visitor>) Visitor.getFromFile();
+		List <Visitor> visitorList = (List<Visitor>) Visitor.getFromFile();
 		System.out.println(String.format("%s", "-----------------------------------------"));
 		System.out.println(String.format("%5s %3s %26s","VisitorID", "|","Name"));
 		System.out.println(String.format("%s", "-----------------------------------------"));
-		for(Visitor vi: visitors) {
+		for(Visitor vi: visitorList) {
 			System.out.println(String.format("%9s %3s %26s", vi.getVisitorID(),"|",vi.getName()));
 		}
 	}
 	public static void update()throws IOException {
 		List<Visitor> visitorList = Visitor.getFromFile();
-		System.out.print("Look for ID -->> ");
-		String id = i.nextLine();
+		String id;
+		int ctr = 0;
+		boolean isExisting = false;
+		do {
+			System.out.print("Look for ID -->> ");
+			id = i.nextLine();
+			for (Visitor visitor : visitorList) {
+				if(visitor.getVisitorID().equals(id)) {	
+					ctr++;
+					System.out.println("Visitor ID found.");
+				}
+			}
+			if (ctr != 0) {
+				isExisting = true;
+			}
+			else {
+				System.out.println("Visitor ID not found. Please try again.");
+			}
+			ctr = 0;
+		}
+		while(isExisting == false);
 		for (Visitor visitor : visitorList) {
 	        if (visitor.getVisitorID().equals(id)) {
-		System.out.print("Enter new name -->> ");
+		System.out.print("Current name: " + visitor.getName() + "\nEnter new name -->> ");
 		String nn = i.nextLine();
 	            visitor.setName(nn);
 	            visitor.saveToFile();
@@ -108,24 +127,42 @@ public class Visitor {
 	}
 	public static void delete()throws IOException{
 		List<Visitor> visitorList = Visitor.getFromFile();//.txt file into ArrayList
-		System.out.print("Look for ID: ");
-		String id = i.nextLine();
-		System.out.print("Are you sure you want to delete " + id + "?\n[1]Yes [2]No --> ");
-        String deleteConfirm = i.nextLine();
-        switch(deleteConfirm) {
-        case "1"://case 1 / "YES"
-        	BufferedWriter writer = new BufferedWriter(new FileWriter("Visitor.txt"));//rewrites .txt file
-        	for (Visitor visitor: visitorList) {
-        		if(!visitor.getVisitorID().equals(id)) {//skips VisitorID input from being written
-        			writer.write(visitor.getVisitorID() + "*" + visitor.getName());
-                    writer.newLine();
-        		}
-        	}
-        	writer.close();
-        System.out.println("Deleted.");
-        break;
-        case "2": //case 2 / "NO"
-        	System.out.println("Deletion cancelled.");
-        }
+		int ctr = 0;
+		boolean isValid = false;
+		do {
+			System.out.print("Look for ID: ");
+			String id = i.nextLine();
+			for (Visitor visitor : visitorList) {
+				if (visitor.getVisitorID().equals(id)) {
+					ctr++;
+					isValid = true;
+					System.out.println("Visitor ID " + visitor.getVisitorID() + " || " + visitor.getName() + " Found.");
+					System.out.print("Are you sure you want to delete " + id + "?\n[1]Yes [2]No --> ");
+			        String deleteConfirm = i.nextLine();
+			        switch(deleteConfirm) {
+			        	case "1"://case 1 / "YES"
+			        		BufferedWriter writer = new BufferedWriter(new FileWriter("Visitor.txt"));//rewrites .txt file
+			        		for (Visitor visitor1: visitorList) {
+			        			if(!visitor1.getVisitorID().equals(id)) {//skips VisitorID input from being written
+			        				writer.write(visitor1.getVisitorID() + "*" + visitor1.getName());
+			        				writer.newLine();
+			        			}
+			        		}
+			        		writer.close();
+			        		System.out.println("Deleted.");
+			        		break;
+			        	case "2": //case 2 / "NO"
+			        		System.out.println("Deletion cancelled.");
+			        		break;
+			        }
+				}
+			}
+			if (ctr == 0) {
+				System.out.println("Visitor ID not found. Please try again.");
+			}
+			
+		}
+		while(!isValid);
+		
 	}
 }
