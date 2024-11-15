@@ -127,7 +127,7 @@ public class CheckInRecord {
     	do {
     		System.out.print("Staff ID: ");
     		staffID = inp.nextLine();
-    		if (!isStaffIDValid(staffID)) System.out.println("Staaff ID Doesn't Exist.");
+    		if (!isStaffIDValid(staffID)) System.out.println("Staff ID Doesn't Exist.");
     	} while (!isStaffIDValid(staffID));
     	
     	String visitorID = null;
@@ -174,14 +174,13 @@ public class CheckInRecord {
     
     public static void display() throws IOException {
     	List<CheckInRecord> inRecord = (List<CheckInRecord>) CheckInRecord.getFromFile();
-    	System.out.println(String.format("%s", "-------------------------------------------------------------------------------"));
- 		System.out.println(String.format("%5s %2s %15s %3s %11s %6s %12s %3s %12s %3s %12s %3s"," Check In ID","|","  Check In Time","|","Check Out Time","|","Date,","|","Staff ID","|","Visitor ID","|"));
- 		System.out.println(String.format("%s", "-------------------------------------------------------------------------------"));
+    	System.out.println(String.format("%s", "----------------------------------------------------------------------------------------------------"));
+ 		System.out.println(String.format("%5s %2s %11s %3s %11s %6s %12s %5s %12s %3s %12s"," CheckInID","|","  CheckInTime","|","CheckOutTime","|","Date","|","StaffID","|","VisitorID"));
+ 		System.out.println(String.format("%s", "----------------------------------------------------------------------------------------------------"));
  		for(CheckInRecord record : inRecord) {
- 			System.out.format("%10s %8s %15s %7s %8s %9s %8s %7s %10s %5s %10s %5s", record.getCheckInID(),"|",record.getCheckInTime(),"|",record.getCheckOutTime(),"|",record.getDate(),"|",record.getStaffID(),"|",record.getVisitor(),"|");
+ 			System.out.format("%9s %3s %11s %5s %11s %7s %8s %7s %10s %5s %10s", record.getCheckInID(),"|",record.getCheckInTime(),"|",record.getCheckOutTime(),"|",record.getDate(),"|",record.getStaffID(),"|",record.getVisitor());
  			System.out.println();		 				 		
  		}
- 		System.out.println(String.format("%s", "-------------------------------------------------------------------------------"));
     }
     
     public static void update() throws IOException { //for updating checkoutTime only

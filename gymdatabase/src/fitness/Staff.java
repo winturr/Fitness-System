@@ -18,12 +18,6 @@ public class Staff {
         this.contactNo = contactNo;
         this.roleID= roleID;
     }
-    public Staff() {
-
-    }
-
-
-
     public void setStaffID(String staffID) {
         this.staffID = staffID;
     }
@@ -73,25 +67,27 @@ public class Staff {
             e.printStackTrace();
         }
         return staff;
-
     }
-    public void add() {
+    public static void add() {
     	boolean isValid = false;
     	List<Staff> staffs = Staff.getFromFile();
-
+    	String staffID;
+    	String roleID;
     	do {
     	    System.out.print("Enter new Staff ID: ");
-    	    String staffId = i.nextLine();
+    	    staffID = i.nextLine();
     	    isValid = true;
     	    for(Staff staff: staffs) {
-    	        if(staff.getStaffID().equals(staffId)) {
+    	        if(staff.getStaffID().equals(staffID)) {
     	            System.out.println("Staff ID already exists! Please enter a new one.");
     	            isValid = false; 
     	            break; 
     	        }
     	    }
     	    if (isValid) {
-    	        setStaffID(staffId);
+    	    	if (isEmpty(staffID)) {
+    				isValid = false;
+    			}
     	    }
     	} while(!isValid); 
 
@@ -105,25 +101,24 @@ public class Staff {
         isValid = false;
         do {
             System.out.println("Enter valid role ID: ");
-            String roleId = i.nextLine();
+            roleID = i.nextLine();
             for(Role role: roles) {
-                if(role.getRoleId().equals(roleId)) {
+                if(role.getRoleID().equals(roleID)) {
                     isValid = true;
                 }
-            }setRoleID(roleId);
+            }
         }while(isValid == false);
-
-
+        System.out.println("Staff successfully added to Staff.txt");
         Staff s = new Staff(staffID, name, contactInfo, roleID);
         s.saveToFile();
     }
-    public void display() {
+    public static void display() {
         List <Staff> staff = (List<Staff>) Staff.getFromFile();
-        System.out.println(String.format("%s", "------------------------------------------------------------------------------------------"));
-        System.out.println(String.format("%9s %3s %26s %5s %15s %10s %15s","StaffID" ,"|","Name","|","Role","|","ContactInfo"));
-        System.out.println(String.format("%s", "------------------------------------------------------------------------------------------"));
+        System.out.println(String.format("%s", "-----------------------------------------------------------------------------------"));
+        System.out.println(String.format("%9s %3s %20s %5s %15s %10s %15s","StaffID" ,"|","Name","|","ContactNo","|","RoleID"));
+        System.out.println(String.format("%s", "-----------------------------------------------------------------------------------"));
         for(Staff st: staff) {
-            System.out.format("%9s %3s %26s %5s %15s %10s %15s", st.getStaffID(), "|", st.getName(),"|", st.getContactNo(),"|", st.getRoleID());
+            System.out.format("%9s %3s %20s %5s %15s %10s %15s", st.getStaffID(), "|", st.getName(),"|", st.getContactNo(),"|", st.getRoleID());
             System.out.println();
         }
     }
@@ -150,5 +145,10 @@ public class Staff {
                 System.out.println("Deletion cancelled.");
         }
     }
-
+    public static boolean isEmpty(String input) {
+		if (input != "") {
+			return false;
+		}
+		return true;
+	}
 }

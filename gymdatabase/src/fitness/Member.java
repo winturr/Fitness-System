@@ -91,9 +91,7 @@ public class Member {
 		LocalDate date = LocalDate.now();
 		LocalDate futureDate = date.plusYears(3);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        String currentDate = date.format(formatter);
-        String endingDate = futureDate.format(formatter);
-        //Grabs local time; another with added 3 years (the only available membership length
+        //Grabs local time; another with added 3 years (the only available membership length)
         String memID;
         List<Member> memberList = Member.getFromFile();
         boolean isValid = false;
@@ -110,21 +108,14 @@ public class Member {
      		if (ctr == 0) {
      			isValid = true;
      		}
+     		if (isEmpty(memID)) {
+				isValid = false;
+			}
      		ctr = 0;
         }
         while(isValid == false);
 		System.out.print("Enter Contact Number: ");
 		String contactNo = i.nextLine();
-		System.out.print("Enter Status\n[1]Active\n[2]Inactive: ");
-		String status = i.nextLine();
-		switch(status) {
-		case "1":
-			status = "Active";
-			break;
-		case "2":
-			status = "Inactive";
-			break;
-		}
 		List<Visitor> visitorList = Visitor.getFromFile();
 		isValid = false;//
 		do {
@@ -142,7 +133,7 @@ public class Member {
 						isValid = false;
 					}
 					else {
-						Member m = new Member(memID, currentDate, endingDate, contactNo, status, visitID);
+						Member m = new Member(memID, date.format(formatter), futureDate.format(formatter), contactNo, "Active", visitID);
 						m.saveToFile();
 						System.out.println("Saved to \"Member.txt\".");
 					}
@@ -156,9 +147,9 @@ public class Member {
 	//static method to directly access method from main without instantiation
 	public static void display() throws IOException {
 		List <Member> members = (List<Member>) Member.getFromFile();
-		System.out.println(String.format("%s", "-----------------------------------------------------------------------------------------------------"));
+		System.out.println(String.format("%s", "---------------------------------------------------------------------------------------------------"));
 		System.out.println(String.format("%9s %3s %15s %1s %5s %1s %5s %5s %10s %4s %5s","MemberID", "|","MembershipStartDate" ,"|","MembershipEndDate", "|", "ContactInfo","|", "Status","|", "VisitorID"));
-		System.out.println(String.format("%s", "-----------------------------------------------------------------------------------------------------"));
+		System.out.println(String.format("%s", "---------------------------------------------------------------------------------------------------"));
 		for(Member me: members) {
 			System.out.println(String.format("%9s %3s %5s %10s %5s %8s %11s %5s %10s %4s %5s", me.getMemberID(),"|",me.getMembershipStartDate() ,"|", me.getMembershipEndDate(),"|",me.getContactNo(),"|",me.getStatus(), "|", me.getVisitorID()));
 		}
@@ -235,5 +226,11 @@ public class Member {
         	System.out.println("Deletion cancelled.");
         	break;
         }
+	}
+	public static boolean isEmpty(String input) {
+		if (input != "") {
+			return false;
+		}
+		return true;
 	}
 }

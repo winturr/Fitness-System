@@ -67,11 +67,15 @@ public class Visitor {
 			if (ctr == 0) {
 				isValid = true;
 			}
+			if (isEmpty(visitorID)) {
+				isValid = false;
+			}
 			ctr = 0;
 		}
 		while(isValid == false);
 		System.out.print("Enter Visitor Name: ");
 		String visitorName = i.nextLine();
+		System.out.println("Successfully added to Visitor.txt");
 		Visitor v = new Visitor(visitorID, visitorName);
 		v.saveToFile();
 	}
@@ -79,11 +83,11 @@ public class Visitor {
 	//static method to directly access method from main without instantiation
 	public static void display() {
 		List <Visitor> visitorList = (List<Visitor>) Visitor.getFromFile();
-		System.out.println(String.format("%s", "-----------------------------------------"));
-		System.out.println(String.format("%5s %3s %26s","VisitorID", "|","Name"));
-		System.out.println(String.format("%s", "-----------------------------------------"));
+		System.out.println(String.format("%s", "----------------------------------"));
+		System.out.println(String.format("%5s %3s %20s","VisitorID", "|","Name"));
+		System.out.println(String.format("%s", "----------------------------------"));
 		for(Visitor vi: visitorList) {
-			System.out.println(String.format("%9s %3s %26s", vi.getVisitorID(),"|",vi.getName()));
+			System.out.println(String.format("%9s %3s %20s", vi.getVisitorID(),"|",vi.getName()));
 		}
 	}
 	public static void update()throws IOException {
@@ -129,7 +133,6 @@ public class Visitor {
 		List<Visitor> visitorList = Visitor.getFromFile();//.txt file into ArrayList
 		int ctr = 0;
 		boolean isValid = false;
-		boolean isFound = false;
 		do {
 			System.out.print("Look for ID: ");
 			String id = i.nextLine();
@@ -171,13 +174,29 @@ public class Visitor {
 				ctr++;
 			}
 		}
+		if (ctr == 0) {
+			isValid = true;
+		}
+		List<Payment> paymentList = Payment.getFromFile();
+		ctr = 0;
+		isValid = false;
+		for (Payment payment : paymentList) {
+			if (payment.getVisitorID().equals(id)) {
+				ctr++;
+			}
+		}
 		if (ctr != 0) {
-			System.out.println("Unable to delete while in another record");
+			System.out.println("Unable to delete while in another record.");
 		}
 		else {
 			isValid = true;
 		}
 		return isValid;
 	}
-	
+	public static boolean isEmpty(String input) {
+		if (input != "") {
+			return false;
+		}
+		return true;
+	}
 }
