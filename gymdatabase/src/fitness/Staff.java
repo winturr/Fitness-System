@@ -68,26 +68,24 @@ public class Staff {
         }
         return staff;
     }
-    public static void add() {
+   public void add() {
     	boolean isValid = false;
     	List<Staff> staffs = Staff.getFromFile();
-    	String staffID;
-    	String roleID;
+
     	do {
     	    System.out.print("Enter new Staff ID: ");
-    	    staffID = i.nextLine();
+    	    String staffId = i.nextLine();
     	    isValid = true;
     	    for(Staff staff: staffs) {
-    	        if(staff.getStaffID().equals(staffID)) {
+    	        if(staff.getStaffID().equals(staffId)) {
+    	        	System.out.println(staff.getStaffID());
     	            System.out.println("Staff ID already exists! Please enter a new one.");
     	            isValid = false; 
     	            break; 
     	        }
     	    }
     	    if (isValid) {
-    	    	if (isEmpty(staffID)) {
-    				isValid = false;
-    			}
+    	        setStaffID(staffId);
     	    }
     	} while(!isValid); 
 
@@ -100,15 +98,16 @@ public class Staff {
         List<Role> roles = Role.getFromFile();
         isValid = false;
         do {
-            System.out.print("Enter valid role ID: ");
-            roleID = i.nextLine();
+            System.out.println("Enter valid role ID: ");
+            String roleId = i.nextLine();
             for(Role role: roles) {
-                if(role.getRoleID().equals(roleID)) {
+                if(role.getRoleId().equals(roleId)) {
                     isValid = true;
                 }
-            }
+            }setRoleId(roleId);
         }while(isValid == false);
-        System.out.println("Staff successfully added to Staff.txt");
+
+
         Staff s = new Staff(staffID, name, contactInfo, roleID);
         s.saveToFile();
     }
