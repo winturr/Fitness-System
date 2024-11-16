@@ -77,44 +77,15 @@ public class ClassRegistration {
 	        }	        
 	    return classreg;
 	 }
-	 	 	 	 	 	 
-	 public static boolean isRegistrationIDValid (String regID) throws IOException {
-		 List<ClassRegistration> classGet = ClassRegistration.getFromFile();
-	 		for (ClassRegistration regClass : classGet) {
-	 			if(regClass.getRegistrationID().equals(regID)) {	
-	 				return false;
-	 			}
-	 		}
-		return true;	
-	 }
-	 
-	 public static boolean isVisitorIDValid (String visitID) {
-		 List<Visitor> visitors = Visitor.getFromFile();
-	 		for (Visitor visitor : visitors) {
-             if (visitor.getVisitorID().equals(visitID)) {                	                	
-                 return true;    
-             }
-         }
-		 return false;
-	 }
-	 
-	 public static boolean isClassIDValid (String classID) {
-		 List<Class> classList = Class.getFromFile();
-	 		for (Class classClass : classList) {
-	 			if (classClass.getClassID().equals(classID)) {
-	 				return true;
-	 			}
-	 		}
-	 	return false;
-	 }
 	 
 	 public static void add() throws IOException {
 		 String regID = null;
 	 		do {
 	 		System.out.print("Registration ID: ");
 	 		regID = inp.nextLine();
+	 		if (isExist(regID)) System.out.println("Enter Valid Registration ID");
 	 		if (!isRegistrationIDValid(regID)) System.out.println("Registration ID Already Exist.");
-	 		} while (!isRegistrationIDValid(regID));
+	 		} while (!isRegistrationIDValid(regID) || isExist(regID));
 	 		
 	 		
 	 		System.out.println("Date Automatically inserted");
@@ -182,4 +153,42 @@ public class ClassRegistration {
 	 		}
 	 		System.out.println(String.format("%s", "-------------------------------------------------------------------------------"));
 	 }
+	 
+	 public static boolean isRegistrationIDValid (String regID) throws IOException {
+		 List<ClassRegistration> classGet = ClassRegistration.getFromFile();
+	 		for (ClassRegistration regClass : classGet) {
+	 			if(regClass.getRegistrationID().equals(regID)) {	
+	 				return false;
+	 			}
+	 		}
+		return true;	
+	 }
+	 
+	 public static boolean isVisitorIDValid (String visitID) {
+		 List<Visitor> visitors = Visitor.getFromFile();
+	 		for (Visitor visitor : visitors) {
+             if (visitor.getVisitorID().equals(visitID)) {                	                	
+                 return true;    
+             }
+         }
+		 return false;
+	 }
+	 
+	 public static boolean isClassIDValid (String classID) {
+		 List<Class> classList = Class.getFromFile();
+	 		for (Class classClass : classList) {
+	 			if (classClass.getClassID().equals(classID)) {
+	 				return true;
+	 			}
+	 		}
+	 	return false;
+	 }
+	 
+	 public static boolean isExist(String regID) {
+	    	if (regID != "") {
+	    		return false;
+	    	}
+	    	return true;
+	    }
+	 
 }
