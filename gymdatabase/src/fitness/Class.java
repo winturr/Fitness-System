@@ -53,8 +53,8 @@ public class Class {
     }
     
     public void saveToFile() {
-        try(BufferedWriter writer = new BufferedWriter(new FileWriter("Staff.txt", true))) {
-            writer.write(classID + "*" + className +"*" + maxCapacity + "*"+startTime + "*" + "*" + endTime + "*" + staffID);
+        try(BufferedWriter writer = new BufferedWriter(new FileWriter("Class.txt", true))) {
+            writer.write(classID + "*" + className +"*" + maxCapacity + "*"+startTime + "*"  + endTime + "*" + staffID );
             writer.newLine();
         }catch(IOException e) {
             e.printStackTrace();
@@ -82,13 +82,13 @@ public class Class {
 
     }
      
-    public void display() {
-        List <Class> class1 = (List<Class>) Class.getFromFile();
-        System.out.println(String.format("%s", "------------------------------------------------------------------------------------------"));
-        System.out.println(String.format("%9s %3s %26s %5s %15s %10s %15s","Class ID" ,"|","Class Name","|","Max Capacity","|","Start Time","|","End Timr","|","Staff ID"));
-        System.out.println(String.format("%s", "------------------------------------------------------------------------------------------"));
+    public static void display() {
+        List <Class> class1 = getFromFile();
+        System.out.println(String.format("%s", "------------------------------------------------------------------------------------------------------------------------------------------------------"));
+        System.out.println(String.format("%9s %3s %26s %5s %15s %10s %15s %9s %3s %26s %5s","Class ID" ,"|","Class Name","|","Max Capacity","|","Start Time","|","End Timr","|","Staff ID"));
+        System.out.println(String.format("%s", "------------------------------------------------------------------------------------------------------------------------------------------------------"));
         for(Class c: class1) {
-            System.out.format("%9s %3s %26s %5s %15s %10s %15s", c.getClassID(), "|", c.getClassName(),"|", c.getMaxCapacity(),"|", c.getStartTime(),"|", c.getEndTime(),"|",c.getStaffID());
+            System.out.format("%9s %3s %26s %5s %15s %10s %15s %9s %3s %26s %5s", c.getClassID(), "|", c.getClassName(),"|", c.getMaxCapacity(),"|", c.getStartTime(),"|", c.getEndTime(),"|",c.getStaffID(),"|");
             System.out.println();
         }
     }
@@ -103,7 +103,7 @@ public class Class {
             return false;
         }
     
-    // Method to check if staff ID is valid for class creation
+    
     public static boolean isStaffIDValid(String staffID) {
         List<Staff> staff = Staff.getFromFile();
         for (Staff staf : staff) {
@@ -114,135 +114,159 @@ public class Class {
         return false;
     }
 
-    public void add() {
-    	boolean isValid = false;
-    	List<Class> classes = Class.getFromFile();
+    public static void add() throws IOException {
+    boolean isValid = false;
+    List<Class> classes = getFromFile();
 
-    	do {
-    	    System.out.print("Enter new Class ID: ");
-    	    String classID = inp.nextLine();
-    	    isValid = true;
-    	    for(Class class1: classes) {
-    	        if(class1.getClassID().equals(classID)) {
-    	            System.out.println("Class ID already exists! Please enter a new one.");
-    	            isValid = false; 
-    	            break; 
-    	        }
-    	    }
-    	    if (isValid) {
-    	        if (isEmpty(classID)) {
-    				isValid = false;
-    			}
-    	    }
-    	} while(!isValid); 
-
-        System.out.print("Enter Class Name: ");
-        String ClassName = inp.nextLine();
-
-        System.out.print("Enter Max Capacity: ");
-        String maxCapacity = inp.nextLine();
-        
-        System.out.print("Enter Start Time: ");
-        String startTime = inp.nextLine();
-        
-        System.out.print("Enter End Time: ");
-        String endTime = inp.nextLine();
-        
-        List<Staff> staffs = Staff.getFromFile();
-        isValid = false;
-        do {
-            System.out.println("Enter valid Staff ID: ");
-            String staffID = inp.nextLine();
-            
-            for(Staff staff: staffs) {
-                if(staff.getStaffID().equals(staffID)) {
-                    isValid = true;
-                }
-            }setStaffID(staffID);
-        }
-        while(isValid == false);
-            Class c = new Class(classID, ClassName, maxCapacity, startTime, endTime, staffID);
-            c.saveToFile();
-        }
     
-    public void update()throws IOException {
-		List<Class> classList = Class.getFromFile();//.txt file into ArrayList
-		boolean isValid = false;
-		int ctr = 0;
-		String id;
-		do {
-			System.out.print("Look for ID: ");
-			id = inp.nextLine();
-			for (Class class1: classList) {
-				if(class1.getClassID().equals(id)) {
-					ctr++;
-					System.out.println("Class ID "+ class1.getClassID() +" Found.");
-				}
-			}
-			if (ctr != 0) {
-				isValid = true;
-			}
-			else {
-				System.out.println("Class ID not found.");
-			}
-		}
-		while(isValid == false);
-		System.out.print("Enter new Class Name: ");
-		String className = inp.nextLine();
-		System.out.print("Enter new Max Capacity: ");
-		String maxCapacity = inp.nextLine();
-                 System.out.print("Enter Start Time: ");
-                String startTime = inp.nextLine();     
-                System.out.print("Enter End Time: ");
-                String endTime = inp.nextLine();
-                List<Staff> staffs = Staff.getFromFile();
+    String classID = "";
+    do {
+        System.out.print("Enter new Class ID: ");
+        classID = inp.nextLine();
+        isValid = true;
+        for (
+                Class class1 : classes) {
+            if (class1.getClassID().equals(classID)) {
+                System.out.println("Class ID already exists! Please enter a new one.");
                 isValid = false;
-                do {
-                    System.out.println("Enter valid Staff ID: ");
-                    String staffID = inp.nextLine();
-            
-                    for(Staff staff: staffs) {
-                        if(staff.getStaffID().equals(staffID)) {
-                            isValid = true;
-                }
-            }setStaffID(staffID);
-        }
-                while(isValid == false);
-                
-	    BufferedWriter writer = new BufferedWriter(new FileWriter("Class.txt"));
-        for (Class class1 : classList) {//rewrites the ArrayList with updated record into the .txt file
-        	writer.write(class1.getClassID() + "*" + class1.getClassName()+ "*" + class1.getMaxCapacity() + "*" + class1.getStartTime() + "*" + class1.getEndTime() + "*" + class1.getStaffID() + "*");
-                writer.newLine();
-            }
-        System.out.print("Updated Entry.");
-        writer.close();
-	}
-    
-    
-    
-    
-    public static void delete()throws IOException{
-        List<Class> classList = Class.getFromFile();//.txt file into ArrayList
-        System.out.print("Look for ID: ");
-        String id = inp.nextLine();
-        System.out.print("Are you sure you want to delete " + id + "?\n[1]Yes [2]No --> ");
-        String deleteConfirm = inp.nextLine();
-        switch(deleteConfirm) {
-            case "1"://case 1 / "YES"
-                BufferedWriter writer = new BufferedWriter(new FileWriter("Class.txt"));//rewrites .txt file
-                for (Class class1: classList) {
-                    if(!class1.getStaffID().equals(id)) {//skips VisitorID input from being written
-                        writer.write(class1.getClassID() + "*" + class1.getClassName());
-                        writer.newLine();
-                    }
-                }
-                writer.close();
-                System.out.println("Deleted.");
                 break;
-            case "2": //case 2 / "NO"
-                System.out.println("Deletion cancelled.");
+            }
         }
+        if (isValid && isEmpty(classID)) {
+            System.out.println("Class ID cannot be empty.");
+            isValid = false;
+        }
+    } while (!isValid);
+
+    
+    System.out.print("Enter Class Name: ");
+    String className = inp.nextLine();
+    System.out.print("Enter Max Capacity: ");
+    String maxCapacity = inp.nextLine();
+    System.out.print("Enter Start Time: ");
+    String startTime = inp.nextLine();
+    System.out.print("Enter End Time: ");
+    String endTime = inp.nextLine();
+
+    
+    String staffID = "";
+    List<Staff> staffs = Staff.getFromFile();
+    boolean staffFound = false;
+    do {
+        System.out.print("Enter valid Staff ID: ");
+        staffID = inp.nextLine();
+        for (Staff staff : staffs) {
+            if (staff.getStaffID().equals(staffID)) {
+                staffFound = true;
+                break;
+            }
+        }
+        if (!staffFound) {
+            System.out.println("Invalid Staff ID! Please enter a valid one.");
+        }
+    } while (staffID.isEmpty() || !staffFound);
+
+    
+    Class newClass = new Class(classID, className, maxCapacity, startTime, endTime, staffID);
+    newClass.saveToFile();
+    System.out.println("Class added successfully.");
+}
+
+    
+    public static void update() throws IOException {
+    List<Class> classList = getFromFile();
+    boolean isValid = false;
+    int ctr = 0;
+    String id;
+
+    
+    do {
+        System.out.print("Look for Class ID: ");
+        id = inp.nextLine();
+        for (Class class1 : classList) {
+            if (class1.getClassID().equals(id)) {
+                ctr++;
+                System.out.println("Class ID " + class1.getClassID() + " Found.");
+                isValid = true;
+
+                System.out.print("Enter new Class Name: ");
+                class1.setClassName(inp.nextLine());
+                System.out.print("Enter new Max Capacity: ");
+                class1.setMaxCapacity(inp.nextLine());
+                System.out.print("Enter new Start Time: ");
+                class1.setStartTime(inp.nextLine());
+                System.out.print("Enter new End Time: ");
+                class1.setEndTime(inp.nextLine());
+
+                String staffID = "";
+                List<Staff> staffs = Staff.getFromFile();
+                boolean staffValid = false;
+                do {
+                    System.out.print("Enter valid Staff ID: ");
+                    staffID = inp.nextLine();
+                    for (Staff staff : staffs) {
+                        if (staff.getStaffID().equals(staffID)) {
+                            staffValid = true;
+                            break;
+                        }
+                    }
+                    if (!staffValid) {
+                        System.out.println("Invalid Staff ID.");
+                    }
+                } while (!staffValid);
+                class1.setStaffID(staffID);
+            }
+        }
+
+        if (ctr == 0) {
+            System.out.println("Class ID not found.");
+        }
+
+    } while (!isValid);
+
+    
+    try (BufferedWriter writer = new BufferedWriter(new FileWriter("Class.txt"))) {
+        for (Class class1 : classList) {
+            writer.write(class1.getClassID() + "*" + class1.getClassName() + "*" + class1.getMaxCapacity() + "*" + class1.getStartTime() + "*" + class1.getEndTime() + "*" + class1.getStaffID());
+            writer.newLine();
+        }
+        System.out.println("Updated class information saved.");
     }
+}
+
+    
+    
+    
+    
+    public static void delete() throws IOException {
+    List<Class> classList = getFromFile();
+    System.out.print("Enter Class ID to delete: ");
+    String id = inp.nextLine();
+    if(ClassRegistration.isClassIDValid(id)){
+        System.out.println("Class is Used by Class Regidtration file, invalid delete");
+    }
+    else{
+        System.out.print("Are you sure you want to delete Class ID " + id + "? [1] Yes [2] No: ");
+        String deleteConfirm = inp.nextLine();
+
+        if (deleteConfirm.equals("1")) {
+
+            classList.removeIf(class1 -> class1.getClassID().equals(id));
+
+
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter("Class.txt"))) {
+                for (Class class1 : classList) {
+                    writer.write(class1.getClassID() + "*" + class1.getClassName() + "*" + class1.getMaxCapacity() + "*" + class1.getStartTime() + "*" + class1.getEndTime() + "*" + class1.getStaffID());
+                    writer.newLine();
+                }
+                System.out.println("Class deleted successfully.");
+            }
+        } else {
+            System.out.println("Deletion canceled.");
+        }
+}
+}
+
     public static boolean isEmpty(String input) {
 		if (input != "") {
 			return false;
