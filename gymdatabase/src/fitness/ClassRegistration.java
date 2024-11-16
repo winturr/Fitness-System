@@ -106,7 +106,7 @@ public class ClassRegistration {
 	 }
 	 
 	 public static boolean isClassIDValid (String classID) {
-		 List<Class> classList = Class.loadClassesFromFile();
+		 List<Class> classList = Class.getFromFile()();
 	 		for (Class classClass : classList) {
 	 			if (classClass.getClassID().equals(classID)) {
 	 				return true;
