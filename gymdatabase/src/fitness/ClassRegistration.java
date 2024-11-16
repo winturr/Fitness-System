@@ -16,13 +16,6 @@ public class ClassRegistration {
 	LocalDate date = LocalDate.now();
 	static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 	
-	public ClassRegistration(String registrationID, String classID, String visitorID) {
-		this.registrationID=registrationID;
-		this.registrationDate=LocalDate.now().format(formatter);;
-		this.classID=classID;
-		this.visitorID=visitorID;
-	}
-	
 	public ClassRegistration(String registrationID,String registrationDate, String classID, String visitorID) {
 		this.registrationID=registrationID;
 		this.registrationDate=registrationDate;
@@ -106,7 +99,7 @@ public class ClassRegistration {
 	 }
 	 
 	 public static boolean isClassIDValid (String classID) {
-		 List<Class> classList = Class.getFromFile()();
+		 List<Class> classList = Class.getFromFile();
 	 		for (Class classClass : classList) {
 	 			if (classClass.getClassID().equals(classID)) {
 	 				return true;
@@ -123,6 +116,9 @@ public class ClassRegistration {
 	 		if (!isRegistrationIDValid(regID)) System.out.println("Registration ID Already Exist.");
 	 		} while (!isRegistrationIDValid(regID));
 	 		
+	 		
+	 		System.out.println("Date Automatically inserted");
+	 		String inDate = LocalDate.now().format(formatter);
 	 		String classID = null;
 	 		do {
 	 		System.out.print("Class ID: ");
@@ -140,7 +136,7 @@ public class ClassRegistration {
 	 		
 	 		
 	 		//check if there is an existing regID
-	 		ClassRegistration classReg = new ClassRegistration(regID,classID,visitorID);		 		
+	 		ClassRegistration classReg = new ClassRegistration(regID,inDate,classID,visitorID);		 		
 	 		if (isRegistrationIDValid(regID) && isVisitorIDValid(visitorID) && isClassIDValid(classID)) {		 			
 	 			classReg.saveToFile();
 	 			System.out.println("Data Successfully Added");
