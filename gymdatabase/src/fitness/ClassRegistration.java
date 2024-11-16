@@ -144,14 +144,13 @@ public class ClassRegistration {
 	 
 	 public static void display() throws IOException {
 		 List <ClassRegistration> classreg = (List<ClassRegistration>) ClassRegistration.getFromFile();
-	 		System.out.println(String.format("%s", "-------------------------------------------------------------------------------"));
-	 		System.out.println(String.format("%5s %2s %15s %3s %11s %6s %12s %3s"," Reigstration ID","|","  Registration Date","|","Class ID","|","VisitorID","|"));
-	 		System.out.println(String.format("%s", "-------------------------------------------------------------------------------"));
+	 		System.out.println(String.format("%s", "--------------------------------------------------------------------------"));
+	 		System.out.println(String.format("%5s %2s %15s %3s %11s %6s %12s", "Reigstration ID","|","  Registration Date","|","Class ID","|","VisitorID"));
+	 		System.out.println(String.format("%s", "--------------------------------------------------------------------------"));
 	 		for(ClassRegistration cl: classreg) {
-	 			System.out.format("%10s %8s %15s %7s %8s %9s %8s %7s", cl.getRegistrationID(), "|", cl.getRegistrationDate(),"|",cl.getClassID(),"|",cl.getVisitorID(),"|");
+	 			System.out.format("%10s %8s %15s %7s %8s %9s %8s", cl.getRegistrationID(), "|", cl.getRegistrationDate(),"|",cl.getClassID(),"|",cl.getVisitorID());
 	 			System.out.println();		 				 		
 	 		}
-	 		System.out.println(String.format("%s", "-------------------------------------------------------------------------------"));
 	 }
 	 
 	 public static boolean isRegistrationIDValid (String regID) throws IOException {
