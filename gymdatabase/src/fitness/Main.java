@@ -4,19 +4,20 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-    	/*Staff 			ADD DISPLAY UPDATE DELETE
-    	  Role				ADD DISPLAY
-    	  Visitor 			ADD DISPLAY
-    	  Member 			ADD DISPLAY UPDATE DELETE
-    	  CheckInRecord 	ADD DISPLAY
-    	  Payment 			ADD DISPLAY
-    	  Class 			ADD DISPLAY UPDATE DELETE
-    	  ClassRegistration ADD DISPLAY 				*/
-        Staff.display();
-        Visitor.display();
-        Member.display();
-        CheckInRecord.display(); 
-        Payment.display();
-        Member.add();
+    	/*Staff 			ADD DISPLAY UPDATE DELETE //
+    	  Role				ADD DISPLAY UPDATE //
+    	  Visitor 			ADD DISPLAY UPDATE //
+    	  Member 			ADD DISPLAY UPDATE DELETE//
+    	  CheckInRecord 	ADD DISPLAY UPDATE //
+    	  Payment 			ADD DISPLAY UPDATE
+    	  Class 			ADD DISPLAY UPDATE DELETE //
+    	  ClassRegistration ADD DISPLAY	//	         */
+    	Role.display();
+    	Staff.display();
+    	Visitor.display();
+    	Member.display();
+    	CheckInRecord.display();
+    	CheckInRecord.checkOutTime();
+    	CheckInRecord.display();
     }
 }

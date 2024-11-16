@@ -26,6 +26,10 @@ public class Role {
      public String getRoleName() {
          return roleName;
      }
+     
+     public void setRoleName(String roleName) {
+    	 this.roleName=roleName;
+     }
 
 
      public void saveToFile() {
@@ -94,6 +98,38 @@ public class Role {
  			System.out.println(String.format("%9s %3s %26s", r.getRoleID(),"|",r.getRoleName()));
  		}
  	}
+     
+     public static void update() throws IOException {
+    	 List<Role> roleList = Role.getFromFile();
+    	 boolean roleValid = false;
+    	 String roleID = null;
+    	 do { 		 
+    		 System.out.print("Role ID you want to update: ");
+    		 roleID = i.nextLine();
+    		 	for (Role roles : roleList) {
+    		 		if(roles.getRoleID().equals(roleID)) {
+    		 			roleValid = true;
+    		 		}
+    		 	}
+    		 if (!roleValid) System.out.println("Role ID doesn't exist.");
+    	 } while (!roleValid);
+    	 
+    	 System.out.println("New Role Name: ");
+    	 String newName = i.nextLine();
+    	 
+    	 BufferedWriter writer = new BufferedWriter(new FileWriter("Role.txt"));
+    	 for (Role roles : roleList) {
+    		 if (roles.getRoleID().equals(roleID)) {
+    		 roles.setRoleName(newName);
+    		 roles.saveToFile();
+    		 }
+    		 writer.write(roles.getRoleID()+"*"+roles.getRoleName());
+    		 writer.newLine(); 		 
+    	 }
+    	 System.out.println("Data Updated");
+    	 writer.close();
+     }
+     
      public static boolean isEmpty(String input) {
  		if (input != "") {
  			return false;

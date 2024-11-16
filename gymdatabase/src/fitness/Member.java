@@ -204,28 +204,40 @@ public class Member {
         System.out.print("Updated Entry.");
         writer.close();
 	}
-	public static void delete()throws IOException{
+	public static void delete() throws IOException {
 		List<Member> memberList = Member.getFromFile();//.txt file into ArrayList
-		System.out.print("Look for ID: ");
-		String id = i.nextLine();
-		System.out.print("Are you sure you want to delete " + id + "?\n[1]Yes [2]No --> ");
-        String deleteConfirm = i.nextLine();
-        switch(deleteConfirm) {
-        case "1"://case 1 / "YES"
-        	BufferedWriter writer = new BufferedWriter(new FileWriter("Member.txt"));//rewrites .txt file
-        	for (Member member: memberList) {
-        		if(!member.getMemberID().equals(id)) {//skips MemberID input from being written
-        			writer.write(member.getMemberID() + "*" + member.getMembershipStartDate() + "*" + member.getMembershipEndDate() + "*" + member.getContactNo() + "*" + member.getStatus() + "*" + member.getVisitorID() + "*");
-                    writer.newLine();
-        		}
-        	}
-        	writer.close();
-        System.out.println("Deleted.");
-        break;
-        case "2": //case 2 / "NO"
-        	System.out.println("Deletion cancelled.");
-        	break;
-        }
+		int ctr = 0;
+		boolean isValid = false;
+		do {
+			System.out.print("Look for ID: ");
+			String id = i.nextLine();
+			for (Member member : memberList) {
+				if (member.getMemberID().equals(id)) {
+					ctr++;
+					isValid = true;
+					System.out.println("Member ID " + member.getMemberID() + " Found.");
+					System.out.print("Are you sure you want to delete " + id + "?\n[1]Yes [2]No --> ");
+			        String deleteConfirm = i.nextLine();
+			        switch(deleteConfirm) {
+			        	case "1"://case 1 / "YES"
+			        		BufferedWriter writer = new BufferedWriter(new FileWriter("Member.txt"));//rewrites .txt file
+			        		for (Member member1: memberList) {
+			        			if(!member1.getVisitorID().equals(id)) {//skips VisitorID input from being written
+			        				writer.write(member1.getMemberID() + "*" + member1.getMembershipStartDate()+ "*" + member1.getMembershipEndDate() + "*" + member1.getContactNo() + "*" + member1.getStatus() + "*" + member1.getVisitorID() + "*");
+			        				writer.newLine();
+			        			}
+			        		}
+			        		writer.close();
+			        		System.out.println("Deleted.");
+			        		break;
+			        	case "2": //case 2 / "NO"
+			        		System.out.println("Deletion cancelled.");
+			        		break;
+			        }
+				}
+			}		
+		}
+		while(!isValid);
 	}
 	public static boolean isEmpty(String input) {
 		if (input != "") {
@@ -234,3 +246,4 @@ public class Member {
 		return true;
 	}
 }
+

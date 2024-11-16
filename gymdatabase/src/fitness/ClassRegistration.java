@@ -16,13 +16,6 @@ public class ClassRegistration {
 	LocalDate date = LocalDate.now();
 	static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 	
-	public ClassRegistration(String registrationID, String classID, String visitorID) {
-		this.registrationID=registrationID;
-		this.registrationDate=LocalDate.now().format(formatter);;
-		this.classID=classID;
-		this.visitorID=visitorID;
-	}
-	
 	public ClassRegistration(String registrationID,String registrationDate, String classID, String visitorID) {
 		this.registrationID=registrationID;
 		this.registrationDate=registrationDate;
@@ -84,45 +77,19 @@ public class ClassRegistration {
 	        }	        
 	    return classreg;
 	 }
-	 	 	 	 	 	 
-	 public static boolean isRegistrationIDValid (String regID) throws IOException {
-		 List<ClassRegistration> classGet = ClassRegistration.getFromFile();
-	 		for (ClassRegistration regClass : classGet) {
-	 			if(regClass.getRegistrationID().equals(regID)) {	
-	 				return false;
-	 			}
-	 		}
-		return true;	
-	 }
-	 
-	 public static boolean isVisitorIDValid (String visitID) {
-		 List<Visitor> visitors = Visitor.getFromFile();
-	 		for (Visitor visitor : visitors) {
-             if (visitor.getVisitorID().equals(visitID)) {                	                	
-                 return true;    
-             }
-         }
-		 return false;
-	 }
-	 
-	 public static boolean isClassIDValid (String classID) {
-		 List<Class> classList = Class.loadClassesFromFile();
-	 		for (Class classClass : classList) {
-	 			if (classClass.getClassID().equals(classID)) {
-	 				return true;
-	 			}
-	 		}
-	 	return false;
-	 }
 	 
 	 public static void add() throws IOException {
 		 String regID = null;
 	 		do {
 	 		System.out.print("Registration ID: ");
 	 		regID = inp.nextLine();
+	 		if (isExist(regID)) System.out.println("Enter Valid Registration ID");
 	 		if (!isRegistrationIDValid(regID)) System.out.println("Registration ID Already Exist.");
-	 		} while (!isRegistrationIDValid(regID));
+	 		} while (!isRegistrationIDValid(regID) || isExist(regID));
 	 		
+	 		
+	 		System.out.println("Date Automatically inserted");
+	 		String inDate = LocalDate.now().format(formatter);
 	 		String classID = null;
 	 		do {
 	 		System.out.print("Class ID: ");
@@ -140,7 +107,7 @@ public class ClassRegistration {
 	 		
 	 		
 	 		//check if there is an existing regID
-	 		ClassRegistration classReg = new ClassRegistration(regID,classID,visitorID);		 		
+	 		ClassRegistration classReg = new ClassRegistration(regID,inDate,classID,visitorID);		 		
 	 		if (isRegistrationIDValid(regID) && isVisitorIDValid(visitorID) && isClassIDValid(classID)) {		 			
 	 			classReg.saveToFile();
 	 			System.out.println("Data Successfully Added");
@@ -186,4 +153,42 @@ public class ClassRegistration {
 	 		}
 	 		System.out.println(String.format("%s", "-------------------------------------------------------------------------------"));
 	 }
+	 
+	 public static boolean isRegistrationIDValid (String regID) throws IOException {
+		 List<ClassRegistration> classGet = ClassRegistration.getFromFile();
+	 		for (ClassRegistration regClass : classGet) {
+	 			if(regClass.getRegistrationID().equals(regID)) {	
+	 				return false;
+	 			}
+	 		}
+		return true;	
+	 }
+	 
+	 public static boolean isVisitorIDValid (String visitID) {
+		 List<Visitor> visitors = Visitor.getFromFile();
+	 		for (Visitor visitor : visitors) {
+             if (visitor.getVisitorID().equals(visitID)) {                	                	
+                 return true;    
+             }
+         }
+		 return false;
+	 }
+	 
+	 public static boolean isClassIDValid (String classID) {
+		 List<Class> classList = Class.getFromFile();
+	 		for (Class classClass : classList) {
+	 			if (classClass.getClassID().equals(classID)) {
+	 				return true;
+	 			}
+	 		}
+	 	return false;
+	 }
+	 
+	 public static boolean isExist(String regID) {
+	    	if (regID != "") {
+	    		return false;
+	    	}
+	    	return true;
+	    }
+	 
 }

@@ -59,9 +59,9 @@ public class Staff {
                 String[] data = line.split("\\*");
                 String id = data[0];
                 String name = data[1];
-                String role = data[2];
-                String info = data[3];
-                staff.add(new Staff(id, name, role, info));
+                String no = data[2];
+                String role = data[3];
+                staff.add(new Staff(id, name, no, role));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -100,7 +100,7 @@ public class Staff {
         List<Role> roles = Role.getFromFile();
         isValid = false;
         do {
-            System.out.println("Enter valid role ID: ");
+            System.out.print("Enter valid role ID: ");
             roleID = i.nextLine();
             for(Role role: roles) {
                 if(role.getRoleID().equals(roleID)) {
@@ -114,37 +114,93 @@ public class Staff {
     }
     public static void display() {
         List <Staff> staff = (List<Staff>) Staff.getFromFile();
-        System.out.println(String.format("%s", "-----------------------------------------------------------------------------------"));
-        System.out.println(String.format("%9s %3s %20s %5s %15s %10s %15s","StaffID" ,"|","Name","|","ContactNo","|","RoleID"));
-        System.out.println(String.format("%s", "-----------------------------------------------------------------------------------"));
+        System.out.println(String.format("%s", "------------------------------------------------------------------------------"));
+        System.out.println(String.format("%9s %3s %15s %5s %15s %10s %15s","StaffID" ,"|","Name","|","ContactNo","|","RoleID"));
+        System.out.println(String.format("%s", "------------------------------------------------------------------------------"));
         for(Staff st: staff) {
-            System.out.format("%9s %3s %20s %5s %15s %10s %15s", st.getStaffID(), "|", st.getName(),"|", st.getContactNo(),"|", st.getRoleID());
+            System.out.format("%9s %3s %15s %5s %15s %10s %15s", st.getStaffID(), "|", st.getName(),"|", st.getContactNo(),"|", st.getRoleID());
             System.out.println();
         }
     }
+    public static void update()throws IOException {
+		List<Staff> staffList = Staff.getFromFile();
+		String id;
+		int ctr = 0;
+		boolean isExisting = false;
+		do {
+			System.out.print("Look for ID -->> ");
+			id = i.nextLine();
+			for (Staff staff : staffList) {
+				if(staff.getStaffID().equals(id)) {	
+					ctr++;
+					System.out.println("Staff ID found.");
+				}
+			}
+			if (ctr != 0) {
+				isExisting = true;
+			}
+			else {
+				System.out.println("Staff ID not found. Please try again.");
+			}
+			ctr = 0;
+		}
+		while(isExisting == false);
+		for (Staff staff : staffList) {
+	        if (staff.getStaffID().equals(id)) {
+	        	System.out.print("Current name: " + staff.getName() + "\nEnter new name -->> ");
+	        	String nn = i.nextLine();
+	            staff.setName(nn);
+	            System.out.print("Current number: " + staff.getContactNo() + "\nEnter new number -->> ");
+	        	String nno = i.nextLine();
+	            staff.setContactNo(nno);
+	            staff.saveToFile();
+	        }
+	    }
+	    BufferedWriter writer = new BufferedWriter(new FileWriter("Staff.txt"));
+        for (Staff staff : staffList) {
+        	writer.write(staff.getStaffID() + "*" + staff.getName() + "*" + staff.getContactNo() + "*" + staff.getRoleID() + "*");
+            writer.newLine();
+        }
+        System.out.println("Updated Entry.");
+        writer.close();
+	}
 
     public static void delete()throws IOException{
-        List<Staff> staffList = Staff.getFromFile();//.txt file into ArrayList
-        System.out.print("Look for ID: ");
-        String id = i.nextLine();
-        System.out.print("Are you sure you want to delete " + id + "?\n[1]Yes [2]No --> ");
-        String deleteConfirm = i.nextLine();
-        switch(deleteConfirm) {
-            case "1"://case 1 / "YES"
-                BufferedWriter writer = new BufferedWriter(new FileWriter("Staff.txt"));//rewrites .txt file
-                for (Staff staff: staffList) {
-                    if(!staff.getStaffID().equals(id)) {//skips VisitorID input from being written
-                        writer.write(staff.getStaffID() + "*" + staff.getName());
-                        writer.newLine();
-                    }
-                }
-                writer.close();
-                System.out.println("Deleted.");
-                break;
-            case "2": //case 2 / "NO"
-                System.out.println("Deletion cancelled.");
-        }
-    }
+    	List<Staff> staffList = Staff.getFromFile();//.txt file into ArrayList
+		int ctr = 0;
+		boolean isValid = false;
+		do {
+			System.out.print("Look for ID: ");
+			String id = i.nextLine();
+			for (Staff staff : staffList) {
+				if (staff.getStaffID().equals(id)) {
+					ctr++;
+					isValid = true;
+					System.out.println("Staff ID " + staff.getStaffID() + " || " + staff.getName() + " Found.");
+					System.out.print("Are you sure you want to delete " + id + "?\n[1]Yes [2]No --> ");
+			        String deleteConfirm = i.nextLine();
+			        switch(deleteConfirm) {
+			        	case "1"://case 1 / "YES"
+			        		BufferedWriter writer = new BufferedWriter(new FileWriter("Staff.txt"));//rewrites .txt file
+			        		for (Staff staff1: staffList) {
+			        			if(!staff1.getStaffID().equals(id)) {//skips StaffID input from being written
+			        				writer.write(staff1.getStaffID() + "*" + staff1.getName() + "*" + staff1.getContactNo() + "*" + staff1.getRoleID());
+			        				writer.newLine();
+			        			}
+			        		}
+			        		writer.close();
+			        		System.out.println("Deleted.");
+			        		break;
+			        	case "2": //case 2 / "NO"
+			        		System.out.println("Deletion cancelled.");
+			        		break;
+			        }
+				}
+			}		
+		}
+		while(!isValid);
+		
+	}
     public static boolean isEmpty(String input) {
 		if (input != "") {
 			return false;
