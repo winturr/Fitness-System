@@ -26,6 +26,10 @@ public class Role {
      public String getRoleName() {
          return roleName;
      }
+     
+     public void setRoleName(String roleName) {
+    	 this.roleName=roleName;
+     }
 
 
      public void saveToFile() {
@@ -95,7 +99,7 @@ public class Role {
  		}
  	}
      
-     public static void update() {
+     public static void update() throws IOException {
     	 List<Role> roleList = Role.getFromFile();
     	 boolean roleValid = false;
     	 String roleID = null;
@@ -111,7 +115,21 @@ public class Role {
     	 } while (!roleValid);
     	 
     	 System.out.println("New Role Name: ");
+    	 String newName = i.nextLine();
+    	 
+    	 BufferedWriter writer = new BufferedWriter(new FileWriter("Role.txt"));
+    	 for (Role roles : roleList) {
+    		 if (roles.getRoleID().equals(roleID)) {
+    		 roles.setRoleName(newName);
+    		 roles.saveToFile();
+    		 }
+    		 writer.write(roles.getRoleID()+"*"+roles.getRoleName());
+    		 writer.newLine(); 		 
+    	 }
+    	 System.out.println("Data Updated");
+    	 writer.close();
      }
+     
      public static boolean isEmpty(String input) {
  		if (input != "") {
  			return false;
