@@ -5,13 +5,13 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) throws IOException {
     	/*Staff 			ADD DISPLAY UPDATE DELETE
-    	  Role				ADD DISPLAY
-    	  Visitor 			ADD DISPLAY
+    	  Role				ADD DISPLAY UPDATE
+    	  Visitor 			ADD DISPLAY UPDATE
     	  Member 			ADD DISPLAY UPDATE DELETE
-    	  CheckInRecord 	ADD DISPLAY
-    	  Payment 			ADD DISPLAY
+    	  CheckInRecord 	ADD DISPLAY UPDATE
+    	  Payment 			ADD DISPLAY UPDATE
     	  Class 			ADD DISPLAY UPDATE DELETE
-    	  ClassRegistration ADD DISPLAY 				*/
+    	  ClassRegistration ADD DISPLAY UPDATE		 */
         Staff.display();
         Visitor.display();
         Member.display();
