@@ -222,7 +222,7 @@ public class Member {
 			        	case "1"://case 1 / "YES"
 			        		BufferedWriter writer = new BufferedWriter(new FileWriter("Member.txt"));//rewrites .txt file
 			        		for (Member member1: memberList) {
-			        			if(!member1.getVisitorID().equals(id)) {//skips VisitorID input from being written
+			        			if(!member1.getMemberID().equals(id)) {//skips VisitorID input from being written
 			        				writer.write(member1.getMemberID() + "*" + member1.getMembershipStartDate()+ "*" + member1.getMembershipEndDate() + "*" + member1.getContactNo() + "*" + member1.getStatus() + "*" + member1.getVisitorID() + "*");
 			        				writer.newLine();
 			        			}
