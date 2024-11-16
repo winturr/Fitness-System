@@ -106,7 +106,8 @@ public class CheckInRecord {
     	do {
     		System.out.print("Check in ID: ");
     		inID= inp.nextLine();
-    		if (!isCheckInIDValid(inID) || isExist(inID)) System.out.println("Check In ID Already Exist");
+    		if (isExist(inID)) System.out.println("Enter Valid Check in ID: ");
+    		if (!isCheckInIDValid(inID) ) System.out.println("Check In ID Already Exist");
     	} while (!isCheckInIDValid(inID) || isExist(inID));
     	
     	System.out.println("Check In Time Automatically Inserted");
