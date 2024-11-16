@@ -102,13 +102,12 @@ public class CheckInRecord {
 	 }
     
     public static void add() throws IOException {
-    	
-    	String inID = null;
+    	String inID = "";
     	do {
     		System.out.print("Check in ID: ");
     		inID= inp.nextLine();
-    		if (!isCheckInIDValid(inID)) System.out.println("Check In ID Already Exist");
-    	} while (!isCheckInIDValid(inID));
+    		if (!isCheckInIDValid(inID) || isExist(inID)) System.out.println("Check In ID Already Exist");
+    	} while (!isCheckInIDValid(inID) || isExist(inID));
     	
     	System.out.println("Check In Time Automatically Inserted");
     	String inTime = LocalTime.now().format(timeFormatter);
@@ -202,7 +201,7 @@ public class CheckInRecord {
     public static boolean isCheckInIDValid(String inID) throws IOException {
     	List<CheckInRecord> inRecord = CheckInRecord.getFromFile();
  		for (CheckInRecord regClass : inRecord) {
- 			if(regClass.getCheckInID().equals(inID)) {	
+ 			if (regClass.getCheckInID().equals(inID) || regClass.getCheckInID().equals("")) {	
  				return false;
  			}
  		}
@@ -228,4 +227,11 @@ public class CheckInRecord {
         }
 		 return false;
 	 }
+    
+    public static boolean isExist(String inID) {
+    	if (inID != "") {
+    		return false;
+    	}
+    	return true;
+    }
 }
