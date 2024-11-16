@@ -85,7 +85,7 @@ public class Class {
     public static void display() {
         List <Class> class1 = getFromFile();
         System.out.println(String.format("%s", "------------------------------------------------------------------------------------------------------------------------------------------------------"));
-        System.out.println(String.format("%9s %3s %26s %5s %15s %10s %15s %9s %3s %26s %5s","Class ID" ,"|","Class Name","|","Max Capacity","|","Start Time","|","End Timr","|","Staff ID"));
+        System.out.println(String.format("%9s %3s %26s %5s %15s %10s %15s %9s %3s %26s %5s","Class ID" ,"|","Class Name","|","Max Capacity","|","Start Time","|","End Time","|","Staff ID"));
         System.out.println(String.format("%s", "------------------------------------------------------------------------------------------------------------------------------------------------------"));
         for(Class c: class1) {
             System.out.format("%9s %3s %26s %5s %15s %10s %15s %9s %3s %26s %5s", c.getClassID(), "|", c.getClassName(),"|", c.getMaxCapacity(),"|", c.getStartTime(),"|", c.getEndTime(),"|",c.getStaffID(),"|");
@@ -93,15 +93,7 @@ public class Class {
         }
     }
 
-    public static boolean isClassIDValid(String classID) {
-            List<Class> class1 = getFromFile();
-            for (Class clas : class1) {
-                if (clas.getStaffID().equals(classID)) {
-                    return true;
-                }
-            }
-            return false;
-        }
+    
     
     
     public static boolean isStaffIDValid(String staffID) {
@@ -236,22 +228,30 @@ public class Class {
 
     
     
-    
+    public static boolean isClassIDValid (String classID) throws IOException {
+		 List<ClassRegistration> classGet = ClassRegistration.getFromFile();
+	 		for (ClassRegistration class1 : classGet) {
+	 			if (class1.getClassID().equals(classID)) {
+	 				return true;
+	 			}
+	 		}
+	 	return false;
+	 }
     
     public static void delete() throws IOException {
     List<Class> classList = getFromFile();
     System.out.print("Enter Class ID to delete: ");
-    String id = inp.nextLine();
-    if(ClassRegistration.isClassIDValid(id)){
-        System.out.println("Class is Used by Class Regidtration file, invalid delete");
+    String classid = inp.nextLine();
+    if(isClassIDValid(classid)){
+        System.out.println("Class is Used by Class Registration file, invalid delete");
     }
     else{
-        System.out.print("Are you sure you want to delete Class ID " + id + "? [1] Yes [2] No: ");
+        System.out.print("Are you sure you want to delete Class ID " + classid + "? [1] Yes [2] No: ");
         String deleteConfirm = inp.nextLine();
 
         if (deleteConfirm.equals("1")) {
 
-            classList.removeIf(class1 -> class1.getClassID().equals(id));
+            classList.removeIf(class1 -> class1.getClassID().equals(classid));
 
 
             try (BufferedWriter writer = new BufferedWriter(new FileWriter("Class.txt"))) {
