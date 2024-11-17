@@ -61,30 +61,29 @@ public class Role {
 
      public static void add() {
     	 List <Role> roleList = (List<Role>) Role.getFromFile();
-    	 int ctr = 0;
     	 boolean isValid = false;
     	 String roleID;
     	 do {
- 			System.out.print("Enter Role ID: ");
+ 			System.out.print("Enter new Role ID: ");
  			roleID = i.nextLine();
+ 			isValid = true;
  			for (Role role : roleList) {
- 				if(role.getRoleID().equals(roleID)) {	
- 					ctr++;
- 					System.out.println("Visitor ID already exists. Please try again.");
+ 				if(role.getRoleID().equals(roleID) || roleID.isEmpty()) {	
+ 					if (role.getRoleID().equals(roleID)) {
+ 						System.out.println("Visitor ID already exists. Please try again.");
+ 					} else if (roleID.isEmpty()){
+ 						System.out.println("Role ID cannot be empty.");
+ 					}
+ 					isValid = false;
+ 					break;					
  				}
  			}
- 			if (ctr == 0) {
- 				isValid = true;
- 			}
- 			if (isEmpty(roleID)) {
- 				isValid = false;
- 			}
- 			ctr = 0;
- 		}
- 		while(isValid == false);
+
+ 		} while(isValid == false);
+    	 
  		System.out.print("Enter Role Name: ");
  		String roleName = i.nextLine();
- 		System.out.println("Successfully added to Visitor.txt");
+ 		System.out.println("Role added Successfully");
  		Role r = new Role(roleID, roleName);
  		r.saveToFile();
  	}
@@ -97,6 +96,7 @@ public class Role {
  		for(Role r: roleList) {
  			System.out.println(String.format("%9s %3s %26s", r.getRoleID(),"|",r.getRoleName()));
  		}
+ 		System.out.println(String.format("%s", "-----------------------------------------"));
  	}
      
      public static void update() throws IOException {
@@ -104,7 +104,36 @@ public class Role {
     	 boolean roleValid = false;
     	 String roleID = null;
     	 do { 		 
-    		 System.out.print("Role ID you want to update: ");
+    		 System.out.print("Look for Role ID: ");
+    		 roleID = i.nextLine();
+    		 	for (Role roles : roleList) {
+    		 		if(roles.getRoleID().equals(roleID)) {
+    		 			roleValid = true;
+    		 			System.out.print("Current Role Name: "+roles.getRoleName() +"\nNew Role Name: ");
+    		 		    String newName = i.nextLine();
+    		 		    roles.setRoleName(newName);
+    		    		roles.saveToFile();
+    		 		}
+    		 	}
+    		 if (!roleValid) System.out.println("Role ID not found. Please try again.");
+    	 } while (!roleValid);
+    	  
+    	 BufferedWriter writer = new BufferedWriter(new FileWriter("Role.txt"));
+    	 for (Role roles : roleList) {
+    		 writer.write(roles.getRoleID()+"*"+roles.getRoleName());
+    		 writer.newLine(); 		 
+    	 }
+    	 System.out.println("Updated Entry");
+    	 writer.close();
+     }
+     
+     public static void delete() throws IOException {
+    	 List<Role> roleList = Role.getFromFile();
+    	 boolean roleValid = false;
+    	 boolean isDeleted = true;
+    	 String roleID = null;
+    	 do { 		 
+    		 System.out.print("Look for Role ID: ");
     		 roleID = i.nextLine();
     		 	for (Role roles : roleList) {
     		 		if(roles.getRoleID().equals(roleID)) {
@@ -112,28 +141,31 @@ public class Role {
     		 		}
     		 	}
     		 if (!roleValid) System.out.println("Role ID doesn't exist.");
+    		 if(roleValid) {
+    			
+    			 System.out.print("Are you sure you want to delete this "+roleID+"?[1]Yes [2]No: ");
+    			 String choice = i.nextLine();
+        		 if (choice.equals("1")) {
+        			 break;      			
+        		 } else {
+        			 System.out.println("Deletion Canceled");
+        			 isDeleted = false;     			 
+        		 }
+    		 } 
     	 } while (!roleValid);
     	 
-    	 System.out.println("New Role Name: ");
-    	 String newName = i.nextLine();
-    	 
-    	 BufferedWriter writer = new BufferedWriter(new FileWriter("Role.txt"));
-    	 for (Role roles : roleList) {
-    		 if (roles.getRoleID().equals(roleID)) {
-    		 roles.setRoleName(newName);
-    		 roles.saveToFile();
+    	 if(isDeleted) {
+    		 BufferedWriter writer = new BufferedWriter(new FileWriter("Role.txt"));
+    		 for (Role roles : roleList) {
+    			 if(!roles.getRoleID().equals(roleID)) {
+    				 writer.write(roles.getRoleID()+"*"+roles.getRoleName());
+    				 writer.newLine();
+    				 isDeleted=true;
+    			 }
     		 }
-    		 writer.write(roles.getRoleID()+"*"+roles.getRoleName());
-    		 writer.newLine(); 		 
+    		 writer.close();
+    		 System.out.println("Role Deleted Successfully.");
     	 }
-    	 System.out.println("Data Updated");
-    	 writer.close();
      }
      
-     public static boolean isEmpty(String input) {
- 		if (input != "") {
- 			return false;
- 		}
- 		return true;
- 	}
 }
