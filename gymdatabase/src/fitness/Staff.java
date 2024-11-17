@@ -68,25 +68,30 @@ public class Staff {
         }
         return staff;
     }
-   public void add() {
+    public static void add() {
     	boolean isValid = false;
     	List<Staff> staffs = Staff.getFromFile();
-
+    	String staffID;
+    	String roleID;
     	do {
     	    System.out.print("Enter new Staff ID: ");
-    	    String staffId = i.nextLine();
+    	    staffID = i.nextLine();
     	    isValid = true;
     	    for(Staff staff: staffs) {
-    	        if(staff.getStaffID().equals(staffId)) {
-    	        	System.out.println(staff.getStaffID());
-    	            System.out.println("Staff ID already exists! Please enter a new one.");
+    	        if(staff.getStaffID().equals(staffID) || staffID.isEmpty()) {
+    	            if (staff.getStaffID().equals(staffID)) {
+    	            	System.out.println("Staff ID already exists! Please try again.");	
+    	            }
+    	            if (staffID.isEmpty()) {
+    	            	System.out.println("Staff ID cannot be empty.");
+    	            }
+    	        	
     	            isValid = false; 
     	            break; 
     	        }
     	    }
-    	    if (isValid) {
-    	        setStaffID(staffId);
-    	    }
+    	    
+    	    
     	} while(!isValid); 
 
         System.out.print("Enter Staff Name: ");
@@ -98,16 +103,16 @@ public class Staff {
         List<Role> roles = Role.getFromFile();
         isValid = false;
         do {
-            System.out.println("Enter valid role ID: ");
-            String roleId = i.nextLine();
+            System.out.print("Enter a valid role ID: ");
+            roleID = i.nextLine();
             for(Role role: roles) {
-                if(role.getRoleId().equals(roleId)) {
+                if(role.getRoleID().equals(roleID)) {
                     isValid = true;
                 }
-            }setRoleId(roleId);
+            }
         }while(isValid == false);
 
-
+        System.out.println("Staff added Successfully");
         Staff s = new Staff(staffID, name, contactInfo, roleID);
         s.saveToFile();
     }
@@ -120,6 +125,7 @@ public class Staff {
             System.out.format("%9s %3s %15s %5s %15s %10s %15s", st.getStaffID(), "|", st.getName(),"|", st.getContactNo(),"|", st.getRoleID());
             System.out.println();
         }
+        System.out.println(String.format("%s", "------------------------------------------------------------------------------"));
     }
     public static void update()throws IOException {
 		List<Staff> staffList = Staff.getFromFile();
@@ -127,12 +133,11 @@ public class Staff {
 		int ctr = 0;
 		boolean isExisting = false;
 		do {
-			System.out.print("Look for ID -->> ");
+			System.out.print("Look for Staff ID: ");
 			id = i.nextLine();
 			for (Staff staff : staffList) {
 				if(staff.getStaffID().equals(id)) {	
 					ctr++;
-					System.out.println("Staff ID found.");
 				}
 			}
 			if (ctr != 0) {
@@ -146,10 +151,10 @@ public class Staff {
 		while(isExisting == false);
 		for (Staff staff : staffList) {
 	        if (staff.getStaffID().equals(id)) {
-	        	System.out.print("Current name: " + staff.getName() + "\nEnter new name -->> ");
+	        	System.out.print("Current name: " + staff.getName() + "\nEnter new name: ");
 	        	String nn = i.nextLine();
 	            staff.setName(nn);
-	            System.out.print("Current number: " + staff.getContactNo() + "\nEnter new number -->> ");
+	            System.out.print("Current number: " + staff.getContactNo() + "\nEnter new number: ");
 	        	String nno = i.nextLine();
 	            staff.setContactNo(nno);
 	            staff.saveToFile();
@@ -166,17 +171,15 @@ public class Staff {
 
     public static void delete()throws IOException{
     	List<Staff> staffList = Staff.getFromFile();//.txt file into ArrayList
-		int ctr = 0;
 		boolean isValid = false;
 		do {
-			System.out.print("Look for ID: ");
+			System.out.print("Look for Staff ID: ");
 			String id = i.nextLine();
 			for (Staff staff : staffList) {
 				if (staff.getStaffID().equals(id)) {
-					ctr++;
 					isValid = true;
-					System.out.println("Staff ID " + staff.getStaffID() + " || " + staff.getName() + " Found.");
-					System.out.print("Are you sure you want to delete " + id + "?\n[1]Yes [2]No --> ");
+					if (recordCheck(id)) {
+					System.out.print("Are you sure you want to delete " + id + "?[1]Yes [2]No: ");
 			        String deleteConfirm = i.nextLine();
 			        switch(deleteConfirm) {
 			        	case "1"://case 1 / "YES"
@@ -188,22 +191,38 @@ public class Staff {
 			        			}
 			        		}
 			        		writer.close();
-			        		System.out.println("Deleted.");
+			        		System.out.println("Staff Deleted Successfully.");
 			        		break;
 			        	case "2": //case 2 / "NO"
-			        		System.out.println("Deletion cancelled.");
+			        		System.out.println("Deletion Canceled.");
 			        		break;
 			        }
 				}
-			}		
+				}
+			}
+			if(!isValid) {
+				System.out.println("Staff ID not found. Please try again.");
+			}
+
+			
 		}
 		while(!isValid);
 		
 	}
-    public static boolean isEmpty(String input) {
-		if (input != "") {
-			return false;
+    
+    public static boolean recordCheck(String id)  throws IOException {
+		List<Class> classList = Class.getFromFile();
+		
+		boolean isValid = true;
+		for (Class classes : classList) {
+			if (classes.getStaffID().equals(id)) {
+				System.out.println("Staff is Used by Class Class, Invalid Delete.");
+				isValid =false;
+				break;
+			}
 		}
-		return true;
-	}
+		return isValid;
+		
+    }
+    
 }
