@@ -159,7 +159,7 @@ public class Member {
 		}
 		System.out.println(String.format("%s", "---------------------------------------------------------------------------------------------------"));
 	}
-	public static void update()throws IOException {
+	public static void update()throws IOException { //renew
 		List<Member> memberList = Member.getFromFile();//.txt file into ArrayList
 		boolean isValid = false;
 		int ctr = 0;
@@ -184,44 +184,9 @@ public class Member {
 		
 	    for (Member member : memberList) {//looks for given MemberID
 	        if (member.getMemberID().equals(id)) {//if found
-	        	//replaces values
-	        	LocalDate date = LocalDate.now();
-	    		LocalDate futureDate = date.plusYears(3);
-	            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-	            String currentDate = date.format(formatter);
-	            String newFutureDate = futureDate.format(formatter);
-	            String renew ="";
-	            boolean isRenewed=false;
-	    		if (member.getStatus().equals("Inactive")) {
-	    			System.out.print("Renew?[1]Yes [2]No: ");
-		    		renew = i.nextLine();
-		    		switch (renew) {
-		    			case "1":
-		    				isRenewed=true;
-		    				member.setMembershipStartDate(currentDate);
-		    				member.setMembershipEndDate(newFutureDate);
-		    				member.setStatus("Active");
-		    				System.out.println("Renewed");
-		    		        break;
-		    				
-		    		}
-	    		}
 	            
-	        	System.out.print("Current Contact Info: " +member.getContactNo()+"\nEnter new Contact Info: ");
-	    		String nc = i.nextLine();
-	    		if (member.getStatus().equals("Active")  && !isRenewed) {
-	    			System.out.print("Current Status: "+member.getStatus()+"\nEnter new status, [1]Active [2]Inactive: ");
-		    		String ns = i.nextLine();
-		    		switch (ns) {
-		    		case "1":
-		    			ns = "Active";
-		    			break;
-		    		case "2":
-		    			ns = "Inactive";
-		    		}
-		    		member.setStatus(ns);
-	    		}
-	    		
+	        	System.out.print("Current Contact Info: " +member.getContactNo()+"\nEnter new Contact Info: ");	    		
+	        	String nc = i.nextLine();	    		
 	            member.setContactNo(nc);            
 	            member.saveToFile();
 	            break;
@@ -269,6 +234,91 @@ public class Member {
 			}		
 		}
 		while(!isValid);
+	}
+	
+	public static void refreshMember() throws IOException { // EndofMembership
+        LocalDate date = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String strDate = formatter.format(date);
+
+        //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        List<Member> members = Member.getFromFile();
+        BufferedWriter writer = new BufferedWriter(new FileWriter("Member.txt",false));
+        for(Member member: members) {
+            if(strDate.equals(member.getMembershipEndDate())) {
+                member.setStatus("Inactive");
+                writer.write(member.getMemberID() + "*" + member.getMembershipStartDate() + "*" + member.getMembershipEndDate() + "*" + member.getContactNo() + "*" + member.getStatus() + "*" + member.getVisitorID() + "*");
+                writer.newLine();
+            }else {
+            	writer.write(member.getMemberID() + "*" + member.getMembershipStartDate() + "*" + member.getMembershipEndDate() + "*" + member.getContactNo() + "*" + member.getStatus() + "*" + member.getVisitorID() + "*");
+                writer.newLine();
+                continue;
+            }
+        }writer.close();
+
+    }
+	
+	public static void renew() throws IOException {
+		List<Member> memberList = Member.getFromFile();//.txt file into ArrayList
+		boolean isValid = false;
+		int ctr = 0;
+		String id;
+		do {
+			System.out.print("Look for Member ID: ");
+			id = i.nextLine();
+			for (Member member: memberList) {
+				if(member.getMemberID().equals(id)) {
+					ctr++;
+				}
+			}
+			if (ctr != 0) {
+				isValid = true;
+			}
+			else {
+				System.out.println("Member ID not found. Please try again.");
+			}
+		}
+		while(isValid == false);
+		
+		for (Member member : memberList) {//looks for given MemberID
+	        if (member.getMemberID().equals(id)) {//if found
+	        	//replaces values
+	        	LocalDate date = LocalDate.now();
+	    		LocalDate futureDate = date.plusYears(3);
+	            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+	            String currentDate = date.format(formatter);
+	            String newFutureDate = futureDate.format(formatter);
+	            String renew ="";
+	    		if (member.getStatus().equals("Inactive")) {
+	    			System.out.print("Are you sure you want to renew?[1]Yes [2]No: ");
+		    		renew = i.nextLine();
+		    		switch (renew) {
+		    			case "1":
+		    				member.setMembershipStartDate(currentDate);
+		    				member.setMembershipEndDate(newFutureDate);
+		    				member.setStatus("Active");
+		    				System.out.println("Renewed");
+		    		        System.out.println("Updated Entry.");
+		    		        break;
+		    			case"2":
+		    				System.out.println("Canceled");
+		    				break;
+		    		}
+	    		} else {
+	    			System.out.println("Member has Active Membership.");
+	    			break;
+	    		}
+	    		member.saveToFile();
+	    		break;
+	        }
+		}
+		
+		BufferedWriter writer = new BufferedWriter(new FileWriter("Member.txt"));
+        for (Member member : memberList) {//rewrites the ArrayList with updated record into the .txt file
+        	writer.write(member.getMemberID() + "*" + member.getMembershipStartDate() + "*" + member.getMembershipEndDate() + "*" + member.getContactNo() + "*" + member.getStatus() + "*" + member.getVisitorID() + "*");
+            writer.newLine();
+        }
+        writer.close();
 	}
 	
 }
