@@ -7,9 +7,8 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
-
     public static void main(String[] args) throws IOException {
-
+    	Member.refreshMember();
     	boolean shutdown = false;
     	Scanner sc = new Scanner(System.in);
     	String username = null;
@@ -44,8 +43,6 @@ public class Main {
     			System.out.println("Wrong Password or Username!");
     		}
     	}
-    	
-    	
     	
     	int flag=0;
     	while(flag!=1) {
@@ -88,7 +85,7 @@ public class Main {
         		boolean isMGood = true;
         		while (isMGood) {
         		Member.display();
-        		System.out.print("\n[1]Add     [3]Delete\n[2]Update  [4]Payment\n\n[5]Back\n\nSelect: ");
+        		System.out.print("\n[1]Add     [4]Payment\n[2]Update  [5]Renew\n[3]Delete\n\n[6]Back\n\nSelect: ");
         		String memberMethods = sc.nextLine();
         		if(memberMethods.equals("1")) {
         			Member.add();
@@ -99,10 +96,11 @@ public class Main {
         		}else if(memberMethods.equals("4")) {
         			Payment.add();
         		}else if(memberMethods.equals("5")) {
+        			Member.renew();
+        		}else if (memberMethods.equals("6")) {
         			isMGood=false;
         			break;
-        		}
-        		else {
+        		}else {
         			System.out.println("Invalid");
         		}
         		}
@@ -279,5 +277,7 @@ public class Main {
     }
     	sc.close();
     }
+    
+	   
 }
 
