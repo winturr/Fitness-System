@@ -13,19 +13,18 @@ import java.util.Scanner;
 import java.time.LocalTime; 
 
 public class CheckInRecord {
-    private String checkInID,checkInTime,checkOutTime,date,staffID,visitorID;
+    private String checkInID,checkInTime,checkOutTime,date,visitorID;
     public static Scanner inp = new Scanner (System.in);
     LocalDate nowDate = LocalDate.now();
 	static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 	LocalTime time = LocalTime.now();
 	static DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
     	
-    public CheckInRecord(String checkInID,String checkInTime, String checkOutTime, String date, String staffID, String visitorID) {
+    public CheckInRecord(String checkInID,String checkInTime, String checkOutTime, String date, String visitorID) {
     	this.checkInID=checkInID;
     	this.checkInTime=checkInTime;
     	this.checkOutTime=checkOutTime;
     	this.date=date;
-    	this.staffID=staffID;
     	this.visitorID=visitorID;
     }
     public String getCheckInID(){
@@ -44,11 +43,7 @@ public class CheckInRecord {
         return date;
     }
     
-    public String getStaffID() {
-    	return staffID;
-    }
-    
-    public String getVisitor() {
+    public String getVisitorID() {
     	return visitorID;
     }
     public void setCheckInID(String checkInID) {
@@ -66,11 +61,7 @@ public class CheckInRecord {
     public void setDate(String date) {
         this.date=date;
     }
-    
-    public void setStaffID(String staffID) {
-    	this.staffID=staffID;
-    }
-    
+        
     public void setVisitorID(String visitorID) {
     	this.visitorID=visitorID;
     }
@@ -78,7 +69,7 @@ public class CheckInRecord {
     
     public void saveToFile() throws IOException {
 		 BufferedWriter writer = new BufferedWriter(new FileWriter("CheckInRecord.txt", true));
-		 writer.write(checkInID + "*" + checkInTime +"*" + checkOutTime+"*"+date+"*"+staffID+"*"+visitorID);
+		 writer.write(checkInID + "*" + checkInTime +"*" + checkOutTime+"*"+date+"*"+visitorID);
 		 writer.newLine();
 		 writer.close();
 	 }
@@ -93,9 +84,8 @@ public class CheckInRecord {
 	                String inTime = data[1];
 	                String outTime = data[2];
 	                String date = data[3];
-	                String staffID = data[4];
-	                String visitorID = data[5];
-	                inRecord.add(new CheckInRecord(inID,inTime, outTime, date,staffID,visitorID));
+	                String visitorID = data[4];
+	                inRecord.add(new CheckInRecord(inID,inTime, outTime, date,visitorID));
 	            }
 	        }	        
 	    return inRecord;
@@ -104,34 +94,29 @@ public class CheckInRecord {
     public static void add() throws IOException {
     	String inID = "";
     	do {
-    		System.out.print("Check in ID: ");
+    		System.out.print("Enter new Check in ID: ");
     		inID= inp.nextLine();
-    		if (isExist(inID)) System.out.println("Enter Valid Check in ID: ");
-    		if (!isCheckInIDValid(inID) ) System.out.println("Check In ID Already Exist");
-    	} while (!isCheckInIDValid(inID) || isExist(inID));
+    		if (inID.isEmpty()) System.out.println("Checkin ID cannot be empty.");
+    		if (!isCheckInIDValid(inID) ) System.out.println("Checkin ID Already Exist. Please try again.");
+    	} while (!isCheckInIDValid(inID) || inID.isEmpty());
     	
     	System.out.println("Check In Time Automatically Inserted");
+    	System.out.println("Date Automatically Inserted");
     	String inTime = LocalTime.now().format(timeFormatter);
     	String outTime = "";
     	String inDate = LocalDate.now().format(formatter);
-    	String staffID = null;
-    	do {
-    		System.out.print("Staff ID: ");
-    		staffID = inp.nextLine();
-    		if (!isStaffIDValid(staffID)) System.out.println("Staff ID Doesn't Exist.");
-    	} while (!isStaffIDValid(staffID));
     	
     	String visitorID = null;
     	do {
-	 		System.out.print("Visitor ID: ");
+	 		System.out.print("Enter a valid Visitor ID: ");
 	 		visitorID = inp.nextLine();
-	 		if (!isVisitorIDValid(visitorID)) System.out.println("Visitor ID Doesn't Exist.");
+	 		if (!isVisitorIDValid(visitorID)) System.out.println("Invalid Visitor ID. Please try again.");
 	 		} while (!isVisitorIDValid(visitorID));
 	 		
-    	CheckInRecord inRecord = new CheckInRecord(inID,inTime,outTime,inDate,staffID,visitorID);
-    	if (isCheckInIDValid(inID) && isStaffIDValid(staffID) && isVisitorIDValid(visitorID)) {
+    	CheckInRecord inRecord = new CheckInRecord(inID,inTime,outTime,inDate,visitorID);
+    	if (isCheckInIDValid(inID) && isVisitorIDValid(visitorID)) {
     		inRecord.saveToFile();
-    		System.out.println("Data Successfully Added");
+    		System.out.println("Check In Record added successfully");
     	}
     	
     	
@@ -141,46 +126,53 @@ public class CheckInRecord {
     	String recordDel = null;
     	boolean isDeleted = true;
     	do {
-    		System.out.print("Enter Check In Record ID you want to delete: ");
+    		System.out.print("Look for Check in ID: ");
     		recordDel = inp.nextLine();
-    		System.out.print("Are you sure you want to delete this record? (Yes or No): ");
-    		String choice = inp.nextLine().toLowerCase();
-    		if (choice.equals("no")) isDeleted = false;
-    		if (isCheckInIDValid(recordDel)) System.out.println("Check In ID doesn't exist.");
+    		if (isCheckInIDValid(recordDel)) System.out.println("Invalid Checkin ID. Please try again.");
     	} while(isCheckInIDValid(recordDel));
+    	
+    	System.out.print("Are you sure you want to delete "+recordDel+"?[1]Yes or [2]No: ");
+		String choice = inp.nextLine();
+		if (choice.equals("1")) {
+		} else {
+			isDeleted = false;
+			System.out.println("Deletion Canceled");
+		}
+
     	
     	if(isDeleted) {
     		List<CheckInRecord> recordList = CheckInRecord.getFromFile();
     		BufferedWriter writer = new BufferedWriter(new FileWriter("CheckInRecord.txt"));
     		for (CheckInRecord inRecord : recordList ) {
     			if (!inRecord.getCheckInID().equals(recordDel)) {
-    				writer.write(inRecord.getCheckInID()+"*"+inRecord.getCheckInTime()+"*"+inRecord.getCheckOutTime()+"*"+inRecord.getDate()+"*"+inRecord.getStaffID()+"*"+inRecord.getVisitor());
+    				writer.write(inRecord.getCheckInID()+"*"+inRecord.getCheckInTime()+"*"+inRecord.getCheckOutTime()+"*"+inRecord.getDate()+"*"+inRecord.getVisitorID());
     				writer.newLine();
     			}
     		}
     		writer.close();
-    		System.out.println("Date Deleted");
+    		System.out.println("Check In Record Deleted Successfully");
     	}
     }
     
     public static void display() throws IOException {
     	List<CheckInRecord> inRecord = (List<CheckInRecord>) CheckInRecord.getFromFile();
     	System.out.println(String.format("%s", "----------------------------------------------------------------------------------------------------"));
- 		System.out.println(String.format("%5s %2s %11s %3s %11s %6s %12s %5s %12s %3s %12s"," CheckInID","|","  CheckInTime","|","CheckOutTime","|","Date","|","StaffID","|","VisitorID"));
+ 		System.out.println(String.format("%5s %2s %11s %3s %11s %6s %12s %3s %12s"," CheckInID","|","  CheckInTime","|","CheckOutTime","|","Date","|","VisitorID"));
  		System.out.println(String.format("%s", "----------------------------------------------------------------------------------------------------"));
  		for(CheckInRecord record : inRecord) {
- 			System.out.format("%9s %3s %11s %5s %11s %7s %8s %7s %10s %5s %10s", record.getCheckInID(),"|",record.getCheckInTime(),"|",record.getCheckOutTime(),"|",record.getDate(),"|",record.getStaffID(),"|",record.getVisitor());
+ 			System.out.format("%9s %3s %11s %5s %11s %7s %8s %5s %10s", record.getCheckInID(),"|",record.getCheckInTime(),"|",record.getCheckOutTime(),"|",record.getDate(),"|",record.getVisitorID());
  			System.out.println();		 				 		
  		}
+ 		System.out.println(String.format("%s", "----------------------------------------------------------------------------------------------------"));
     }
     
     public static void checkOutTime() throws IOException { //for updating checkoutTime only
     	List<CheckInRecord> inList = CheckInRecord.getFromFile();
     	String inID = null;
     	do {
-    	System.out.print("Select Check in ID: ");
+    	System.out.print("Look for Check in ID: ");
     	inID = inp.nextLine();
-    	if (isCheckInIDValid(inID)) System.out.println("Check In ID doesn't exist.");
+    	if (isCheckInIDValid(inID)) System.out.println("Check In ID not found. Please try again.");
     	} while (isCheckInIDValid(inID));
     	    	
     	System.out.println("Check Out Time:  "+ LocalTime.now().format(timeFormatter));
@@ -192,10 +184,10 @@ public class CheckInRecord {
     		 inRecord.setCheckOutTime(newTime);
  			 inRecord.saveToFile();
     		 }
-    		 writer.write(inRecord.getCheckInID()+"*"+inRecord.getCheckInTime()+"*"+inRecord.getCheckOutTime()+"*"+inRecord.getDate()+"*"+inRecord.getStaffID()+"*"+inRecord.getVisitor());
+    		 writer.write(inRecord.getCheckInID()+"*"+inRecord.getCheckInTime()+"*"+inRecord.getCheckOutTime()+"*"+inRecord.getDate()+"*"+inRecord.getVisitorID());
     		 writer.newLine();
     	 }
-    	 System.out.println("Data Updated.");
+    	 System.out.println("Updated Entry.");
     	 writer.close();
     }
      	
@@ -208,17 +200,7 @@ public class CheckInRecord {
  		}
 	return true;	
  }
-    
-    public static boolean isStaffIDValid(String staffID) throws IOException {
-    	List<Staff> staffList = Staff.getFromFile();
-    	for (Staff staffs : staffList) {
-    		if(staffs.getStaffID().equals(staffID)) {
-    			return true;
-    		}
-    	}
-    	return false;
-    }
-    
+       
     public static boolean isVisitorIDValid (String visitID) {
 		 List<Visitor> visitors = Visitor.getFromFile();
 	 		for (Visitor visitor : visitors) {
@@ -229,10 +211,4 @@ public class CheckInRecord {
 		 return false;
 	 }
     
-    public static boolean isExist(String inID) {
-    	if (inID != "") {
-    		return false;
-    	}
-    	return true;
-    }
 }
