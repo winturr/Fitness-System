@@ -91,28 +91,51 @@ public class Payment{
         
         
         public static void add() {
-        	System.out.print("Enter payment ID: ");
-        	String paymentID = i.nextLine();
+    		List<Payment> paymentList = Payment.getFromFile();
+        	String paymentID;
+        	boolean isIDValid = false;
+        	do {
+        		System.out.print("Enter new Payment ID: ");
+        		paymentID = i.nextLine();
+        		isIDValid = true;
+        		for (Payment pays : paymentList) {
+        			if(pays.getPaymentID().equals(paymentID) || paymentID.isEmpty()) {
+        				if (pays.getPaymentID().equals(paymentID)) {
+        					System.out.println("Payment ID already exists. Please try again.");
+        				} else if (paymentID.isEmpty()) {
+        					System.out.println("Payment ID cannot be empty.");
+        				}
+        				isIDValid =false;
+        				break;				
+        			}
+        		}	
+        	} while (!isIDValid);
+        	
+        	       
         	System.out.print("Enter Amount: ");
         	String amount = i.nextLine();
         	LocalDate date = LocalDate.now();
         	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        	System.out.println("Date already inserted.");
      
         	List<Visitor> visitors = Visitor.getFromFile();
         	boolean isValid = false;
         	String visitorID;
         	do {
-        		System.out.print("Enter valid visitor ID: ");
+        		System.out.print("Enter a valid visitor ID: ");
             	visitorID = i.nextLine();
         		for(Visitor visitor: visitors) {
         			if(visitor.getVisitorID().equals(visitorID)) {
         				isValid = true;
+        				System.out.println("Invalid Visitor ID. Please try again.");
         			}
         		}
         	}while(isValid == false);
         	
+        	System.out.println("Payment added Successfully");
         	Payment p = new Payment(paymentID, amount, date.format(formatter), visitorID);
-        	p.saveToFile();
+        	p.saveToFile(); 
+        	
         	
         }
         public static void display() {
@@ -122,29 +145,85 @@ public class Payment{
             System.out.println(String.format("%s", "---------------------------------------------------------"));
             for(Payment p: paymentList) {
                 System.out.println(String.format("%9s %3s %6s %5s %10s %8s %10s", p.getPaymentID(), "|", p.getAmount(),"|", p.getPaymentDate(),"|", p.getVisitorID()));
-
             }
+            System.out.println(String.format("%s", "---------------------------------------------------------"));
         }
+        
+        
         public static void delete()throws IOException{
-            List<Payment> paymentList = Payment.getFromFile();//.txt file into ArrayList
-            System.out.print("Look for ID: ");
-            String id = i.nextLine();
-            System.out.print("Are you sure you want to delete " + id + "?\n[1]Yes [2]No --> ");
+        	List<Payment> paymentList = Payment.getFromFile();
+        	String paymentID;
+        	boolean isIDValid = false;
+        	do {
+        		System.out.print("Enter new Payment ID: ");
+        		paymentID = i.nextLine();
+        		isIDValid = false;
+        		for (Payment pays : paymentList) {
+        			if(pays.getPaymentID().equals(paymentID)) {
+        				if (pays.getPaymentID().equals(paymentID)) {
+        					isIDValid =true;
+        				} 
+        				break;				
+        			}        			
+        		}	
+        		if (!isIDValid) System.out.println("Invalid Payment ID. Please try again.");
+        		
+        	} while (!isIDValid);
+        	
+            System.out.print("Are you sure you want to delete " + paymentID + "?[1]Yes [2]No: ");
             String deleteConfirm = i.nextLine();
             switch(deleteConfirm) {
                 case "1"://case 1 / "YES"
                     BufferedWriter writer = new BufferedWriter(new FileWriter("Payment.txt"));//rewrites .txt file
                     for (Payment payment : paymentList) {
-                        if(!payment.getPaymentID().equals(id)) {//skips VisitorID input from being written
+                        if(!payment.getPaymentID().equals(paymentID)) {//skips VisitorID input from being written
                             writer.write(payment.getPaymentID() + "*" + payment.getAmount() + "*" + payment.getPaymentDate()+ "*" + payment.getVisitorID() + "*");
                             writer.newLine();
                         }
                     }
                     writer.close();
-                    System.out.println("Deleted.");
+                    System.out.println("Payment Deleted Successfully.");
                     break;
                 case "2": //case 2 / "NO"
-                    System.out.println("Deletion cancelled.");
+                    System.out.println("Deletion Canceled.");
             }
         }
+        
+        public static void update() throws IOException {
+        	List <Payment> paymentList = (List<Payment>) Payment.getFromFile();
+        	String id = null;
+        	boolean isIDValid = false;
+        	do {
+        		System.out.print("Look for Payment ID: ");
+        		id = i.nextLine();
+        		for(Payment pay : paymentList) {
+        			if(pay.getPaymentID().equals(id)) {
+        				isIDValid = true;
+        			}
+        		}
+        		if(!isIDValid) System.out.println("Payment ID not found. Please try again.");
+        	} while (!isIDValid);
+        	
+        	
+        	BufferedWriter writer = new BufferedWriter(new FileWriter("Payment.txt"));
+        	for (Payment pay : paymentList) {
+        		if(pay.getPaymentID().equals(id)) {
+        			System.out.print("Current Amount: "+pay.getAmount()+"\nNew Amount: ");
+                	String newAmount = i.nextLine();
+        			pay.setAmount(newAmount);        			
+        		}
+        		pay.saveToFile();
+        		writer.write(pay.getPaymentID() + "*" + pay.getAmount() + "*" + pay.getPaymentDate()+ "*" + pay.getVisitorID() + "*");
+                writer.newLine();
+        	}
+        	System.out.println("Updated Entry");
+        	writer.close();
+        }
+        
+        public static boolean isExist(String payID) {
+	    	if (payID != "") {
+	    		return false;
+	    	}
+	    	return true;
+	    }
 }
