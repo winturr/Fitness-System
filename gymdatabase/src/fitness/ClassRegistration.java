@@ -81,27 +81,24 @@ public class ClassRegistration {
 	 public static void add() throws IOException {
 		 String regID = null;
 	 		do {
-	 		System.out.print("Registration ID: ");
+	 		System.out.print("Enter new Registration ID: ");
 	 		regID = inp.nextLine();
-	 		if (isExist(regID)) System.out.println("Enter Valid Registration ID");
-	 		if (!isRegistrationIDValid(regID)) System.out.println("Registration ID Already Exist.");
-	 		} while (!isRegistrationIDValid(regID) || isExist(regID));
-	 		
+	 		if (regID.isEmpty()) System.out.println("Registration ID cannot be empty.");
+	 		if (!isRegistrationIDValid(regID)) System.out.println("Registration ID already exist. Please try again.");
+	 		} while (!isRegistrationIDValid(regID) || regID.isEmpty());
 	 		
 	 		System.out.println("Date Automatically inserted");
 	 		String inDate = LocalDate.now().format(formatter);
 	 		String classID = null;
 	 		do {
-	 		System.out.print("Class ID: ");
+	 		System.out.print("Enter a valid Class ID: ");
 	 		classID = inp.nextLine();
-	 		if (!isClassIDValid(classID)) System.out.println("Class ID Doesn't Exist.");;
 	 		} while (!isClassIDValid(classID));
 	 		
 	 		String visitorID = null;
 	 		do {
-	 		System.out.print("Visitor ID: ");
+	 		System.out.print("Enter a valid Visitor ID: ");
 	 		visitorID = inp.nextLine();
-	 		if (!isVisitorIDValid(visitorID)) System.out.println("Visitor ID Doesn't Exist.");
 	 		} while (!isVisitorIDValid(visitorID));
 	 		
 	 		
@@ -110,7 +107,7 @@ public class ClassRegistration {
 	 		ClassRegistration classReg = new ClassRegistration(regID,inDate,classID,visitorID);		 		
 	 		if (isRegistrationIDValid(regID) && isVisitorIDValid(visitorID) && isClassIDValid(classID)) {		 			
 	 			classReg.saveToFile();
-	 			System.out.println("Data Successfully Added");
+	 			System.out.println("Class Registration added Successfully");
 	 		} 
 	 }
 	 
@@ -118,14 +115,19 @@ public class ClassRegistration {
 		 String classDel = null;
 	 		boolean isDeleted = true;
 	 		do {
-	 		System.out.print("Enter CLass Registration ID you want to delete: ");
-	 		classDel = inp.nextLine();
-	 		System.out.print("Are you sure you want to delete this record? (Yes or No): ");
-	 		String choice = inp.nextLine().toLowerCase();
-	 		if (choice.equals("no")) isDeleted = false;
-	 		if (isRegistrationIDValid(classDel)) System.out.println("Registration ID doesnt Exist");
+	 		isDeleted = true;
+	 		System.out.print("Enter Class Registration ID you want to delete: ");
+	 		classDel = inp.nextLine();	 		
+	 		if (isRegistrationIDValid(classDel)) System.out.println("Invalid Class Registration ID. Please try again.");
 	 		} while(isRegistrationIDValid(classDel));
 	 		
+	 		System.out.print("Are you sure you want to delete "+ classDel+ "?[1] Yes [2]No: ");
+	 		String choice = inp.nextLine();
+	 		if (choice.equals("1")) {
+	 		} else {
+	 			isDeleted = false;
+	 			System.out.println("Deletion Canceled");
+	 		}
 	 		if(isDeleted) {
 	 		List<ClassRegistration> classRegistrationList = ClassRegistration.getFromFile();
 	 		BufferedWriter writer = new BufferedWriter(new FileWriter("ClassRegistration.txt"));
@@ -138,7 +140,7 @@ public class ClassRegistration {
 	 			
 	 		}
 	 		writer.close();
-	 		System.out.println("Data Deleted");
+	 		System.out.println("Class Registration Deleted Successfully");
 	 		}
 	 }
 	 
@@ -148,9 +150,10 @@ public class ClassRegistration {
 	 		System.out.println(String.format("%5s %2s %15s %3s %11s %6s %12s", "Reigstration ID","|","  Registration Date","|","Class ID","|","VisitorID"));
 	 		System.out.println(String.format("%s", "--------------------------------------------------------------------------"));
 	 		for(ClassRegistration cl: classreg) {
-	 			System.out.format("%10s %8s %15s %7s %8s %9s %8s", cl.getRegistrationID(), "|", cl.getRegistrationDate(),"|",cl.getClassID(),"|",cl.getVisitorID());
+	 			System.out.format("%10s %7s %15s %7s %8s %9s %8s", cl.getRegistrationID(), "|", cl.getRegistrationDate(),"|",cl.getClassID(),"|",cl.getVisitorID());
 	 			System.out.println();		 				 		
 	 		}
+	 		System.out.println(String.format("%s", "--------------------------------------------------------------------------"));
 	 }
 	 
 	 public static boolean isRegistrationIDValid (String regID) throws IOException {
@@ -183,11 +186,5 @@ public class ClassRegistration {
 	 	return false;
 	 }
 	 
-	 public static boolean isExist(String regID) {
-	    	if (regID != "") {
-	    		return false;
-	    	}
-	    	return true;
-	    }
 	 
 }
