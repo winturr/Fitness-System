@@ -1,8 +1,6 @@
 package fitness;
 import java.io.*;
 import java.util.*;
-import java.time.*;
-import java.time.format.DateTimeFormatter;
 
 public class Visitor {
 	public static Scanner i =new Scanner(System.in);
@@ -54,28 +52,27 @@ public class Visitor {
 		String visitorID;
 		List <Visitor> visitorList = (List<Visitor>) Visitor.getFromFile();
 		boolean isValid = false;
-		int ctr = 0;
+
 		do {
-			System.out.print("Enter Visitor ID: ");
+			System.out.print("Enter new Visitor ID: ");
 			visitorID = i.nextLine();
+			isValid = true;
 			for (Visitor visitor : visitorList) {
-				if(visitor.getVisitorID().equals(visitorID)) {	
-					ctr++;
-					System.out.println("Visitor ID already exists. Please try again.");
+				if(visitor.getVisitorID().equals(visitorID) || visitorID.isEmpty()) {	
+					if(visitor.getVisitorID().equals(visitorID)) {
+						System.out.println("Visitor ID already exists! Please enter a new one.");
+					} else if (visitorID.isEmpty()) {
+						System.out.println("Visitor ID cannot be empty.");
+					}
+					isValid = false;
+					break;
 				}
-			}
-			if (ctr == 0) {
-				isValid = true;
-			}
-			if (isEmpty(visitorID)) {
-				isValid = false;
-			}
-			ctr = 0;
+			}	
 		}
-		while(isValid == false);
+		while(!isValid);
 		System.out.print("Enter Visitor Name: ");
 		String visitorName = i.nextLine();
-		System.out.println("Successfully added to Visitor.txt");
+		System.out.println("Visitor added Successfully");
 		Visitor v = new Visitor(visitorID, visitorName);
 		v.saveToFile();
 	}
@@ -89,6 +86,7 @@ public class Visitor {
 		for(Visitor vi: visitorList) {
 			System.out.println(String.format("%9s %3s %20s", vi.getVisitorID(),"|",vi.getName()));
 		}
+		System.out.println(String.format("%s", "----------------------------------"));
 	}
 	public static void update()throws IOException {
 		List<Visitor> visitorList = Visitor.getFromFile();
@@ -96,12 +94,11 @@ public class Visitor {
 		int ctr = 0;
 		boolean isExisting = false;
 		do {
-			System.out.print("Look for ID -->> ");
+			System.out.print("Look for Visitor ID:  ");
 			id = i.nextLine();
 			for (Visitor visitor : visitorList) {
 				if(visitor.getVisitorID().equals(id)) {	
 					ctr++;
-					System.out.println("Visitor ID found.");
 				}
 			}
 			if (ctr != 0) {
@@ -115,7 +112,7 @@ public class Visitor {
 		while(isExisting == false);
 		for (Visitor visitor : visitorList) {
 	        if (visitor.getVisitorID().equals(id)) {
-		System.out.print("Current name: " + visitor.getName() + "\nEnter new name -->> ");
+		System.out.print("Current name: " + visitor.getName() + "\nEnter new name: ");
 		String nn = i.nextLine();
 	            visitor.setName(nn);
 	            visitor.saveToFile();
@@ -131,66 +128,85 @@ public class Visitor {
 	}
 	public static void delete()throws IOException{
 		List<Visitor> visitorList = Visitor.getFromFile();//.txt file into ArrayList
-		int ctr = 0;
 		boolean isValid = false;
 		do {
-			System.out.print("Look for ID: ");
+			System.out.print("Look for Visitor ID: ");
 			String id = i.nextLine();
 			for (Visitor visitor : visitorList) {
-				if (visitor.getVisitorID().equals(id)&& recordCheck(id)) {
-					ctr++;
-					isValid = true;
-					System.out.println("Visitor ID " + visitor.getVisitorID() + " || " + visitor.getName() + " Found.");
-					System.out.print("Are you sure you want to delete " + id + "?\n[1]Yes [2]No --> ");
-			        String deleteConfirm = i.nextLine();
-			        switch(deleteConfirm) {
-			        	case "1"://case 1 / "YES"
-			        		BufferedWriter writer = new BufferedWriter(new FileWriter("Visitor.txt"));//rewrites .txt file
-			        		for (Visitor visitor1: visitorList) {
-			        			if(!visitor1.getVisitorID().equals(id)) {//skips VisitorID input from being written
-			        				writer.write(visitor1.getVisitorID() + "*" + visitor1.getName());
-			        				writer.newLine();
-			        			}
-			        		}
-			        		writer.close();
-			        		System.out.println("Deleted.");
-			        		break;
-			        	case "2": //case 2 / "NO"
-			        		System.out.println("Deletion cancelled.");
-			        		break;
-			        }
+				if (visitor.getVisitorID().equals(id)) {
+					isValid =true;
+					if (recordCheck(id)) {
+						System.out.print("Are you sure you want to delete " + id + "?[1]Yes [2]No: ");
+				        String deleteConfirm = i.nextLine();
+				        switch(deleteConfirm) {
+				        	case "1"://case 1 / "YES"
+				        		BufferedWriter writer = new BufferedWriter(new FileWriter("Visitor.txt"));//rewrites .txt file
+				        		for (Visitor visitor1: visitorList) {
+				        			if(!visitor1.getVisitorID().equals(id)) {//skips VisitorID input from being written
+				        				writer.write(visitor1.getVisitorID() + "*" + visitor1.getName());
+				        				writer.newLine();
+				        			}
+				        		}
+				        		writer.close();
+				        		System.out.println("Visitor Deleted Successfully.");
+				        		break;
+				        	case "2": //case 2 / "NO"
+				        		System.out.println("Deletion Canceled.");
+				        		break;
+				        }
+					} 
 				}
-			}		
+				
+				
+			}
+			if (!isValid) {
+				System.out.println("Visitor ID not found. Please try again.");
+			}
+			
+			
 		}
 		while(!isValid);
 		
 	}
 	public static boolean recordCheck(String id)  throws IOException {
 		List<Member> memberList = Member.getFromFile();
-		int ctr = 0;
-		boolean isValid = false;
+		
+		boolean isValid = true;
 		for (Member member : memberList) {
 			if (member.getVisitorID().equals(id)) {
-				ctr++;
+				System.out.println("Visitor is Used by Member Class, Invalid Delete.");
+				isValid =false;
+				break;
 			}
 		}
-		if (ctr == 0) {
-			isValid = true;
-		}
+		
 		List<Payment> paymentList = Payment.getFromFile();
-		ctr = 0;
-		isValid = false;
 		for (Payment payment : paymentList) {
 			if (payment.getVisitorID().equals(id)) {
-				ctr++;
+				System.out.println("Visitor is used by Payment Class, Invalid Delete.");
+				isValid =false;
+				break;
 			}
 		}
-		if (ctr != 0) {
-			System.out.println("Unable to delete while in another record.");
+		
+		List<CheckInRecord> recordList = CheckInRecord.getFromFile();
+		for (CheckInRecord records:recordList) {
+			if(records.getVisitorID().equals(id)) {
+				System.out.println("Visitor is used in CheckInRecord Class, Invalid Delete.");
+				isValid =false;
+				break;
+			}
 		}
-		else {
-			isValid = true;
+		
+		List<ClassRegistration> regList = ClassRegistration.getFromFile();
+		for (ClassRegistration reg : regList) {
+			if(reg.getVisitorID().equals(id)) {
+				System.out.println("Visitor is used in ClassRegistrationClass, Invalid Delete.");
+				isValid =false;
+				break;
+			}
 		}
+		
 		return isValid;
 	}
 	public static boolean isEmpty(String input) {
@@ -199,4 +215,5 @@ public class Visitor {
 		}
 		return true;
 	}
+	
 }
