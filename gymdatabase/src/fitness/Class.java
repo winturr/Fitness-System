@@ -84,13 +84,14 @@ public class Class {
      
     public static void display() {
         List <Class> class1 = getFromFile();
-        System.out.println(String.format("%s", "------------------------------------------------------------------------------------------------------------------------------------------------------"));
-        System.out.println(String.format("%9s %3s %26s %5s %15s %10s %15s %9s %3s %26s %5s","Class ID" ,"|","Class Name","|","Max Capacity","|","Start Time","|","End Time","|","Staff ID"));
-        System.out.println(String.format("%s", "------------------------------------------------------------------------------------------------------------------------------------------------------"));
+        System.out.println(String.format("%s", "-------------------------------------------------------------------------------------------------------------------------"));
+        System.out.println(String.format("%9s %3s %15s %5s %12s %10s %12s %9s %7s %15s %5s","Class ID" ,"|","Class Name","|","Max Capacity","|","Start Time","|","End Time","|","Staff ID"));
+        System.out.println(String.format("%s", "-------------------------------------------------------------------------------------------------------------------------"));
         for(Class c: class1) {
-            System.out.format("%9s %3s %26s %5s %15s %10s %15s %9s %3s %26s %5s", c.getClassID(), "|", c.getClassName(),"|", c.getMaxCapacity(),"|", c.getStartTime(),"|", c.getEndTime(),"|",c.getStaffID(),"|");
+            System.out.format("%9s %3s %15s %5s %12s %10s %12s %9s %8s %15s %5s", c.getClassID(), "|", c.getClassName(),"|", c.getMaxCapacity(),"|", c.getStartTime(),"|", c.getEndTime(),"|",c.getStaffID(),"|");
             System.out.println();
         }
+        System.out.println(String.format("%s", "-------------------------------------------------------------------------------------------------------------------------"));
     }
 
     
@@ -119,12 +120,12 @@ public class Class {
         for (
                 Class class1 : classes) {
             if (class1.getClassID().equals(classID)) {
-                System.out.println("Class ID already exists! Please enter a new one.");
+                System.out.println("Class ID already exists. Please try again.");
                 isValid = false;
                 break;
             }
         }
-        if (isValid && isEmpty(classID)) {
+        if (isValid && classID.isEmpty()) {
             System.out.println("Class ID cannot be empty.");
             isValid = false;
         }
@@ -136,16 +137,16 @@ public class Class {
     System.out.print("Enter Max Capacity: ");
     String maxCapacity = inp.nextLine();
     System.out.print("Enter Start Time: ");
-    String startTime = inp.nextLine();
+    String startTime = inp.nextLine().toUpperCase();
     System.out.print("Enter End Time: ");
-    String endTime = inp.nextLine();
+    String endTime = inp.nextLine().toUpperCase();
 
     
     String staffID = "";
     List<Staff> staffs = Staff.getFromFile();
     boolean staffFound = false;
     do {
-        System.out.print("Enter valid Staff ID: ");
+        System.out.print("Enter a valid Staff ID: ");
         staffID = inp.nextLine();
         for (Staff staff : staffs) {
             if (staff.getStaffID().equals(staffID)) {
@@ -153,9 +154,7 @@ public class Class {
                 break;
             }
         }
-        if (!staffFound) {
-            System.out.println("Invalid Staff ID! Please enter a valid one.");
-        }
+
     } while (staffID.isEmpty() || !staffFound);
 
     
@@ -178,40 +177,22 @@ public class Class {
         for (Class class1 : classList) {
             if (class1.getClassID().equals(id)) {
                 ctr++;
-                System.out.println("Class ID " + class1.getClassID() + " Found.");
                 isValid = true;
 
-                System.out.print("Enter new Class Name: ");
+                System.out.print("Cuurent Name: "+class1.getClassName()+"\nEnter new Class Name: ");
                 class1.setClassName(inp.nextLine());
-                System.out.print("Enter new Max Capacity: ");
+                System.out.print("Cuurent Max Capacity: "+class1.getMaxCapacity()+"\nEnter new Max Capacity: ");
                 class1.setMaxCapacity(inp.nextLine());
-                System.out.print("Enter new Start Time: ");
-                class1.setStartTime(inp.nextLine());
-                System.out.print("Enter new End Time: ");
-                class1.setEndTime(inp.nextLine());
+                System.out.print("Cuurent Start Time: "+class1.getStartTime()+"\nEnter new Start Time: ");
+                class1.setStartTime(inp.nextLine().toUpperCase());
+                System.out.print("Cuurent End Time: "+class1.getEndTime()+"\nEnter new End Time: ");
+                class1.setEndTime(inp.nextLine().toUpperCase());
 
-                String staffID = "";
-                List<Staff> staffs = Staff.getFromFile();
-                boolean staffValid = false;
-                do {
-                    System.out.print("Enter valid Staff ID: ");
-                    staffID = inp.nextLine();
-                    for (Staff staff : staffs) {
-                        if (staff.getStaffID().equals(staffID)) {
-                            staffValid = true;
-                            break;
-                        }
-                    }
-                    if (!staffValid) {
-                        System.out.println("Invalid Staff ID.");
-                    }
-                } while (!staffValid);
-                class1.setStaffID(staffID);
             }
         }
 
         if (ctr == 0) {
-            System.out.println("Class ID not found.");
+            System.out.println("Class ID not found. Please try again.");
         }
 
     } while (!isValid);
@@ -222,15 +203,25 @@ public class Class {
             writer.write(class1.getClassID() + "*" + class1.getClassName() + "*" + class1.getMaxCapacity() + "*" + class1.getStartTime() + "*" + class1.getEndTime() + "*" + class1.getStaffID());
             writer.newLine();
         }
-        System.out.println("Updated class information saved.");
+        System.out.println("Updated Entry.");
     }
 }
 
     
     
-    public static boolean isClassIDValid (String classID) throws IOException {
+    public static boolean isClassRegIDValid (String classID) throws IOException {
 		 List<ClassRegistration> classGet = ClassRegistration.getFromFile();
 	 		for (ClassRegistration class1 : classGet) {
+	 			if (class1.getClassID().equals(classID)) {
+	 				return true;
+	 			}
+	 		}
+	 	return false;
+	 }
+    
+    public static boolean isClassIDValid (String classID) throws IOException {
+		 List<Class> classGet = Class.getFromFile();
+	 		for (Class class1 : classGet) {
 	 			if (class1.getClassID().equals(classID)) {
 	 				return true;
 	 			}
@@ -242,14 +233,16 @@ public class Class {
     List<Class> classList = getFromFile();
     int ctr =1;
     while(ctr==1){
-        System.out.print("Enter Class ID to delete: ");
+        System.out.print("Look for Class ID: ");
         String classid = inp.nextLine();
 
-        if(isClassIDValid(classid)){
+        if(isClassRegIDValid(classid)){
             System.out.println("Class is Used by Class Registration file, invalid delete");
-        }
-        else{
-            System.out.print("Are you sure you want to delete Class ID " + classid + "? [1] Yes [2] No: ");
+        } else if (classid.isEmpty()) {
+        	System.out.println("Class ID cannot be empty.");
+        } 
+        else if (isClassIDValid(classid)){
+            System.out.print("Are you sure you want to delete Class ID " + classid + "?[1] Yes [2] No: ");
             String deleteConfirm = inp.nextLine();
 
             if (deleteConfirm.equals("1")) {
@@ -266,16 +259,15 @@ public class Class {
                     ctr = 0;
                 }
             } else {
-                System.out.println("Deletion canceled.");
+                System.out.println("Deletion Canceled.");
+                ctr = 0;
             }
+    } else {
+    	System.out.println("Invalid Class Registration ID. Please try again.");
     }
+        
 }
 }
 
-    public static boolean isEmpty(String input) {
-		if (input != "") {
-			return false;
-		}
-		return true;
-	}
+   
 }
