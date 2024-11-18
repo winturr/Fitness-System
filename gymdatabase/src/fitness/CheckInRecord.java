@@ -127,7 +127,7 @@ public class CheckInRecord {
     		if (isCheckInIDValid(recordDel)) System.out.println("Invalid Checkin ID. Please try again.");
     	} while(isCheckInIDValid(recordDel));
     	
-    	System.out.print("Are you sure you want to delete "+recordDel+"?[1]Yes or [2]No: "); 
+    	System.out.print("Are you sure you want to delete "+recordDel+"?[1]Yes or [2]No: "); // for confirmation
 		String choice = inp.nextLine();
 		if (choice.equals("1")) {
 		} else {
