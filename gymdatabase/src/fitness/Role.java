@@ -31,7 +31,7 @@ public class Role {
     	 this.roleName=roleName;
      }
 
-
+     //saves record from user input into Member.txt
      public void saveToFile() {
             try (BufferedWriter writer = new BufferedWriter(new FileWriter("Role.txt", true))) {
                 writer.write(getRoleID() + "*" + getRoleName()+ "*");
@@ -41,7 +41,7 @@ public class Role {
             }
         }
 
-
+     //scans all available records in Member.txt
      public static List<Role> getFromFile() {
             List<Role> roles = new ArrayList<>();
             try (BufferedReader reader = new BufferedReader(new FileReader("Role.txt"))) {
@@ -58,11 +58,13 @@ public class Role {
             return roles;
         }
 
-
+     // Adds a role to the record
      public static void add() {
     	 List <Role> roleList = (List<Role>) Role.getFromFile();
     	 boolean isValid = false;
     	 String roleID;
+
+      //Requuires user to input new Role Id    
     	 do {
  			System.out.print("Enter new Role ID: ");
  			roleID = i.nextLine();
@@ -87,7 +89,8 @@ public class Role {
  		Role r = new Role(roleID, roleName);
  		r.saveToFile();
  	}
-     
+
+     //Displays role record
      public static void display() {
  		List <Role> roleList = (List<Role>) Role.getFromFile();
  		System.out.println(String.format("%s", "-----------------------------------------"));
@@ -98,7 +101,8 @@ public class Role {
  		}
  		System.out.println(String.format("%s", "-----------------------------------------"));
  	}
-     
+
+     //updates role record
      public static void update() throws IOException {
     	 List<Role> roleList = Role.getFromFile();
     	 boolean roleValid = false;
@@ -126,12 +130,14 @@ public class Role {
     	 System.out.println("Updated Entry");
     	 writer.close();
      }
-     
+
+     //deletes a role record from the txt file
      public static void delete() throws IOException {
     	 List<Role> roleList = Role.getFromFile();
     	 boolean roleValid = false;
     	 boolean isDeleted = true;
     	 String roleID = null;
+      //Requires user to input existing role Id
     	 do { 		 
     		 System.out.print("Look for Role ID: ");
     		 roleID = i.nextLine();
