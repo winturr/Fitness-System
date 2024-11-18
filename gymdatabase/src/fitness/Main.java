@@ -14,21 +14,21 @@ public class Main {
     	String username = null;
     	String password = null;
       
-    	while (!shutdown) {
+    	while (!shutdown) { 
     	System.out.println("------------");
     	System.out.print("[1]Login\n[2]Shutdown\n------------\nSelect: ");   	
     	String ch = sc.nextLine();
 
-    	if (ch.equals("2")) break;
+    	if (ch.equals("2")) break; // for ending the shutdown loop
     	
     	
     	Boolean isValid = false;
-    	while(isValid != true) {
+    	while(isValid != true) { // login
     		System.out.print("Enter username: ");
     		String inpUser = sc.nextLine(); 		
     		System.out.print("Enter password: ");
     		String inpPass = sc.nextLine();
-    		try (BufferedReader reader = new BufferedReader(new FileReader("Password.txt"))) {
+    		try (BufferedReader reader = new BufferedReader(new FileReader("Password.txt"))) { //reading the saved password
 				String line;
 				while ((line = reader.readLine()) != null) {
 				    String[] data = line.split("\\*");
@@ -36,7 +36,7 @@ public class Main {
 				    password = data[1];
 				}
 			}
-    		if(inpUser.equals(username) && inpPass.equals(password)) {
+    		if(inpUser.equals(username) && inpPass.equals(password)) { //if username and password is correct
     			System.out.println("Welcome!");
     			isValid = true;
     		}else {
@@ -45,7 +45,7 @@ public class Main {
     	}
     	
     	int flag=0;
-    	while(flag!=1) {
+    	while(flag!=1) { 
     		System.out.println("----------------------------");
         	System.out.println("LeFitness Visitation System");
         	System.out.println("----------------------------");
@@ -54,7 +54,7 @@ public class Main {
         	String choice = sc.nextLine();
         	
         	switch(choice) {
-        	case "1":
+        	case "1": // menu
         		boolean isVGood = true;
         		do {
         		Visitor.display();
@@ -81,7 +81,7 @@ public class Main {
         		}
         		} while (isVGood);
         		break;
-        	case "2": 
+        	case "2":  // member
         		boolean isMGood = true;
         		while (isMGood) {
         		Member.display();
@@ -105,7 +105,7 @@ public class Main {
         		}
         		}
         		break;
-        	case "3":
+        	case "3": // check in records
         		boolean isCIGood= true;
         		while (isCIGood) {
         		CheckInRecord.display();
@@ -126,7 +126,7 @@ public class Main {
         		}
         		}
         		break;
-        	case "4":
+        	case "4": // payment
         		boolean isPGood = true;
         		while(isPGood) {
         		Payment.display();
@@ -146,7 +146,7 @@ public class Main {
         		}
         		}
         		break;
-        	case "5":
+        	case "5": // class registration
         		boolean isCRGood = true;
         		while (isCRGood) {
         		ClassRegistration.display();
@@ -164,7 +164,7 @@ public class Main {
         		}
         		}
         		break;
-        	case "6":
+        	case "6": // class
         		boolean isCGood = true;
         		while (isCGood) {
         		Class.display();
@@ -184,7 +184,7 @@ public class Main {
         		}
         		}
         		break;
-        	case "7":
+        	case "7": // staff
         		boolean isSGood = true;
         		while (isSGood) {
         		Staff.display();
@@ -205,7 +205,7 @@ public class Main {
         		}
         		}
         		break;
-        	case "8":
+        	case "8": // role
         		boolean isRGood = true;
         		while (isRGood) {
         		Role.display();
@@ -225,13 +225,13 @@ public class Main {
         		}
         		}
         		break;
-        	case "9":
+        	case "9": // logout
         		flag = 1;
         		System.out.println("-----------");
         		System.out.println("Logged Out");
         		System.out.println("-----------\n");
         		break;
-        	case "10":
+        	case "10": // change username and password 
         		Boolean isUpdateValid = false;
             	while(isUpdateValid != true) {
             		System.out.print("Enter current username: ");
