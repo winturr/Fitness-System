@@ -60,7 +60,8 @@ public class Payment{
         public void setVisitorID(String visitorID) {
         	this.visitorID = visitorID;
         }
-        
+
+	//saves record from user input into Member.txt
         public void saveToFile() {
 	        try (BufferedWriter writer = new BufferedWriter(new FileWriter("Payment.txt", true))) {
 	            writer.write(getPaymentID() + "*" + getAmount()+ "*"+getPaymentDate()+"*"+getVisitorID()+"*");
@@ -70,7 +71,7 @@ public class Payment{
 	        }
 	    }
         
-        
+        //scans all available records in Member.txt
         public static List<Payment> getFromFile() {
 			List<Payment> payments = new ArrayList<>();
 	        try (BufferedReader reader = new BufferedReader(new FileReader("Payment.txt"))) {
@@ -89,11 +90,12 @@ public class Payment{
 	        return payments;
 		}
         
-        
+        //Adds a payemt record 
         public static void add() {
     		List<Payment> paymentList = Payment.getFromFile();
         	String paymentID;
         	boolean isIDValid = false;
+		//Must input non-existing payment Id
         	do {
         		System.out.print("Enter new Payment ID: ");
         		paymentID = i.nextLine();
@@ -138,6 +140,7 @@ public class Payment{
         	
         	
         }
+	//Displays payment records
         public static void display() {
         	List <Payment> paymentList = (List<Payment>) Payment.getFromFile();
             System.out.println(String.format("%s", "---------------------------------------------------------"));
@@ -149,13 +152,14 @@ public class Payment{
             System.out.println(String.format("%s", "---------------------------------------------------------"));
         }
         
-        
+        //delete a payment record
         public static void delete()throws IOException{
         	List<Payment> paymentList = Payment.getFromFile();
         	String paymentID;
         	boolean isIDValid = false;
+		//Requires a user to input an existing payemnt Id
         	do {
-        		System.out.print("Enter new Payment ID: ");
+        		System.out.print("Look for Payment ID: ");
         		paymentID = i.nextLine();
         		isIDValid = false;
         		for (Payment pays : paymentList) {
@@ -188,7 +192,8 @@ public class Payment{
                     System.out.println("Deletion Canceled.");
             }
         }
-        
+
+	//update a payment record 
         public static void update() throws IOException {
         	List <Payment> paymentList = (List<Payment>) Payment.getFromFile();
         	String id = null;
@@ -220,10 +225,5 @@ public class Payment{
         	writer.close();
         }
         
-        public static boolean isExist(String payID) {
-	    	if (payID != "") {
-	    		return false;
-	    	}
-	    	return true;
-	    }
+        
 }
