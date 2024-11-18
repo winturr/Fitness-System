@@ -127,7 +127,7 @@ public class CheckInRecord {
     		if (isCheckInIDValid(recordDel)) System.out.println("Invalid Checkin ID. Please try again.");
     	} while(isCheckInIDValid(recordDel));
     	
-    	System.out.print("Are you sure you want to delete "+recordDel+"?[1]Yes or [2]No: "); // for confirmation
+    	System.out.print("Are you sure you want to delete "+recordDel+"?[1]Yes or [2]No: "); 
 		String choice = inp.nextLine();
 		if (choice.equals("1")) {
 		} else {
@@ -136,11 +136,11 @@ public class CheckInRecord {
 		}
 
     	
-    	if(isDeleted) { //rewriting the records without the 
+    	if(isDeleted) { //rewrite the txt file 
     		List<CheckInRecord> recordList = CheckInRecord.getFromFile();
     		BufferedWriter writer = new BufferedWriter(new FileWriter("CheckInRecord.txt"));
     		for (CheckInRecord inRecord : recordList ) {
-    			if (!inRecord.getCheckInID().equals(recordDel)) {
+    			if (!inRecord.getCheckInID().equals(recordDel)) { //skips CheckInID input from being written
     				writer.write(inRecord.getCheckInID()+"*"+inRecord.getCheckInTime()+"*"+inRecord.getCheckOutTime()+"*"+inRecord.getDate()+"*"+inRecord.getVisitorID());
     				writer.newLine();
     			}
@@ -150,7 +150,7 @@ public class CheckInRecord {
     	}
     }
     
-    public static void display() throws IOException {
+    public static void display() throws IOException { //Displau all the records in CheckInRecord txt file
     	List<CheckInRecord> inRecord = (List<CheckInRecord>) CheckInRecord.getFromFile();
     	System.out.println(String.format("%s", "----------------------------------------------------------------------------------------------------"));
  		System.out.println(String.format("%5s %2s %11s %3s %11s %6s %12s %3s %12s"," CheckInID","|","  CheckInTime","|","CheckOutTime","|","Date","|","VisitorID"));
@@ -165,7 +165,7 @@ public class CheckInRecord {
     public static void checkOutTime() throws IOException { //for updating checkoutTime only
     	List<CheckInRecord> inList = CheckInRecord.getFromFile();
     	String inID = null;
-    	do {
+    	do { //filtering invalid input
     	System.out.print("Look for Check in ID: ");
     	inID = inp.nextLine();
     	if (isCheckInIDValid(inID)) System.out.println("Check In ID not found. Please try again.");
@@ -175,7 +175,7 @@ public class CheckInRecord {
     	String newTime = LocalTime.now().format(timeFormatter);
     			   		    		
     	 BufferedWriter writer = new BufferedWriter(new FileWriter("CheckInRecord.txt"));
-    	 for (CheckInRecord inRecord : inList) {
+    	 for (CheckInRecord inRecord : inList) { //for rewriting the records with an updated checkout time
     		 if(inRecord.getCheckInID().equals(inID)) {
     		 inRecord.setCheckOutTime(newTime);
  			 inRecord.saveToFile();
@@ -187,7 +187,7 @@ public class CheckInRecord {
     	 writer.close();
     }
      	
-    public static boolean isCheckInIDValid(String inID) throws IOException {
+    public static boolean isCheckInIDValid(String inID) throws IOException { // for checking if the check in id is valid
     	List<CheckInRecord> inRecord = CheckInRecord.getFromFile();
  		for (CheckInRecord regClass : inRecord) {
  			if (regClass.getCheckInID().equals(inID) || regClass.getCheckInID().equals("")) {	
@@ -197,7 +197,7 @@ public class CheckInRecord {
 	return true;	
  }
        
-    public static boolean isVisitorIDValid (String visitID) {
+    public static boolean isVisitorIDValid (String visitID) { // for checking if the check in id is valid
 		 List<Visitor> visitors = Visitor.getFromFile();
 	 		for (Visitor visitor : visitors) {
             if (visitor.getVisitorID().equals(visitID)) {                	                	
