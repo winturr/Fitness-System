@@ -246,18 +246,18 @@ public class Main {
 						    password = data[1];
 						}
 					}
-            		if(inpUser.equals(username) && inpPass.equals(password)) {
+            		if(inpUser.equals(username) && inpPass.equals(password)) {// check if the password is correct
             			System.out.print("Enter new Username: ");
             			String newUser = sc.nextLine();
             			System.out.print("Enter new Password: ");            			
             			String newPass = sc.nextLine();
-            			try (BufferedWriter writer = new BufferedWriter(new FileWriter("Password.txt", false))) {
+            			try (BufferedWriter writer = new BufferedWriter(new FileWriter("Password.txt", false))) { //rewriting with new password
 							writer.write(newUser+"*"+newPass);
 						}
             			System.out.println("Username and Password Updated Successfully");
             			isUpdateValid = true;
             		}else {
-            			System.out.println("Wrong Password or Username!");
+            			System.out.println("Wrong Password or Username!"); // if the user doesnt want to change username or password anymore
             			System.out.print("[1]Retry\n[2]Back\nSelect: ");
             			String wrong = sc.nextLine();
             			if (wrong.equals("2")) {
