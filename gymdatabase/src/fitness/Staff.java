@@ -43,6 +43,8 @@ public class Staff {
     public String getContactNo() {
         return contactNo;
     }
+
+    //saves record from user input into Member.txt
     public void saveToFile() {
         try(BufferedWriter writer = new BufferedWriter(new FileWriter("Staff.txt", true))) {
             writer.write(staffID + "*" + name +"*" + contactNo + "*"+roleID+"*");
@@ -51,6 +53,8 @@ public class Staff {
             e.printStackTrace();
         }
     }
+
+    //scans all available records in Member.txt
     public static List<Staff> getFromFile() {
         List<Staff> staff = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader("Staff.txt"))) {
@@ -68,6 +72,8 @@ public class Staff {
         }
         return staff;
     }
+
+    // add staff to the record 
     public static void add() {
     	boolean isValid = false;
     	List<Staff> staffs = Staff.getFromFile();
@@ -116,6 +122,8 @@ public class Staff {
         Staff s = new Staff(staffID, name, contactInfo, roleID);
         s.saveToFile();
     }
+
+    //Displays staff record 
     public static void display() {
         List <Staff> staff = (List<Staff>) Staff.getFromFile();
         System.out.println(String.format("%s", "------------------------------------------------------------------------------"));
@@ -127,11 +135,14 @@ public class Staff {
         }
         System.out.println(String.format("%s", "------------------------------------------------------------------------------"));
     }
+	
+    //Update Staff record 
     public static void update()throws IOException {
 		List<Staff> staffList = Staff.getFromFile();
 		String id;
 		int ctr = 0;
 		boolean isExisting = false;
+	    	//Requires user to input existing Staff id
 		do {
 			System.out.print("Look for Staff ID: ");
 			id = i.nextLine();
@@ -169,6 +180,7 @@ public class Staff {
         writer.close();
 	}
 
+    //Deletes staff record
     public static void delete()throws IOException{
     	List<Staff> staffList = Staff.getFromFile();//.txt file into ArrayList
 		boolean isValid = false;
@@ -209,7 +221,8 @@ public class Staff {
 		while(!isValid);
 		
 	}
-    
+	    
+    //Boolean method to check if the staff id is being used in another class
     public static boolean recordCheck(String id)  throws IOException {
 		List<Class> classList = Class.getFromFile();
 		
