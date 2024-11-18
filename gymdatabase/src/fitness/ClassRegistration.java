@@ -112,7 +112,7 @@ public class ClassRegistration {
 	 		boolean isDeleted = true;
 	 		do { //Filter invalid inputs
 	 		isDeleted = true;
-	 		System.out.print("Enter Class Registration ID you want to delete: ");
+	 		System.out.print("Look for Class Registration ID: ");
 	 		classDel = inp.nextLine();	 		
 	 		if (isRegistrationIDValid(classDel)) System.out.println("Invalid Class Registration ID. Please try again.");
 	 		} while(isRegistrationIDValid(classDel));
