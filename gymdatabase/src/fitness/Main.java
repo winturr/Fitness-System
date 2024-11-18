@@ -47,7 +47,7 @@ public class Main {
     	int flag=0;
     	while(flag!=1) { 
     		System.out.println("----------------------------");
-        	System.out.println("LeFitness Visitation System");
+        	System.out.println("DXTREME Visitation System");
         	System.out.println("----------------------------");
         	System.out.print(" [1] Visitor\n [2] Member\n [3] CheckInRecord \n [4] Payment \n [5] Class Registration\n [6] Class\n [7] Staff\n [8] Role\n [9] Logout\n [10] Change Username and Password\n Select: ");
         	
