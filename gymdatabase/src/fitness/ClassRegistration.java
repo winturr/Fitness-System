@@ -54,14 +54,14 @@ public class ClassRegistration {
 	public String getVisitorID() {
 		return visitorID;
 	}
-	
+	 // save the record to the ClassRegistration txt file
 	 public void saveToFile() throws IOException {
 		 BufferedWriter writer = new BufferedWriter(new FileWriter("ClassRegistration.txt", true));
 		 writer.write(registrationID + "*" + registrationDate +"*" + classID+"*"+visitorID);
 		 writer.newLine();
 		 writer.close();
 	 }
-	 
+	 // Reading the ClassRegistration file and putting all the records into an array list
 	 public static List<ClassRegistration> getFromFile() throws IOException {
 		 List<ClassRegistration> classreg = new ArrayList<>();
 	        try (BufferedReader reader = new BufferedReader(new FileReader("ClassRegistration.txt"))) {
@@ -78,9 +78,9 @@ public class ClassRegistration {
 	    return classreg;
 	 }
 	 
-	 public static void add() throws IOException {
+	 public static void add() throws IOException { // for adding records
 		 String regID = null;
-	 		do {
+	 		do { //Filter invalid inputs
 	 		System.out.print("Enter new Registration ID: ");
 	 		regID = inp.nextLine();
 	 		if (regID.isEmpty()) System.out.println("Registration ID cannot be empty.");
@@ -90,45 +90,41 @@ public class ClassRegistration {
 	 		System.out.println("Date Automatically inserted");
 	 		String inDate = LocalDate.now().format(formatter);
 	 		String classID = null;
-	 		do {
+	 		do { //Filter invalid inputs
 	 		System.out.print("Enter a valid Class ID: ");
 	 		classID = inp.nextLine();
 	 		} while (!isClassIDValid(classID));
 	 		
 	 		String visitorID = null;
-	 		do {
+	 		do { //Filter invalid inputs
 	 		System.out.print("Enter a valid Visitor ID: ");
 	 		visitorID = inp.nextLine();
 	 		} while (!isVisitorIDValid(visitorID));
+	
+	 		ClassRegistration classReg = new ClassRegistration(regID,inDate,classID,visitorID);		 			 			 			
+	 		classReg.saveToFile();
+	 		System.out.println("Class Registration added Successfully");
 	 		
-	 		
-	 		
-	 		//check if there is an existing regID
-	 		ClassRegistration classReg = new ClassRegistration(regID,inDate,classID,visitorID);		 		
-	 		if (isRegistrationIDValid(regID) && isVisitorIDValid(visitorID) && isClassIDValid(classID)) {		 			
-	 			classReg.saveToFile();
-	 			System.out.println("Class Registration added Successfully");
-	 		} 
 	 }
 	 
-	 public static void delete() throws IOException {
+	 public static void delete() throws IOException { //delete records
 		 String classDel = null;
 	 		boolean isDeleted = true;
-	 		do {
+	 		do { //Filter invalid inputs
 	 		isDeleted = true;
 	 		System.out.print("Enter Class Registration ID you want to delete: ");
 	 		classDel = inp.nextLine();	 		
 	 		if (isRegistrationIDValid(classDel)) System.out.println("Invalid Class Registration ID. Please try again.");
 	 		} while(isRegistrationIDValid(classDel));
 	 		
-	 		System.out.print("Are you sure you want to delete "+ classDel+ "?[1] Yes [2]No: ");
+	 		System.out.print("Are you sure you want to delete "+ classDel+ "?[1] Yes [2]No: "); // for confirmation
 	 		String choice = inp.nextLine();
 	 		if (choice.equals("1")) {
 	 		} else {
 	 			isDeleted = false;
 	 			System.out.println("Deletion Canceled");
 	 		}
-	 		if(isDeleted) {
+	 		if(isDeleted) { // rewrite all the records to the txt file, except for the class registration ID record that the user input
 	 		List<ClassRegistration> classRegistrationList = ClassRegistration.getFromFile();
 	 		BufferedWriter writer = new BufferedWriter(new FileWriter("ClassRegistration.txt"));
 	 		for (ClassRegistration classRegis : classRegistrationList) {
@@ -144,7 +140,7 @@ public class ClassRegistration {
 	 		}
 	 }
 	 
-	 public static void display() throws IOException {
+	 public static void display() throws IOException { // for displaying all the records
 		 List <ClassRegistration> classreg = (List<ClassRegistration>) ClassRegistration.getFromFile();
 	 		System.out.println(String.format("%s", "--------------------------------------------------------------------------"));
 	 		System.out.println(String.format("%5s %2s %15s %3s %11s %6s %12s", "Reigstration ID","|","  Registration Date","|","Class ID","|","VisitorID"));
@@ -156,34 +152,34 @@ public class ClassRegistration {
 	 		System.out.println(String.format("%s", "--------------------------------------------------------------------------"));
 	 }
 	 
-	 public static boolean isRegistrationIDValid (String regID) throws IOException {
+	 public static boolean isRegistrationIDValid (String regID) throws IOException { // for checking if the registration id is valid
 		 List<ClassRegistration> classGet = ClassRegistration.getFromFile();
 	 		for (ClassRegistration regClass : classGet) {
 	 			if(regClass.getRegistrationID().equals(regID)) {	
-	 				return false;
+	 				return false; // if it equals it will return a false
 	 			}
 	 		}
-		return true;	
+		return true; // if not, it will return a true
 	 }
 	 
-	 public static boolean isVisitorIDValid (String visitID) {
+	 public static boolean isVisitorIDValid (String visitID) { // for checking if the visitor id is valid
 		 List<Visitor> visitors = Visitor.getFromFile();
 	 		for (Visitor visitor : visitors) {
-             if (visitor.getVisitorID().equals(visitID)) {                	                	
-                 return true;    
-             }
-         }
-		 return false;
+             			if (visitor.getVisitorID().equals(visitID)) {                	                	
+                 			return true; // if it equals it will return a true   
+             			}
+         		}
+		 return false; // if not, it will return a false
 	 }
 	 
-	 public static boolean isClassIDValid (String classID) {
+	 public static boolean isClassIDValid (String classID) { // for checking if the registration id is valid
 		 List<Class> classList = Class.getFromFile();
 	 		for (Class classClass : classList) {
 	 			if (classClass.getClassID().equals(classID)) {
-	 				return true;
+	 				return true;  if it equals it will return a true
 	 			}
 	 		}
-	 	return false;
+	 	return false; // if not, it will return a false
 	 }
 	 
 	 
