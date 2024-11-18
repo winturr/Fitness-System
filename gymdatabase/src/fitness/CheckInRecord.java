@@ -73,7 +73,7 @@ public class CheckInRecord {
 		 writer.newLine();
 		 writer.close();
 	 }
-    // 
+    // Reading the CheckInRecord file and putting all the records into an array list
     public static List<CheckInRecord> getFromFile() throws IOException {
 		 List<CheckInRecord> inRecord = new ArrayList<>();
 	        try (BufferedReader reader = new BufferedReader(new FileReader("CheckInRecord.txt"))) {
@@ -91,9 +91,9 @@ public class CheckInRecord {
 	    return inRecord;
 	 }
     
-    public static void add() throws IOException {
+    public static void add() throws IOException { // Add record to the CheckInRecord file
     	String inID = "";
-    	do {
+    	do { //Filter invalid inputs
     		System.out.print("Enter new Check in ID: ");
     		inID= inp.nextLine();
     		if (inID.isEmpty()) System.out.println("Checkin ID cannot be empty.");
@@ -107,31 +107,27 @@ public class CheckInRecord {
     	String inDate = LocalDate.now().format(formatter);
     	
     	String visitorID = null;
-    	do {
+    	do { //Filter invalid inputs
 	 		System.out.print("Enter a valid Visitor ID: ");
 	 		visitorID = inp.nextLine();
 	 		if (!isVisitorIDValid(visitorID)) System.out.println("Invalid Visitor ID. Please try again.");
 	 		} while (!isVisitorIDValid(visitorID));
 	 		
     	CheckInRecord inRecord = new CheckInRecord(inID,inTime,outTime,inDate,visitorID);
-    	if (isCheckInIDValid(inID) && isVisitorIDValid(visitorID)) {
-    		inRecord.saveToFile();
-    		System.out.println("Check In Record added successfully");
-    	}
-    	
-    	
+    	inRecord.saveToFile();
+    	System.out.println("Check In Record added successfully");   	    	
     }
     
-    public static void delete() throws IOException {
+    public static void delete() throws IOException { // delete records
     	String recordDel = null;
     	boolean isDeleted = true;
-    	do {
+    	do { //Filter invalid inputs
     		System.out.print("Look for Check in ID: ");
     		recordDel = inp.nextLine();
     		if (isCheckInIDValid(recordDel)) System.out.println("Invalid Checkin ID. Please try again.");
     	} while(isCheckInIDValid(recordDel));
     	
-    	System.out.print("Are you sure you want to delete "+recordDel+"?[1]Yes or [2]No: ");
+    	System.out.print("Are you sure you want to delete "+recordDel+"?[1]Yes or [2]No: "); // for confirmation
 		String choice = inp.nextLine();
 		if (choice.equals("1")) {
 		} else {
@@ -140,7 +136,7 @@ public class CheckInRecord {
 		}
 
     	
-    	if(isDeleted) {
+    	if(isDeleted) { //rewriting the records without the 
     		List<CheckInRecord> recordList = CheckInRecord.getFromFile();
     		BufferedWriter writer = new BufferedWriter(new FileWriter("CheckInRecord.txt"));
     		for (CheckInRecord inRecord : recordList ) {
