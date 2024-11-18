@@ -88,6 +88,8 @@ public class Visitor {
 		}
 		System.out.println(String.format("%s", "----------------------------------"));
 	}
+
+	//Updates the visitor name
 	public static void update()throws IOException {
 		List<Visitor> visitorList = Visitor.getFromFile();
 		String id;
@@ -126,9 +128,12 @@ public class Visitor {
         System.out.println("Updated Entry.");
         writer.close();
 	}
+
+	//delete visitor record
 	public static void delete()throws IOException{
 		List<Visitor> visitorList = Visitor.getFromFile();//.txt file into ArrayList
 		boolean isValid = false;
+		//Valid visitor id must be input 
 		do {
 			System.out.print("Look for Visitor ID: ");
 			String id = i.nextLine();
@@ -168,6 +173,7 @@ public class Visitor {
 		while(!isValid);
 		
 	}
+	//Checks if the visitor id is being used in other records
 	public static boolean recordCheck(String id)  throws IOException {
 		List<Member> memberList = Member.getFromFile();
 		
@@ -209,11 +215,6 @@ public class Visitor {
 		
 		return isValid;
 	}
-	public static boolean isEmpty(String input) {
-		if (input != "") {
-			return false;
-		}
-		return true;
-	}
+	
 	
 }
