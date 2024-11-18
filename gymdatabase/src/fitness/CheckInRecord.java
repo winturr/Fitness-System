@@ -66,14 +66,14 @@ public class CheckInRecord {
     	this.visitorID=visitorID;
     }
     
-    
+    // save the record to the CheckInRecord txt file
     public void saveToFile() throws IOException {
 		 BufferedWriter writer = new BufferedWriter(new FileWriter("CheckInRecord.txt", true));
 		 writer.write(checkInID + "*" + checkInTime +"*" + checkOutTime+"*"+date+"*"+visitorID);
 		 writer.newLine();
 		 writer.close();
 	 }
-    
+    // 
     public static List<CheckInRecord> getFromFile() throws IOException {
 		 List<CheckInRecord> inRecord = new ArrayList<>();
 	        try (BufferedReader reader = new BufferedReader(new FileReader("CheckInRecord.txt"))) {
