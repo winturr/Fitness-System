@@ -88,6 +88,7 @@ public class Member {
 		}
             return m;
 	}
+	// Add member details to a txt file
 	public static void add()throws IOException {
 		LocalDate date = LocalDate.now();
 		LocalDate futureDate = date.plusYears(3);
@@ -97,6 +98,8 @@ public class Member {
         List<Member> memberList = Member.getFromFile();
         boolean isValid = false;
         int ctr = 0;
+
+	//Do-while loop to only allow user to input non-existing Member Id
         do {
         	System.out.print("Enter new Member ID: ");
     		memID = i.nextLine();
@@ -116,11 +119,15 @@ public class Member {
      		}
      		ctr = 0;
         }
+	
+	 // Ask for contact number and input valid visitor id
         while(isValid == false);
 		System.out.print("Enter Contact Number: ");
 		String contactNo = i.nextLine();
 		List<Visitor> visitorList = Visitor.getFromFile();
-		isValid = false;//
+		isValid = false;
+		
+		//Do-while loop to only allow user to input existing visitor id
 		do {
 			System.out.print("Enter a valid Visitor ID: ");
 			String visitID = i.nextLine();
@@ -164,6 +171,7 @@ public class Member {
 		boolean isValid = false;
 		int ctr = 0;
 		String id;
+		//filters invalid input and requires user to input existing member Id
 		do {
 			System.out.print("Look for Member ID: ");
 			id = i.nextLine();
@@ -235,7 +243,8 @@ public class Member {
 		}
 		while(!isValid);
 	}
-	
+
+	//Changes the status of a member to inactive once membership expires
 	public static void refreshMember() throws IOException { // EndofMembership
         LocalDate date = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -257,7 +266,7 @@ public class Member {
         }writer.close();
 
     }
-	
+	//renews an expired membership 
 	public static void renew() throws IOException {
 		List<Member> memberList = Member.getFromFile();//.txt file into ArrayList
 		boolean isValid = false;
