@@ -78,7 +78,7 @@ public class Class extends CRD {
 
     }
      
-    public void display() { //Displau all the records in Class txt file
+    public void display() { //Displays all the records in Class txt file
         List <Class> class1 = getFromFile();
         System.out.println(String.format("%s", "-------------------------------------------------------------------------------------------------------------------------"));
         System.out.println(String.format("%9s %3s %15s %5s %12s %10s %12s %9s %7s","Class ID" ,"|","Class Name","|","Start Time","|","End Time","|","Staff ID"));
@@ -201,7 +201,7 @@ public class Class extends CRD {
 
     
     
-    public static boolean isClassRegIDValid (String classID) throws IOException {
+    public static boolean isClassRegIDValid (String classID) throws IOException { //boolean with built-in filter for ClassRegistration ID
 		 List<ClassRegistration> classGet = ClassRegistration.getFromFile();
 	 		for (ClassRegistration class1 : classGet) {
 	 			if (class1.getClassID().equals(classID)) {
@@ -211,7 +211,7 @@ public class Class extends CRD {
 	 	return false;
 	 }
     
-    public static boolean isClassIDValid (String classID) throws IOException {
+    public static boolean isClassIDValid (String classID) throws IOException { //boolean with built-in filter for Class ID
 		 List<Class> classGet = Class.getFromFile();
 	 		for (Class class1 : classGet) {
 	 			if (class1.getClassID().equals(classID)) {
@@ -233,7 +233,7 @@ public class Class extends CRD {
         } else if (classid.isEmpty()) {
         	System.out.println("Class ID cannot be empty.");
         } 
-        else if (isClassIDValid(classid)){
+        else if (isClassIDValid(classid)){// confirmation
             System.out.print("Are you sure you want to delete Class ID " + classid + "?[1] Yes [2] No: ");
             String deleteConfirm = inp.nextLine();
 
