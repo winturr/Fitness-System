@@ -1,15 +1,13 @@
 package fitness;
-    
 import java.io.*;
 import java.util.*;
 
 public class Class extends CRD {
-    private String classID, className, startTime,endTime,staffID,maxCapacity;
+    private String classID, className, startTime,endTime,staffID;
     public static Scanner inp = new Scanner(System.in);
-    public Class(String classID, String className, String maxCapacity, String startTime, String endTime, String staffID) {
+    public Class(String classID, String className, String startTime, String endTime, String staffID) {
         this.classID = classID;
-        this.className = className;
-        this.maxCapacity = maxCapacity;
+        this.className = className;     
         this.startTime = startTime;
         this.endTime = endTime;
         this.staffID = staffID;
@@ -24,9 +22,7 @@ public class Class extends CRD {
     public void setClassName(String className) {
         this.className = className;
     } 
-    public void setMaxCapacity(String maxCapacity) {
-        this.maxCapacity = maxCapacity;
-    }
+   
     public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
@@ -42,9 +38,7 @@ public class Class extends CRD {
     public String getClassName() {
         return className;
     }
-    public String getMaxCapacity() {
-        return maxCapacity;
-    }
+    
     public String getStartTime() {
         return startTime;
     }
@@ -57,7 +51,7 @@ public class Class extends CRD {
     
     public void saveToFile() {
         try(BufferedWriter writer = new BufferedWriter(new FileWriter("Class.txt", true))) {
-            writer.write(classID + "*" + className +"*" + maxCapacity + "*"+startTime + "*"  + endTime + "*" + staffID );
+            writer.write(classID + "*" + className +"*" +startTime + "*"  + endTime + "*" + staffID+"*");
             writer.newLine();
         }catch(IOException e) {
             e.printStackTrace();
@@ -72,11 +66,10 @@ public class Class extends CRD {
                 String[] data = line.split("\\*");
                 String classID = data[0];
                 String className = data[1];
-                String maxCapacity = data[2];
-                String startTime = data[3];
-                String endTime = data[4];
-                String staffID = data[5];
-                class1.add(new Class(classID , className, maxCapacity , startTime , endTime , staffID));
+                String startTime = data[2];
+                String endTime = data[3];
+                String staffID = data[4];
+                class1.add(new Class(classID , className, startTime , endTime , staffID));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -88,10 +81,10 @@ public class Class extends CRD {
     public void display() {
         List <Class> class1 = getFromFile();
         System.out.println(String.format("%s", "-------------------------------------------------------------------------------------------------------------------------"));
-        System.out.println(String.format("%9s %3s %15s %5s %12s %10s %12s %9s %7s %15s %5s","Class ID" ,"|","Class Name","|","Max Capacity","|","Start Time","|","End Time","|","Staff ID"));
+        System.out.println(String.format("%9s %3s %15s %5s %12s %10s %12s %9s %7s","Class ID" ,"|","Class Name","|","Start Time","|","End Time","|","Staff ID"));
         System.out.println(String.format("%s", "-------------------------------------------------------------------------------------------------------------------------"));
         for(Class c: class1) {
-            System.out.format("%9s %3s %15s %5s %12s %10s %12s %9s %8s %15s %5s", c.getClassID(), "|", c.getClassName(),"|", c.getMaxCapacity(),"|", c.getStartTime(),"|", c.getEndTime(),"|",c.getStaffID(),"|");
+            System.out.format("%9s %3s %15s %5s %12s %10s %12s %9s %8s", c.getClassID(), "|", c.getClassName(),"|", c.getStartTime(),"|", c.getEndTime(),"|",c.getStaffID(),"|");
             System.out.println();
         }
         System.out.println(String.format("%s", "-------------------------------------------------------------------------------------------------------------------------"));
@@ -137,8 +130,6 @@ public class Class extends CRD {
     
     System.out.print("Enter Class Name: ");
     String className = inp.nextLine();
-    System.out.print("Enter Max Capacity: ");
-    String maxCapacity = inp.nextLine();
     System.out.print("Enter Start Time: ");
     String startTime = inp.nextLine().toUpperCase();
     System.out.print("Enter End Time: ");
@@ -161,7 +152,7 @@ public class Class extends CRD {
     } while (staffID.isEmpty() || !staffFound);
 
     
-    Class newClass = new Class(classID, className, maxCapacity, startTime, endTime, staffID);
+    Class newClass = new Class(classID, className, startTime, endTime, staffID);
     newClass.saveToFile();
     System.out.println("Class added successfully.");
 }
@@ -184,8 +175,6 @@ public class Class extends CRD {
 
                 System.out.print("Cuurent Name: "+class1.getClassName()+"\nEnter new Class Name: ");
                 class1.setClassName(inp.nextLine());
-                System.out.print("Cuurent Max Capacity: "+class1.getMaxCapacity()+"\nEnter new Max Capacity: ");
-                class1.setMaxCapacity(inp.nextLine());
                 System.out.print("Cuurent Start Time: "+class1.getStartTime()+"\nEnter new Start Time: ");
                 class1.setStartTime(inp.nextLine().toUpperCase());
                 System.out.print("Cuurent End Time: "+class1.getEndTime()+"\nEnter new End Time: ");
@@ -203,7 +192,7 @@ public class Class extends CRD {
     
     try (BufferedWriter writer = new BufferedWriter(new FileWriter("Class.txt"))) {
         for (Class class1 : classList) {
-            writer.write(class1.getClassID() + "*" + class1.getClassName() + "*" + class1.getMaxCapacity() + "*" + class1.getStartTime() + "*" + class1.getEndTime() + "*" + class1.getStaffID());
+            writer.write(class1.getClassID() + "*" + class1.getClassName() + "*" + class1.getStartTime() + "*" + class1.getEndTime() + "*" + class1.getStaffID());
             writer.newLine();
         }
         System.out.println("Updated Entry.");
@@ -255,7 +244,7 @@ public class Class extends CRD {
 
                 try (BufferedWriter writer = new BufferedWriter(new FileWriter("Class.txt"))) {
                     for (Class class1 : classList) {
-                        writer.write(class1.getClassID() + "*" + class1.getClassName() + "*" + class1.getMaxCapacity() + "*" + class1.getStartTime() + "*" + class1.getEndTime() + "*" + class1.getStaffID());
+                        writer.write(class1.getClassID() + "*" + class1.getClassName() + "*" + class1.getStartTime() + "*" + class1.getEndTime() + "*" + class1.getStaffID());
                         writer.newLine();
                     }
                     System.out.println("Class deleted successfully.");
