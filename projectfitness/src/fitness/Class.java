@@ -78,7 +78,7 @@ public class Class extends CRD {
 
     }
      
-    public void display() {
+    public void display() { //Displau all the records in Class txt file
         List <Class> class1 = getFromFile();
         System.out.println(String.format("%s", "-------------------------------------------------------------------------------------------------------------------------"));
         System.out.println(String.format("%9s %3s %15s %5s %12s %10s %12s %9s %7s","Class ID" ,"|","Class Name","|","Start Time","|","End Time","|","Staff ID"));
