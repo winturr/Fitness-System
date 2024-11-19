@@ -49,7 +49,7 @@ public class Class extends CRD {
         return staffID;
     }
     
-    public void saveToFile() {
+    public void saveToFile() {  // save the record to the Class txt file
         try(BufferedWriter writer = new BufferedWriter(new FileWriter("Class.txt", true))) {
             writer.write(classID + "*" + className +"*" +startTime + "*"  + endTime + "*" + staffID+"*");
             writer.newLine();
