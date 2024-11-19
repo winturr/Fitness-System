@@ -165,7 +165,7 @@ public class Class extends CRD {
     String id;
 
     
-    do {
+    do { //Filter invalid inputs
         System.out.print("Look for Class ID: ");
         id = inp.nextLine();
         for (Class class1 : classList) {
@@ -224,7 +224,7 @@ public class Class extends CRD {
     public void delete() throws IOException {
     List<Class> classList = getFromFile();
     int ctr =1;
-    while(ctr==1){
+    while(ctr==1){ //Filter invalid inputs
         System.out.print("Look for Class ID: ");
         String classid = inp.nextLine();
 
