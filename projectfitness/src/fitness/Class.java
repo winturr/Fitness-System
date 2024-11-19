@@ -93,7 +93,7 @@ public class Class extends CRD {
     
     
     
-    public static boolean isStaffIDValid(String staffID) {
+    public static boolean isStaffIDValid(String staffID) { //boolean with built-in filter for certain cases
         List<Staff> staff = Staff.getFromFile();
         for (Staff staf : staff) {
             if (staf.getStaffID().equals(staffID)) {
