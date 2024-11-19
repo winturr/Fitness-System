@@ -57,7 +57,7 @@ public class Class extends CRD {
             e.printStackTrace();
         }
     }
-    
+    // Reading the Class file and putting all the records into an array list
     public static List<Class> getFromFile() {
         List<Class> class1 = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader("Class.txt"))) {
@@ -103,13 +103,13 @@ public class Class extends CRD {
         return false;
     }
 
-    public void add() throws IOException {
+    public void add() throws IOException { // Add record to the CheckInRecord file
     boolean isValid = false;
     List<Class> classes = getFromFile();
 
     
     String classID = "";
-    do {
+    do { //Filter invalid inputs
         System.out.print("Enter new Class ID: ");
         classID = inp.nextLine();
         isValid = true;
@@ -139,7 +139,7 @@ public class Class extends CRD {
     String staffID = "";
     List<Staff> staffs = Staff.getFromFile();
     boolean staffFound = false;
-    do {
+    do {//Filter invalid inputs
         System.out.print("Enter a valid Staff ID: ");
         staffID = inp.nextLine();
         for (Staff staff : staffs) {
